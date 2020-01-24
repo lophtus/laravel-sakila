@@ -15,7 +15,7 @@ class CreateInventoryTable extends Migration
     {
         Schema::create('inventory', function (Blueprint $table) {
             $table->mediumIncrements('inventory_id');
-            $table->unsignedSmallInteger('film_id');
+            $table->unsignedInteger('film_id');
             $table->unsignedTinyInteger('store_id');
             $table->timestamps();
 

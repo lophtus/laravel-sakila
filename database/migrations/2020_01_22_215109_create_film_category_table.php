@@ -14,7 +14,7 @@ class CreateFilmCategoryTable extends Migration
     public function up()
     {
         Schema::create('film_category', function (Blueprint $table) {
-            $table->unsignedSmallInteger('film_id');
+            $table->unsignedInteger('film_id');
             $table->unsignedTinyInteger('category_id');
             $table->timestamps();
 

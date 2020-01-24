@@ -15,11 +15,11 @@ class CreateFilmTextTable extends Migration
     public function up()
     {
         Schema::create('film_text', function (Blueprint $table) {
-            $table->unsignedSmallInteger('film_id')->primary();
+            $table->unsignedInteger('film_id')->primary();
             $table->string('title', 255);
             $table->text('description')->nullable();
 
-            $table->foreign('film_id')->references('film_id')->on('inventory');
+            $table->foreign('film_id')->references('film_id')->on('film');
         });
 
         DB::unprepared('

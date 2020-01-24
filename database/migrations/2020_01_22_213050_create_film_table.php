@@ -14,15 +14,15 @@ class CreateFilmTable extends Migration
     public function up()
     {
         Schema::create('film', function (Blueprint $table) {
-            $table->smallIncrements('film_id');
+            $table->increments('film_id');
             $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->year('release_year')->nullable();
+            $table->unsignedSmallInteger('release_year')->nullable();
             $table->unsignedTinyInteger('language_id');
             $table->unsignedTinyInteger('original_language_id')->nullable();
             $table->tinyInteger('rental_duration')->default(3);
             $table->decimal('rental_rate', 4, 2)->default(4.99);
-            $table->smallInteger('length')->nullable();
+            $table->unsignedSmallInteger('length')->nullable();
             $table->decimal('replacement_cost', 5, 2)->default(19.99);
             $table->enum('rating', ['G', 'PG', 'PG-13', 'R', 'NC-17'])->default('G')->nullable();
             $table->set('special_features', ['Trailers', 'Commentaries','Deleted Scenes','Behind the Scenes'])->nullable();
