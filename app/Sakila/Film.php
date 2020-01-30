@@ -6,7 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
-    /** @var array */
+    /**
+     * @OA\Schema(
+     *   schema="Rating",
+     *   type="string",
+     *   nullable=true,
+     *   enum={
+     *     "G",
+     *     "PG",
+     *     "PG-13",
+     *     "R",
+     *     "NC-17",
+     *   }
+     * )
+     *
+     * @var array
+     */
     public const RATINGS = [
         'G',
         'PG',
@@ -15,7 +30,21 @@ class Film extends Model
         'NC-17'
     ];
 
-    /** @var array */
+    /**
+     * @OA\Schema(
+     *   schema="SpecialFeatures",
+     *   type="string",
+     *   nullable=true,
+     *   enum={
+     *     "Trailers",
+     *     "Commentaries",
+     *     "Deleted Scenes",
+     *     "Behind the Scenes",
+     *   }
+     * )
+     *
+     * @var array
+     */
     public const SPECIAL_FEATURES = [
         'Trailers',
         'Commentaries',
@@ -66,6 +95,18 @@ class Film extends Model
         'replacement_cost',
         'rating',
         'special_features',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'release_year' => 'integer',
+        'rental_rate' => 'float',
+        'length' => 'integer',
+        'replacement_cost' => 'float',
     ];
 
     /**
