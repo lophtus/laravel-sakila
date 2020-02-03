@@ -76,6 +76,7 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(function ($router) {
+                 require base_path('routes/api/actors.php');
                  require base_path('routes/api/films.php');
              });
     }
