@@ -37,7 +37,7 @@ class Store extends Model
      */
     public function customers()
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasMany(Customer::class, 'store_id', 'store_id');
     }
 
     /**
@@ -47,7 +47,7 @@ class Store extends Model
      */
     public function inventory()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class, 'store_id', 'store_id');
     }
 
     /**
@@ -57,7 +57,7 @@ class Store extends Model
      */
     public function manager()
     {
-        return $this->belongsTo(Staff::class, 'manager_staff_id');
+        return $this->belongsTo(Staff::class, 'manager_staff_id', 'staff_id');
     }
 
     /**
@@ -67,6 +67,6 @@ class Store extends Model
      */
     public function staff()
     {
-        return $this->hasMany(Staff::class);
+        return $this->hasMany(Staff::class, 'store_id');
     }
 }
