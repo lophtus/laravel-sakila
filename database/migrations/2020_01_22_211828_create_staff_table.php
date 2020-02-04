@@ -22,7 +22,7 @@ class CreateStaffTable extends Migration
             $table->string('email', 50)->nullable();
             $table->unsignedTinyInteger('store_id');
             $table->boolean('active')->default(true);
-            $table->string('username', 16);
+            $table->string('username', 45);
             $table->string('password', 40)->nullable();
             $table->timestamps();
 
@@ -31,7 +31,7 @@ class CreateStaffTable extends Migration
         });
 
         Schema::table('store', function (Blueprint $table) {
-            $table->unsignedTinyInteger('manager_staff_id')->after('store_id');
+            $table->unsignedTinyInteger('manager_staff_id')->nullable()->after('store_id');
 
             $table->foreign('manager_staff_id')->references('staff_id')->on('staff');
         });
