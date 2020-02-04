@@ -13,6 +13,6 @@ $factory->define(Address::class, function (Faker $faker) {
         'district' => $faker->stateAbbr,
         'city_id' => factory(City::class),
         'postal_code' => $faker->optional()->postcode,
-        'phone' => $faker->phoneNumber,
+        'phone' => $faker->numerify('###-###-####'),
     ];
 });
