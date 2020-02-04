@@ -9,7 +9,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Store::class, function (Faker $faker) {
     return [
-        'manager_staff_id' => factory(Staff::class),
         'address_id' => factory(Address::class),
     ];
 });
