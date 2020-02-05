@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Sakila\Actor;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**

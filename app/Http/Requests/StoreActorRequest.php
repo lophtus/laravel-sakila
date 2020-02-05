@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Sakila\Film;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
