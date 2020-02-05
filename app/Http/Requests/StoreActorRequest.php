@@ -36,19 +36,19 @@ class StoreActorRequest extends FormRequest
              * @OA\Property(
              *   property="first_name",
              *   type="string",
-             *   maximum=45,
+             *   maxLength=45,
              * )
              */
-            'first_name' => 'string|required',
+            'first_name' => 'string|required|max:45',
 
             /**
              * @OA\Property(
              *   property="last_name",
              *   type="string",
-             *   maximum=45,
+             *   maxLength=45,
              * )
              */
-            'last_name' => 'string|required',
+            'last_name' => 'string|required|max:45',
         ];
     }
 }

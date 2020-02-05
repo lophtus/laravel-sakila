@@ -31,17 +31,19 @@ class UpdateActorRequest extends FormRequest
              * @OA\Property(
              *   property="first_name",
              *   type="string",
+             *   maxLength=45,
              * )
              */
-            'first_name' => 'string',
+            'first_name' => 'string|max:45',
 
             /**
              * @OA\Property(
              *   property="last_name",
              *   type="string",
+             *   maxLength=45,
              * )
              */
-            'last_name' => 'string',
+            'last_name' => 'string|max:45',
         ];
     }
 }
