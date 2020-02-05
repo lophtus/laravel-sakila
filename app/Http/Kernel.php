@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             'throttle:60,1',
+            'cache.headers:public;max_age=300;etag',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
