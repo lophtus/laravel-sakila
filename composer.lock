@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f2534029f7b94f80271e5e68e5c08ca",
+    "content-hash": "72bb50fa0c3b375715d31dc4a16e68d6",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -401,6 +401,48 @@
                 "trusted proxy"
             ],
             "time": "2019-12-20T13:11:11+00:00"
+        },
+        {
+            "name": "gregoryduckworth/encryptable",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gregoryduckworth/Encryptable.git",
+                "reference": "4ade5d782742ef1ad116974978609b42263701ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gregoryduckworth/Encryptable/zipball/4ade5d782742ef1ad116974978609b42263701ed",
+                "reference": "4ade5d782742ef1ad116974978609b42263701ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GregoryDuckworth\\Encryptable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Duckworth",
+                    "email": "gregoryduckworth@googlemail.com"
+                }
+            ],
+            "description": "A simple trait to make attributes encrypted in the database",
+            "keywords": [
+                "database",
+                "eloquent",
+                "encrypt",
+                "laravel"
+            ],
+            "time": "2018-03-06T08:31:40+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
