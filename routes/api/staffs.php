@@ -53,6 +53,63 @@ Route::get('/staffs', 'Api\\StaffController@index');
 
 /**
  * @OA\Get(
+ *   description="Retrieve a list of staffs by store",
+ *   path="/stores/{id}/staffs",
+ *   tags={"staffs"},
+ *   @OA\Parameter(
+ *     description="A unique identifier for a store",
+ *     name="id",
+ *     in="path",
+ *     @OA\Schema(
+ *       type="integer",
+ *     ),
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name",
+ *     name="filter[first_name]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by last name",
+ *     name="filter[last_name]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by email",
+ *     name="filter[email]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *       format="email",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by username",
+ *     name="filter[username]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
+ *   @OA\Response(
+ *     response="200",
+ *     description="A collection of objects containing information about staffs",
+ *     @OA\JsonContent(ref="#/components/schemas/StaffCollection"),
+ *   ),
+ * )
+ */
+Route::get('/stores/{store}/staffs', 'Api\StaffController@indexByStore');
+
+/**
+ * @OA\Get(
  *   description="Retrieve the specified staff",
  *   path="/staffs/{id}",
  *   tags={"staffs"},
@@ -85,8 +142,11 @@ Route::get('/staffs/{id}', 'Api\\StaffController@show');
  *   tags={"staffs"},
  *   @OA\Parameter(
  *     name="id",
- *     description="",
+ *     description="A unique identifier for a store",
  *     in="path",
+ *     @OA\Schema(
+ *       type="integer",
+ *     ),
  *   ),
  *   @OA\RequestBody(
  *     description="An object containing information about a staff",

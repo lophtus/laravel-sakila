@@ -29,6 +29,22 @@ class StaffController extends Controller
     }
 
     /**
+     * Display a listing of the resource by store.
+     *
+     * @param Store $store
+     * @return \Illuminate\Http\Response
+     */
+    public function indexByStore(Store $store)
+    {
+        return new StaffCollection(
+            QueryBuilder::for(Staff::class)
+                ->where('store_id', $store->store_id)
+                ->allowedFilters(['first_name', 'last_name', 'email', 'username'])
+                ->jsonPaginate()
+        );
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param StoreStaffRequest  $request
