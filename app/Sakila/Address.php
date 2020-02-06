@@ -21,12 +21,26 @@ class Address extends Model
     protected $primaryKey = 'address_id';
 
     /**
-     * Returns the associated city
+     * The model's default values for attributes.
      *
-     * @return City
+     * @var array
      */
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
+    protected $attributes = [
+        'country' => 'US',
+    ];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'address',
+        'address2',
+        'city',
+        'state',
+        'country',
+        'postal_code',
+        'phone',
+    ];
 }

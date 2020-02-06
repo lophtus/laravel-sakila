@@ -2,10 +2,13 @@
 
 namespace App\Sakila;
 
+use App\Sakila\Concerns\HasFillableRelations;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    use HasFillableRelations;
+
     /**
      * The table associated with the model.
      *
@@ -44,13 +47,40 @@ class Customer extends Model
     ];
 
     /**
+     * The relations that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable_relations = [
+        'address'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'address',
+    ];
+
+    /**
      * Returns the associated address
      *
      * @return Address
      */
     public function address()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'address_id', 'address_id')->withDefault();
     }
 
     /**

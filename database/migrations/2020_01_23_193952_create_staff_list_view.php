@@ -21,16 +21,12 @@ class CreateStaffListView extends Migration
                 a.address AS address,
                 a.postal_code AS `zip code`,
                 a.phone AS phone,
-                city.city AS city,
-                country.country AS country,
+                a.city AS city,
+                a.country AS country,
                 s.store_id AS SID
             FROM staff AS s
             JOIN address AS a
                 ON s.address_id = a.address_id
-            JOIN city
-                ON a.city_id = city.city_id
-            JOIN country
-                ON city.country_id = country.country_id
         ');
     }
 

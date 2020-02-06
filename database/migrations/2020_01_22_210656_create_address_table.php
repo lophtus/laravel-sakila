@@ -17,13 +17,12 @@ class CreateAddressTable extends Migration
             $table->smallIncrements('address_id');
             $table->string('address', 50);
             $table->string('address2', 50)->nullable();
-            $table->string('district', 20);
-            $table->unsignedSmallInteger('city_id');
-            $table->string('postal_code', 10)->nullable();
+            $table->string('city', 50);
+            $table->char('state', 2);
+            $table->char('country', 2)->default('US');
+            $table->string('postal_code', 10);
             $table->string('phone', 20);
             $table->timestamps();
-
-            $table->foreign('city_id')->references('city_id')->on('city');
         });
     }
 
