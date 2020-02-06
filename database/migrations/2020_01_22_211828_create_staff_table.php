@@ -23,7 +23,7 @@ class CreateStaffTable extends Migration
             $table->unsignedTinyInteger('store_id');
             $table->boolean('active')->default(true);
             $table->string('username', 45);
-            $table->string('password', 40)->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
 
             $table->foreign('address_id')->references('address_id')->on('address');
