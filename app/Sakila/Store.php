@@ -2,10 +2,13 @@
 
 namespace App\Sakila;
 
+use App\Sakila\Concerns\HasFillableRelations;
 use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
+    use HasFillableRelations;
+
     /**
      * The table associated with the model.
      *
@@ -21,13 +24,31 @@ class Store extends Model
     protected $primaryKey = 'store_id';
 
     /**
+     * The relations that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable_relations = [
+        'address'
+    ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'address',
+    ];
+
+    /**
      * Returns the associate address
      *
      * @return Address
      */
     public function address()
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'address_id', 'address_id')->withDefault();
     }
 
     /**
