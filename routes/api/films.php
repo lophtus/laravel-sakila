@@ -50,6 +50,57 @@ Route::get('/films', 'Api\\FilmController@index');
 
 /**
  * @OA\Get(
+ *   description="Retrieve a list of films by store",
+ *   path="/stores/{id}/films",
+ *   tags={"films"},
+ *   @OA\Parameter(
+ *     name="id",
+ *     description="A unique identifier for a store",
+ *     in="path",
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by title",
+ *     name="filter[title]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by description",
+ *     name="filter[description]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by release year",
+ *     name="filter[release_year]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="integer",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by rating",
+ *     name="filter[rating]",
+ *     in="query",
+ *     @OA\Schema(ref="#/components/schemas/Rating"),
+ *   ),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
+ *   @OA\Response(
+ *     response="200",
+ *     description="A collection of objects containing information about films",
+ *     @OA\JsonContent(ref="#/components/schemas/FilmCollection"),
+ *   ),
+ * )
+ */
+Route::get('/stores/{store}/films', 'Api\\FilmController@indexByStore');
+
+/**
+ * @OA\Get(
  *   description="Retrieve the specified film",
  *   path="/films/{id}",
  *   tags={"films"},
