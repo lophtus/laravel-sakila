@@ -160,7 +160,7 @@ class Film extends Model
     }
 
     /**
-     * Returns the associated stores
+     * Returns a collection of associated stores from inventory
      *
      * @return Collection<Store>
      */

@@ -52,7 +52,7 @@ Route::get('/films', 'Api\\FilmController@index');
  * @OA\Get(
  *   description="Retrieve a list of films by store",
  *   path="/stores/{id}/films",
- *   tags={"films"},
+ *   tags={"films", "stores"},
  *   @OA\Parameter(
  *     name="id",
  *     description="A unique identifier for a store",
