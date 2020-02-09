@@ -20,6 +20,27 @@ Route::get('/stores', 'Api\\StoreController@index');
 
 /**
  * @OA\Get(
+ *   description="Retrieve a list of stores by film",
+ *   path="/films/{id}/stores",
+ *   tags={"films", "stores"},
+ *   @OA\Parameter(
+ *     name="id",
+ *     description="A unique identifier for a film",
+ *     in="path",
+ *   ),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
+ *   @OA\Response(
+ *     response="200",
+ *     description="A collection of objects containing information about stores",
+ *     @OA\JsonContent(ref="#/components/schemas/StoreCollection"),
+ *   ),
+ * )
+ */
+Route::get('/films/{film}/stores', 'Api\\StoreController@indexbyFilm');
+
+/**
+ * @OA\Get(
  *   description="Retrieve the specified store",
  *   path="/stores/{id}",
  *   tags={"stores"},

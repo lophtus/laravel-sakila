@@ -8,7 +8,9 @@ use App\Http\Requests\StoreStoreRequest;
 use App\Http\Requests\UpdateStoreRequest;
 use App\Http\Resources\StoreCollection;
 use App\Http\Resources\StoreResource;
+use App\Sakila\Film;
 use App\Sakila\Store;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class StoreController extends Controller
@@ -22,6 +24,23 @@ class StoreController extends Controller
     {
         return new StoreCollection(
             QueryBuilder::for(Store::class)
+                ->allowedFilters([])
+                ->jsonPaginate()
+        );
+    }
+
+    /**
+     * Display a listing of the resource by film.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexByFilm(Film $film)
+    {
+        return new StoreCollection(
+            QueryBuilder::for(Store::class)
+                ->whereHas('films', function (Builder $query) use ($film) {
+                    $query->where('film.film_id', $film->film_id);
+                })
                 ->allowedFilters([])
                 ->jsonPaginate()
         );

@@ -62,6 +62,17 @@ class Store extends Model
     }
 
     /**
+     * Returns a collection of associated films from inventory
+     *
+     * @return Collection<Film>
+     */
+    public function films()
+    {
+        return $this->hasManyThrough(Film::class, Inventory::class, 'store_id', 'film_id', 'store_id', 'film_id');
+    }
+
+
+    /**
      * Return a collection of associated inventory
      *
      * @return Collection<Inventory>
