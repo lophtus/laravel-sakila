@@ -27,7 +27,7 @@ class Rental extends Model
      */
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
     }
 
     /**
@@ -37,7 +37,7 @@ class Rental extends Model
      */
     public function inventory()
     {
-        return $this->belongsTo(Inventory::class);
+        return $this->belongsTo(Inventory::class, 'inventory_id', 'inventory_id');
     }
 
     /**
@@ -47,6 +47,16 @@ class Rental extends Model
      */
     public function staff()
     {
-        return $this->belongsTo(Staff::class);
+        return $this->belongsTo(Staff::class, 'staff_id', 'staff_id');
+    }
+
+    /**
+     * Returns the associated store
+     *
+     * @return Store
+     */
+    public function store()
+    {
+        return $this->hasOneThrough(Store::class, Inventory::class, 'inventory_id', 'store_id', 'inventory_id', 'store_id');
     }
 }
