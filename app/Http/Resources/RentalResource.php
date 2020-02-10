@@ -34,7 +34,7 @@ class RentalResource extends JsonResource
              *   format="date-time",
              * )
              */
-            'rented_date' => $this->rental_date,
+            'rental_date' => $this->rental_date,
 
             /**
              * @OA\Property(
