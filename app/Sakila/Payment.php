@@ -21,13 +21,42 @@ class Payment extends Model
     protected $primaryKey = 'payment_id';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'amount',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'rental',
+        'customer',
+        'staff',
+    ];
+
+    /**
      * Returns the associated customer
      *
      * @return Customer
      */
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
     }
 
     /**
@@ -37,7 +66,7 @@ class Payment extends Model
      */
     public function rental()
     {
-        return $this->belongsTo(Rental::class);
+        return $this->belongsTo(Rental::class, 'rental_id', 'rental_id');
     }
 
     /**
@@ -47,6 +76,6 @@ class Payment extends Model
      */
     public function staff()
     {
-        return $this->belongsTo(Staff::class);
+        return $this->belongsTo(Staff::class, 'staff_id', 'staff_id');
     }
 }
