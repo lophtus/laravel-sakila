@@ -41,6 +41,16 @@ class Rental extends Model
     }
 
     /**
+     * Returns the associated payment
+     *
+     * @return Payment
+     */
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'rental_id', 'rental_id');
+    }
+
+    /**
      * Returns the associated staff
      *
      * @return Staff
