@@ -1,5 +1,5 @@
 {
-    "name": "lophtus/sakila",
+    "name": "lophtus/laravel-sakila",
     "type": "project",
     "description": "A system for managing film rentals.",
     "keywords": [
