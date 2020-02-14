@@ -12,17 +12,17 @@
     <CHeaderNav class="ml-auto mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
-          <CIcon name="cil-bell" />
+          <i class="far fa-bell"></i>
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
-          <CIcon name="cil-list" />
+          <i class="far fa-list-alt"></i>
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
-          <CIcon name="cil-envelope-open" />
+          <i class="far fa-envelope-open"></i>
         </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>
