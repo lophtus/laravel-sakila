@@ -1,5 +1,5 @@
 <template>
-  <CFooter>
+  <CFooter class="mt-2">
     <div>
       <!-- footer -->
       <a href="#">Laravel Sakila</a>
