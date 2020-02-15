@@ -19,13 +19,12 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
 
 Vue.config.performance = true;
+
 Vue.use(BootstrapVue);
 Vue.use(CoreuiVue);
 
@@ -37,12 +36,13 @@ Vue.use(CoreuiVue);
 
 import App from "./App.vue";
 import router from "./router";
+import "./vee-validate";
 
 const app = new Vue({
-    el: "#app",
-    router,
-    components: {
-        App
-    },
-    render: h => h(App)
+  el: "#app",
+  router,
+  components: {
+    App
+  },
+  render: h => h(App)
 });
