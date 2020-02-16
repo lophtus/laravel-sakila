@@ -81,7 +81,7 @@
 
 <script>
 import axios from "axios";
-import { StateList, CountryList } from "../../data/form_constants";
+import { StateList, CountryList } from "../../data/address_constants";
 import ValidationErrors from "../../components/ValidationErrors";
 
 export default {
