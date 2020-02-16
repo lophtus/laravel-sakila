@@ -49,16 +49,21 @@ export default {
     async onDelete() {
       let vm = this;
 
-      vm.$bvModal.msgBoxConfirm("Do you really want to delete this store?", {}).then(value => {
-        if (value) {
-          const promise = axios.delete("/stores/" + vm.store.id);
+      vm.$bvModal
+        .msgBoxConfirm("Do you really want to delete this store?", {})
+        .then(value => {
+          if (value) {
+            const promise = axios.delete("/stores/" + vm.store.id);
 
-          promise.then(() => {
-            vm.$router.push({ name: "store-list" });
-            vm.$toasted.show("Store was deleted successfully", { type: "success", icon: "far fa-check-circle" });
-          });
-        }
-      });
+            promise.then(() => {
+              vm.$router.push({ name: "store-list" });
+              vm.$toasted.show("Store was deleted successfully", {
+                type: "success",
+                icon: "far fa-check-circle"
+              });
+            });
+          }
+        });
     }
   }
 };
