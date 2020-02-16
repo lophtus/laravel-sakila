@@ -22,11 +22,18 @@ window.Vue = require('vue');
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
+import Toasted from "vue-toasted";
 
 Vue.config.performance = true;
 
 Vue.use(BootstrapVue);
 Vue.use(CoreuiVue);
+Vue.use(Toasted, {
+  theme: "toasted-primary",
+  iconPack: "custom-class",
+  position: "bottom-right",
+  duration: 5000
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
