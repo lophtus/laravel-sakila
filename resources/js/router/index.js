@@ -9,6 +9,8 @@ import FilmIndex from "../views/films/index";
 import FilmList from "../views/films/list";
 import FilmView from "../views/films/view";
 import StoreIndex from "../views/stores/index";
+import StoreCreate from "../views/stores/create";
+import StoreEdit from "../views/stores/edit";
 import StoreList from "../views/stores/list";
 import StoreView from "../views/stores/view";
 
@@ -63,7 +65,6 @@ function configRoutes() {
                 },
                 {
                     path: "/stores",
-                    name: "store-index",
                     component: StoreIndex,
                     children: [
                         {
@@ -72,9 +73,19 @@ function configRoutes() {
                             component: StoreList,
                         },
                         {
+                            path: "create",
+                            name: "store-create",
+                            component: StoreCreate,
+                        },
+                        {
                             path: ":id(\\d+)",
                             name: "store-view",
                             component: StoreView,
+                        },
+                        {
+                            path: ":id(\\d+)/edit",
+                            name: "store-edit",
+                            component: StoreEdit,
                         },
                     ],
                 }
