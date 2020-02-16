@@ -96,7 +96,7 @@ class FilmController extends Controller
         $film->fill($request->all());
         $film->save();
 
-        return $film->refresh();
+        return new FilmResource($film->refresh());
     }
 
     /**

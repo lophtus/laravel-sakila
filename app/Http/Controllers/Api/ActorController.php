@@ -76,7 +76,7 @@ class ActorController extends Controller
         $actor->fill($request->all());
         $actor->save();
 
-        return $actor->refresh();
+        return new ActorResource($actor->refresh());
     }
 
     /**
