@@ -35,6 +35,16 @@
         <b-img src="https://via.placeholder.com/300x300"></b-img>
       </b-col>
     </b-row>
+
+    <b-button variant="primary" :to="{name: 'film-edit', params: {id: film.id}}">
+      <i class="far fa-edit"></i>
+      Edit
+    </b-button>
+
+    <b-button variant="danger" @click="onDelete">
+      <i class="far fa-times-circle"></i>
+      Delete
+    </b-button>
   </div>
 </template>
 
@@ -58,6 +68,27 @@ export default {
         vm.film = film || {};
       });
     });
+  },
+  methods: {
+    async onDelete() {
+      let vm = this;
+
+      vm.$bvModal
+        .msgBoxConfirm("Do you really want to delete this film?", {})
+        .then(value => {
+          if (value) {
+            const promise = axios.delete("/films/" + vm.film.id);
+
+            promise.then(() => {
+              vm.$router.push({ name: "film-list" });
+              vm.$toasted.show("Film was deleted successfully", {
+                type: "success",
+                icon: "far fa-check-circle"
+              });
+            });
+          }
+        });
+    }
   }
 };
 </script>

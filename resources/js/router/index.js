@@ -6,6 +6,8 @@ import CustomerIndex from "../views/customers/index";
 import CustomerList from "../views/customers/list";
 import CustomerView from "../views/customers/view";
 import FilmIndex from "../views/films/index";
+import FilmCreate from "../views/films/create";
+import FilmEdit from "../views/films/edit";
 import FilmList from "../views/films/list";
 import FilmView from "../views/films/view";
 import StoreIndex from "../views/stores/index";
@@ -57,9 +59,19 @@ function configRoutes() {
                             component: FilmList,
                         },
                         {
+                            path: "create",
+                            name: "film-create",
+                            component: FilmCreate,
+                        },
+                        {
                             path: ":id(\\d+)",
                             name: "film-view",
                             component: FilmView,
+                        },
+                        {
+                            path: ":id(\\d+)/edit",
+                            name: "film-edit",
+                            component: FilmEdit,
                         },
                     ],
                 },

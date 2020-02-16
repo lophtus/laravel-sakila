@@ -2,6 +2,15 @@
   <div>
     <h2>Films</h2>
 
+    <b-row class="mb-4">
+        <b-col>
+            <b-button variant="success" size="sm" :to="{name: 'film-create'}">
+                <i class="far fa-plus-square"></i>
+                Create
+            </b-button>
+        </b-col>
+    </b-row>
+
     <b-table
       :items="fetchData"
       :fields="fields"
