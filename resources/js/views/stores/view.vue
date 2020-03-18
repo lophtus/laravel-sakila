@@ -19,15 +19,25 @@
       </b-col>
     </b-row>
 
-    <b-button variant="primary" v-b-modal.edit-modal>
+    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
       <i class="far fa-edit"></i>
       Edit
     </b-button>
 
-    <b-button variant="danger" @click="onDelete">
+    <b-button variant="danger" size="sm" @click="onDelete">
       <i class="far fa-times-circle"></i>
       Delete
     </b-button>
+
+    <hr />
+
+    <b-card no-body>
+      <b-tabs card>
+        <b-tab title="Customers">
+          <CustomerList v-if="isLoaded" :store="store" />
+        </b-tab>
+      </b-tabs>
+    </b-card>
 
     <EditModal :populateWith="store" @saved="onSave"></EditModal>
   </div>
@@ -35,15 +45,18 @@
 
 <script>
 import axios from "axios";
+import CustomerList from "./components/CustomerList";
 import EditModal from "./components/EditModal";
 
 export default {
   name: "StoreView",
   components: {
+    CustomerList,
     EditModal
   },
   data() {
     return {
+      isLoaded: false,
       store: {}
     };
   },
@@ -55,6 +68,7 @@ export default {
 
       next(vm => {
         vm.store = store || {};
+        vm.isLoaded = true;
       });
     });
   },

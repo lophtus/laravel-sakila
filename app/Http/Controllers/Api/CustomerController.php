@@ -10,6 +10,7 @@ use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
 use App\Sakila\Customer;
 use App\Sakila\Store;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerController extends Controller
@@ -23,6 +24,24 @@ class CustomerController extends Controller
     {
         return new CustomerCollection(
             QueryBuilder::for(Customer::class)
+                ->allowedFilters(['first_name', 'last_name', 'email'])
+                ->jsonPaginate()
+        );
+    }
+
+    /**
+     * Display a listing of the resource by store.
+     *
+     * @param Store $store
+     * @return \Illuminate\Http\Response
+     */
+    public function indexByStore(Store $store)
+    {
+        return new CustomerCollection(
+            QueryBuilder::for(Customer::class)
+                ->whereHas('store', function (Builder $query ) use ($store) {
+                    $query->where('store.store_id', $store->store_id);
+                })
                 ->allowedFilters(['first_name', 'last_name', 'email'])
                 ->jsonPaginate()
         );

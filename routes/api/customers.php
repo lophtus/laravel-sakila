@@ -71,6 +71,51 @@ Route::get('/customers', 'Api\\CustomerController@index');
 Route::get('/customers/{id}', 'Api\\CustomerController@show');
 
 /**
+ * @OA\Get(
+ *   description="Retrieve a list of customers by store",
+ *   path="/stores/{id}/customers",
+ *   tags={"customers", "stores"},
+ *   @OA\Parameter(
+ *     name="id",
+ *     description="A unique identifier for a store",
+ *     in="path",
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name",
+ *     name="filter[first_name]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by last name",
+ *     name="filter[last_name]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by email",
+ *     name="filter[email]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
+ *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
+ *   @OA\Response(
+ *     response="200",
+ *     description="A collection of objects containing information about customers",
+ *     @OA\JsonContent(ref="#/components/schemas/CustomerCollection"),
+ *   ),
+ * )
+ */
+Route::get('/stores/{store}/customers', 'Api\\CustomerController@indexByStore');
+
+/**
  * @OA\Post(
  *   description="Create a new customer for the specified store",
  *   path="/stores/{id}/customers",
