@@ -3,12 +3,12 @@
     <h2>Stores</h2>
 
     <b-row class="mb-4">
-        <b-col>
-            <b-button variant="success" size="sm" :to="{name: 'store-create'}">
-                <i class="far fa-plus-square"></i>
-                Create
-            </b-button>
-        </b-col>
+      <b-col>
+        <b-button variant="success" size="sm" v-b-modal.create-modal>
+          <i class="far fa-plus-square"></i>
+          Create
+        </b-button>
+      </b-col>
     </b-row>
 
     <b-table
@@ -25,13 +25,13 @@
       </template>
 
       <template v-slot:cell(address)="row">
-          {{ row.item.address }}
-          <br/>
-          <span v-if="row.item.address2">
-              {{ row.item.address2 }}
-              <br/>
-          </span>
-          {{ row.item.city }}, {{ row.item.state }} {{ row.item.postal_code }}
+        {{ row.item.address }}
+        <br />
+        <span v-if="row.item.address2">
+          {{ row.item.address2 }}
+          <br />
+        </span>
+        {{ row.item.city }}, {{ row.item.state }} {{ row.item.postal_code }}
       </template>
 
       <template v-slot:cell(actions)="row">
@@ -54,17 +54,21 @@
         ></b-pagination>
       </b-col>
     </b-row>
+
+    <CreateModal></CreateModal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import CreateModal from "./components/CreateModal";
 
 export default {
   name: "StoreList",
   components: {
-    LoadingSpinner
+    LoadingSpinner,
+    CreateModal
   },
   data() {
     return {

@@ -2,17 +2,24 @@
   <div>
     <h2>Store (#{{ store.id }})</h2>
 
-    <address>
-      {{ store.address }}
-      <br />
-      <span v-if="store.address2">
-        {{ store.address2 }}
-        <br />
-      </span>
-      {{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}
-    </address>
+    <b-row>
+      <b-col>
+        <address>
+          {{ store.address }}
+          <br />
+          <span v-if="store.address2">
+            {{ store.address2 }}
+            <br />
+          </span>
+          {{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}
+        </address>
+      </b-col>
+      <b-col cols="auto">
+        <b-img src="https://via.placeholder.com/300x300"></b-img>
+      </b-col>
+    </b-row>
 
-    <b-button variant="primary" :to="{name: 'store-edit', params: {id: store.id}}">
+    <b-button variant="primary" v-b-modal.edit-modal>
       <i class="far fa-edit"></i>
       Edit
     </b-button>
@@ -21,14 +28,20 @@
       <i class="far fa-times-circle"></i>
       Delete
     </b-button>
+
+    <EditModal :populateWith="store" @saved="onSave"></EditModal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import EditModal from "./components/EditModal";
 
 export default {
   name: "StoreView",
+  components: {
+    EditModal
+  },
   data() {
     return {
       store: {}
@@ -46,6 +59,9 @@ export default {
     });
   },
   methods: {
+    onSave(store) {
+      this.store = store;
+    },
     async onDelete() {
       let vm = this;
 
