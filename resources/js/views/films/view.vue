@@ -36,25 +36,32 @@
       </b-col>
     </b-row>
 
-    <b-button variant="primary" :to="{name: 'film-edit', params: {id: film.id}}">
+    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
       <i class="far fa-edit"></i>
       Edit
     </b-button>
 
-    <b-button variant="danger" @click="onDelete">
+    <b-button variant="danger" size="sm" @click="onDelete">
       <i class="far fa-times-circle"></i>
       Delete
     </b-button>
+
+    <EditModal :populateWith="film" @saved="onSave"></EditModal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import EditModal from "./components/EditModal";
 
 export default {
   name: "FilmView",
+  components: {
+    EditModal
+  },
   data() {
     return {
+      isLoaded: false,
       film: {}
     };
   },
@@ -66,10 +73,14 @@ export default {
 
       next(vm => {
         vm.film = film || {};
+        vm.isLoaded = true;
       });
     });
   },
   methods: {
+    onSave(film) {
+      this.film = film;
+    },
     async onDelete() {
       let vm = this;
 

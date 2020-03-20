@@ -3,12 +3,12 @@
     <h2>Films</h2>
 
     <b-row class="mb-4">
-        <b-col>
-            <b-button variant="success" size="sm" :to="{name: 'film-create'}">
-                <i class="far fa-plus-square"></i>
-                Create
-            </b-button>
-        </b-col>
+      <b-col>
+        <b-button variant="success" size="sm" v-b-modal.create-modal>
+          <i class="far fa-plus-square"></i>
+          Create
+        </b-button>
+      </b-col>
     </b-row>
 
     <b-table
@@ -44,17 +44,21 @@
         ></b-pagination>
       </b-col>
     </b-row>
+
+    <CreateModal></CreateModal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import CreateModal from "./components/CreateModal";
 
 export default {
   name: "FilmList",
   components: {
-    LoadingSpinner
+    LoadingSpinner,
+    CreateModal
   },
   data() {
     return {

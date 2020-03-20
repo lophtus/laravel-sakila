@@ -1,21 +1,17 @@
 <template>
-  <div>
-    <h2>Edit Film</h2>
-
+  <b-modal ref="editModal" id="edit-modal" title="Edit Film" @show="resetModal" @ok="handleOkay">
     <p>Use the form below to update the film.</p>
 
-    <ValidationErrors v-if="validationErrors" :errors="validationErrors" />
-
-    <ValidationObserver ref="observer" v-slot="{ passes }">
-      <b-form @submit.prevent="passes(onSubmit)">
-        <ValidationProvider rules="required" name="Title" v-slot="{ valid, errors }">
+    <ValidationObserver ref="formObserver" v-slot="{ passes }">
+      <b-form @submit.stop.prevent="passes(onSubmit)">
+        <ValidationProvider rules="required" name="title" v-slot="{ valid, errors }">
           <b-form-group label="Title">
             <b-input v-model="form.title" :state="errors[0] ? false : (valid ? true : null)" />
             <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider name="Description" v-slot="{ valid, errors }">
+        <ValidationProvider name="description" v-slot="{ valid, errors }">
           <b-form-group label="Description">
             <b-textarea
               v-model="form.description"
@@ -25,14 +21,14 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="Length" v-slot="{ valid, errors }">
+        <ValidationProvider name="length" v-slot="{ valid, errors }">
           <b-form-group label="Length">
             <b-input v-model="form.length" :state="errors[0] ? false : (valid ? true : null)" />
             <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="ReleaseYear" v-slot="{ valid, errors }">
+        <ValidationProvider name="release_year" v-slot="{ valid, errors }">
           <b-form-group label="Release Year">
             <b-input
               v-model="form.release_year"
@@ -42,7 +38,7 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="Rating" v-slot="{ valid, errors }">
+        <ValidationProvider name="rating" v-slot="{ valid, errors }">
           <b-form-group label="Rating">
             <b-select
               v-model="form.rating"
@@ -57,7 +53,7 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider name="SpecialFeatures" v-slot="{ valid, errors }">
+        <ValidationProvider name="special_features" v-slot="{ valid, errors }">
           <b-form-group label="Special Features">
             <b-select
               v-model="form.special_features"
@@ -72,7 +68,7 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="RentalDuration" v-slot="{ valid, errors }">
+        <ValidationProvider rules="required" name="rental_duration" v-slot="{ valid, errors }">
           <b-form-group label="Rental Duration">
             <b-input
               v-model="form.rental_duration"
@@ -82,14 +78,14 @@
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="RentalRate" v-slot="{ valid, errors }">
+        <ValidationProvider rules="required" name="rental_rate" v-slot="{ valid, errors }">
           <b-form-group label="Rental Rate">
             <b-input v-model="form.rental_rate" :state="errors[0] ? false : (valid ? true : null)" />
             <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
 
-        <ValidationProvider rules="required" name="ReplacementCost" v-slot="{ valid, errors }">
+        <ValidationProvider rules="required" name="replacement_cost" v-slot="{ valid, errors }">
           <b-form-group label="Replacement Cost">
             <b-input
               v-model="form.replacement_cost"
@@ -98,79 +94,68 @@
             <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
         </ValidationProvider>
-
-        <b-button type="submit" variant="primary" :disabled="isSaving">
-          <b-spinner v-if="isSaving" class="mr-2" small></b-spinner>Save
-        </b-button>
-        <b-link @click="$router.go(-1)">Cancel</b-link>
       </b-form>
     </ValidationObserver>
-  </div>
+
+    <template v-slot:modal-ok>
+      <b-spinner v-if="isSaving" class="mr-2" small></b-spinner>Save
+    </template>
+  </b-modal>
 </template>
 
 <script>
 import axios from "axios";
-import ValidationErrors from "../../components/ValidationErrors";
-import { RatingList, SpecialFeatureList } from "../../data/film_constants";
+import { RatingList, SpecialFeatureList } from "../../../data/film_constants";
 
 export default {
-  name: "FilmEdit",
-  components: {
-    ValidationErrors
+  name: "EditModal",
+  props: {
+    populateWith: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       isSaving: false,
-      validationErrors: null,
       ratings: RatingList,
       special_features: SpecialFeatureList,
-      form: {
-        title: null,
-        description: null,
-        length: null,
-        release_year: null,
-        rating: null,
-        special_features: null,
-        rental_duration: null,
-        rental_rate: null,
-        replacement_cost: null
-      },
-      film: {}
+      form: {}
     };
   },
-  beforeRouteEnter(to, from, next) {
-    const promise = axios.get("/films/" + to.params.id);
-
-    return promise.then(({ data }) => {
-      const film = data.data;
-
-      next(vm => {
-        vm.film = film || {};
-        vm.form = Object.assign({}, vm.film);
-      });
-    });
-  },
   methods: {
+    resetModal() {
+      this.form = Object.assign({}, this.populateWith);
+    },
+    handleOkay(bvModalEvt) {
+      bvModalEvt.preventDefault();
+
+      this.onSubmit();
+    },
     async onSubmit() {
       let vm = this;
 
       vm.isSaving = true;
 
-      const promise = axios.patch("/films/" + vm.film.id, vm.form);
+      const promise = axios.patch("/films/" + vm.form.id, vm.form);
 
       promise
         .then(({ data }) => {
           const film = data.data;
 
-          vm.$router.push({ name: "film-view", params: { id: film.id } });
+          vm.$emit("saved", film);
+
+          vm.$refs.editModal.hide();
+
           vm.$toasted.show("Film was updated successfully", {
             type: "success",
             icon: "far fa-check-circle"
           });
         })
         .catch(error => {
-          vm.validationErrors = error.response.data.errors;
-          window.scrollTo(0, 0);
+          if (error.response.data.errors) {
+            vm.$refs.formObserver.setErrors(error.response.data.errors);
+          }
         })
         .finally(() => {
           vm.isSaving = false;
