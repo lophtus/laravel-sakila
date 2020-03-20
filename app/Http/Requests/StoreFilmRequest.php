@@ -71,7 +71,7 @@ class StoreFilmRequest extends FormRequest
              *   maximum=7,
              * )
              */
-            'rental_duration' => 'integer',
+            'rental_duration' => 'integer|required',
 
             /**
              * @OA\Property(
@@ -80,7 +80,7 @@ class StoreFilmRequest extends FormRequest
              *   default=4.99,
              * )
              */
-            'rental_rate' => 'numeric',
+            'rental_rate' => 'numeric|required',
 
             /**
              * @OA\Property(
@@ -98,7 +98,7 @@ class StoreFilmRequest extends FormRequest
              *   type="number",
              * )
              */
-            'replacement_cost' => 'numeric',
+            'replacement_cost' => 'numeric|required',
 
             /**
              * @OA\Property(
