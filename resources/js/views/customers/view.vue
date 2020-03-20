@@ -11,16 +11,28 @@
         </span>
         {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
     </address>
+
+    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
+      <i class="far fa-edit"></i>
+      Edit
+    </b-button>
+
+    <EditModal :populateWith="customer" @saved="onSave"></EditModal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import EditModal from "./components/EditModal";
 
 export default {
   name: "CustomerView",
+  components: {
+    EditModal
+  },
   data() {
     return {
+      isLoaded: false,
       customer: {}
     };
   },
@@ -32,8 +44,14 @@ export default {
 
       next(vm => {
         vm.customer = customer || {};
+        vm.isLoaded = true;
       });
     });
+  },
+  methods: {
+    onSave(customer) {
+      this.customer = customer;
+    },
   }
 };
 </script>
