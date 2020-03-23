@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\DTOs\CustomerData;
+use App\Http\Filters\FilterContainsMultipleFields;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
@@ -11,6 +12,7 @@ use App\Http\Resources\CustomerResource;
 use App\Sakila\Customer;
 use App\Sakila\Store;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CustomerController extends Controller
@@ -24,7 +26,19 @@ class CustomerController extends Controller
     {
         return new CustomerCollection(
             QueryBuilder::for(Customer::class)
-                ->allowedFilters(['first_name', 'last_name', 'email'])
+                ->allowedFilters([
+                    'first_name',
+                    'last_name',
+                    'email',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'first_name',
+                            'last_name',
+                            'email',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -42,7 +56,19 @@ class CustomerController extends Controller
                 ->whereHas('store', function (Builder $query ) use ($store) {
                     $query->where('store.store_id', $store->store_id);
                 })
-                ->allowedFilters(['first_name', 'last_name', 'email'])
+                ->allowedFilters([
+                    'first_name',
+                    'last_name',
+                    'email',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'first_name',
+                            'last_name',
+                            'email',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -55,7 +81,6 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request, Store $store)
     {
-
         $customer = $store->customers()
             ->create(CustomerData::fromRequest($request));
 
@@ -70,7 +95,8 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = Customer::find($id);
+        $customer = QueryBuilder::for(Customer::class)
+            ->find($id);
 
         if (! $customer) {
             abort(404);
@@ -88,7 +114,8 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, $id)
     {
-        $customer = Customer::find($id);
+        $customer = QueryBuilder::for(Customer::class)
+            ->find($id);
 
         if (! $customer) {
             abort(404);
@@ -108,7 +135,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = Customer::find($id);
+        $customer = QueryBuilder::for(Customer::class)
+            ->find($id);
 
         if (! $customer) {
             abort(404);

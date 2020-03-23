@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\DTOs\StaffData;
+use App\Http\Filters\FilterContainsMultipleFields;
 use App\Http\Requests\StoreStaffRequest;
 use App\Http\Requests\UpdateStaffRequest;
 use App\Http\Resources\StaffCollection;
 use App\Http\Resources\StaffResource;
 use App\Sakila\Staff;
 use App\Sakila\Store;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class StaffController extends Controller
@@ -23,7 +25,21 @@ class StaffController extends Controller
     {
         return new StaffCollection(
             QueryBuilder::for(Staff::class)
-                ->allowedFilters(['first_name', 'last_name', 'email', 'username'])
+                ->allowedFilters([
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'username',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'first_name',
+                            'last_name',
+                            'email',
+                            'username',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -39,7 +55,21 @@ class StaffController extends Controller
         return new StaffCollection(
             QueryBuilder::for(Staff::class)
                 ->where('store_id', $store->store_id)
-                ->allowedFilters(['first_name', 'last_name', 'email', 'username'])
+                ->allowedFilters([
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'username',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'first_name',
+                            'last_name',
+                            'email',
+                            'username',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -66,7 +96,8 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        $staff = Staff::find($id);
+        $staff = QueryBuilder::for(Staff::class)
+            ->find($id);
 
         if (! $staff) {
             abort(404);
@@ -84,7 +115,8 @@ class StaffController extends Controller
      */
     public function update(UpdateStaffRequest $request, $id)
     {
-        $staff = Staff::find($id);
+        $staff = QueryBuilder::for(Staff::class)
+            ->find($id);
 
         if (! $staff) {
             abort(404);
@@ -104,7 +136,8 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        $staff = Staff::find($id);
+        $staff = QueryBuilder::for(Staff::class)
+            ->find($id);
 
         if (! $staff) {
             abort(404);

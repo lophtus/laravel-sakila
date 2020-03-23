@@ -162,7 +162,7 @@ export default {
           ctx.currentPage +
           "&page[size]=" +
           ctx.perPage +
-          "&filter[title]=" +
+          "&filter[search]=" +
           ctx.filter
       );
 

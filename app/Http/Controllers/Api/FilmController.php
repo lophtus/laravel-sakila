@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\FilterContainsMultipleFields;
 use App\Http\Requests\StoreFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
 use App\Http\Resources\FilmCollection;
@@ -10,6 +11,7 @@ use App\Http\Resources\FilmResource;
 use App\Sakila\Film;
 use App\Sakila\Store;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class FilmController extends Controller
@@ -23,7 +25,20 @@ class FilmController extends Controller
     {
         return new FilmCollection(
             QueryBuilder::for(Film::class)
-                ->allowedFilters(['title', 'description', 'release_year', 'rating'])
+                ->allowedFilters([
+                    'title',
+                    'description',
+                    'release_year',
+                    'rating',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'title',
+                            'description',
+                            'release_year',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -38,10 +53,23 @@ class FilmController extends Controller
     {
         return new FilmCollection(
             QueryBuilder::for(Film::class)
-                ->whereHas('stores', function (Builder $query ) use ($store) {
+                ->whereHas('stores', function (Builder $query) use ($store) {
                     $query->where('store.store_id', $store->store_id);
                 })
-                ->allowedFilters(['title', 'description', 'release_year', 'rating'])
+                ->allowedFilters([
+                    'title',
+                    'description',
+                    'release_year',
+                    'rating',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'title',
+                            'description',
+                            'release_year'
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -69,7 +97,8 @@ class FilmController extends Controller
      */
     public function show($id)
     {
-        $film = Film::find($id);
+        $film = QueryBuilder::for(Film::class)
+            ->find($id);
 
         if (! $film) {
             abort(404);
@@ -87,7 +116,8 @@ class FilmController extends Controller
      */
     public function update(UpdateFilmRequest $request, $id)
     {
-        $film = Film::find($id);
+        $film = QueryBuilder::for(Film::class)
+            ->find($id);
 
         if (! $film) {
             abort(404);
@@ -107,7 +137,8 @@ class FilmController extends Controller
      */
     public function destroy($id)
     {
-        $film = Film::find($id);
+        $film = QueryBuilder::for(Film::class)
+            ->find($id);
 
         if (! $film) {
             abort(404);

@@ -40,6 +40,14 @@ use Illuminate\Support\Facades\Route;
  *       type="string",
  *     )
  *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name, last name, email or username",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
  *   @OA\Response(
@@ -92,6 +100,14 @@ Route::get('/staffs', 'Api\\StaffController@index');
  *   @OA\Parameter(
  *     description="Filter by username",
  *     name="filter[username]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name, last name, email or username",
+ *     name="filter[search]",
  *     in="query",
  *     @OA\Schema(
  *       type="string",

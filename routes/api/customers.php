@@ -32,6 +32,14 @@ use Illuminate\Support\Facades\Route;
  *       format="email",
  *     )
  *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name, last name or email",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
  *   @OA\Response(
@@ -42,33 +50,6 @@ use Illuminate\Support\Facades\Route;
  * )
  */
 Route::get('/customers', 'Api\\CustomerController@index');
-
-/**
- * @OA\Get(
- *   description="Retrieve the specified customer",
- *   path="/customers/{id}",
- *   tags={"customers"},
- *   @OA\Parameter(
- *     name="id",
- *     description="A unique identifier for a customer",
- *     in="path",
- *   ),
- *   @OA\Response(
- *     response="200",
- *     description="An object containing information for a customer",
- *     @OA\JsonContent(ref="#/components/schemas/CustomerResource"),
- *   ),
- *   @OA\Response(
- *     response="404",
- *     ref="#/components/responses/NotFoundResponse",
- *   ),
- *   @OA\Response(
- *     response="500",
- *     ref="#/components/responses/ServerErrorResponse",
- *   ),
- * )
- */
-Route::get('/customers/{id}', 'Api\\CustomerController@show');
 
 /**
  * @OA\Get(
@@ -104,6 +85,14 @@ Route::get('/customers/{id}', 'Api\\CustomerController@show');
  *       type="string",
  *     )
  *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name, last name or email",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
  *   @OA\Response(
@@ -114,6 +103,33 @@ Route::get('/customers/{id}', 'Api\\CustomerController@show');
  * )
  */
 Route::get('/stores/{store}/customers', 'Api\\CustomerController@indexByStore');
+
+/**
+ * @OA\Get(
+ *   description="Retrieve the specified customer",
+ *   path="/customers/{id}",
+ *   tags={"customers"},
+ *   @OA\Parameter(
+ *     name="id",
+ *     description="A unique identifier for a customer",
+ *     in="path",
+ *   ),
+ *   @OA\Response(
+ *     response="200",
+ *     description="An object containing information for a customer",
+ *     @OA\JsonContent(ref="#/components/schemas/CustomerResource"),
+ *   ),
+ *   @OA\Response(
+ *     response="404",
+ *     ref="#/components/responses/NotFoundResponse",
+ *   ),
+ *   @OA\Response(
+ *     response="500",
+ *     ref="#/components/responses/ServerErrorResponse",
+ *   ),
+ * )
+ */
+Route::get('/customers/{id}', 'Api\\CustomerController@show');
 
 /**
  * @OA\Post(

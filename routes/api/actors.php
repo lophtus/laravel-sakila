@@ -23,6 +23,14 @@ use Illuminate\Support\Facades\Route;
  *       type="string",
  *     )
  *   ),
+ *   @OA\Parameter(
+ *     description="Filter by first name or last name",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
  *   @OA\Response(

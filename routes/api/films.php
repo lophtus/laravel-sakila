@@ -37,6 +37,14 @@ use Illuminate\Support\Facades\Route;
  *     in="query",
  *     @OA\Schema(ref="#/components/schemas/Rating"),
  *   ),
+ *   @OA\Parameter(
+ *     description="Filter by title, description or release year",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
+ *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),
  *   @OA\Response(
@@ -87,6 +95,14 @@ Route::get('/films', 'Api\\FilmController@index');
  *     name="filter[rating]",
  *     in="query",
  *     @OA\Schema(ref="#/components/schemas/Rating"),
+ *   ),
+ *   @OA\Parameter(
+ *     description="Filter by title, description or release year",
+ *     name="filter[search]",
+ *     in="query",
+ *     @OA\Schema(
+ *       type="string",
+ *     )
  *   ),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageNumber"),
  *   @OA\Parameter(ref="#/components/parameters/PageablePageSize"),

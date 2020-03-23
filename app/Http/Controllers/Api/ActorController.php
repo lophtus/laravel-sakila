@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Filters\FilterContainsMultipleFields;
 use App\Http\Requests\StoreActorRequest;
 use App\Http\Requests\UpdateActorRequest;
 use App\Http\Resources\ActorCollection;
 use App\Http\Resources\ActorResource;
 use App\Sakila\Actor;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ActorController extends Controller
@@ -21,7 +23,17 @@ class ActorController extends Controller
     {
         return new ActorCollection(
             QueryBuilder::for(Actor::class)
-                ->allowedFilters(['first_name', 'last_name'])
+                ->allowedFilters([
+                    'first_name',
+                    'last_name',
+                    AllowedFilter::custom(
+                        'search',
+                        new FilterContainsMultipleFields([
+                            'first_name',
+                            'last_name',
+                        ])
+                    ),
+                ])
                 ->jsonPaginate()
         );
     }
@@ -49,7 +61,8 @@ class ActorController extends Controller
      */
     public function show($id)
     {
-        $actor = Actor::find($id);
+        $actor = QueryBuilder::for(Actor::class)
+            ->find($id);
 
         if (! $actor) {
             abort(404);
@@ -67,7 +80,8 @@ class ActorController extends Controller
      */
     public function update(UpdateActorRequest $request, $id)
     {
-        $actor = Actor::find($id);
+        $actor = QueryBuilder::for(Actor::class)
+            ->find($id);
 
         if (! $actor) {
             abort(404);
@@ -87,7 +101,8 @@ class ActorController extends Controller
      */
     public function destroy($id)
     {
-        $actor = Actor::find($id);
+        $actor = QueryBuilder::for(Actor::class)
+            ->find($id);
 
         if (! $actor) {
             abort(404);
