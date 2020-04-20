@@ -2,11 +2,36 @@
   <div>
     <h2>Customers</h2>
 
+    <b-row>
+      <b-col>
+        <b-form-group label="Filter">
+          <b-input-group size="sm">
+            <b-input
+              v-model="filter"
+              type="search"
+              id="filterInput"
+              placeholder="Type to Search"
+              debounce="500"
+            ></b-input>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+      <b-col>
+        <b-form-group label="Per page">
+          <b-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-select>
+        </b-form-group>
+      </b-col>
+    </b-row>
+
     <b-table
       :items="fetchData"
       :fields="fields"
       :current-page="currentPage"
       :per-page="perPage"
+      :filter="filter"
       :busy="isBusy"
       show-empty
       striped
@@ -16,7 +41,11 @@
       </template>
 
       <template v-slot:cell(actions)="row">
-        <b-button variant="primary" size="sm" :to="{name:'customer-view', params: {id: row.item.id}}">
+        <b-button
+          variant="primary"
+          size="sm"
+          :to="{name:'customer-view', params: {id: row.item.id}}"
+        >
           <i class="far fa-edit"></i>
           View
         </b-button>
@@ -54,7 +83,9 @@ export default {
       currentPage: 1,
       lastPage: 1,
       perPage: 30,
-      fields: ["id", "first_name", "last_name", "actions"],
+      pageOptions: [10, 20, 30],
+      filter: "",
+      fields: ["id", "first_name", "last_name", "email", "actions"],
       customers: []
     };
   },
@@ -65,7 +96,12 @@ export default {
       vm.isBusy = true;
 
       const promise = axios.get(
-        "/customers?page[number]=" + ctx.currentPage + "&page[size]=" + ctx.perPage
+        "/customers?page[number]=" +
+          ctx.currentPage +
+          "&page[size]=" +
+          ctx.perPage +
+          "&filter[search]=" +
+          ctx.filter
       );
 
       return promise.then(({ data }) => {
