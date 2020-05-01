@@ -1,10 +1,9 @@
 <template>
   <CSidebar fixed :minimize="minimize" :show.sync="show">
-    <CSidebarBrand
-      :imgFull="{ width: 118, height: 46, alt: 'Logo', src: '/img/brand/coreui-base-white.svg'}"
-      :imgMinimized="{ width: 118, height: 46, alt: 'Logo', src: '/img/brand/coreui-signet-white.svg'}"
-      :wrappedInLink="{ href: 'https://coreui.io/', target: '_blank'}"
-    />
+    <CSidebarBrand class="d-md-down-none" to="/">
+      <CImg class="c-sidebar-brand-full" width="118" height="46" src="/img/brand/coreui-base-white.svg" />
+      <CImg class="c-sidebar-brand-minimized" width="118" height="46" src="/img/brand/coreui-signet-white.svg" />
+    </CSidebarBrand>
     <CRenderFunction flat :content-to-render="nav" />
     <CSidebarMinimizer class="d-md-down-none" @click.native="minimize = !minimize" />
   </CSidebar>
