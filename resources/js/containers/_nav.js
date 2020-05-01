@@ -16,6 +16,12 @@ export default [
             },
             {
                 _name: 'CSidebarNavItem',
+                name: 'Inventory',
+                to: {name: "inventory-list"},
+                fontIcon: 'far fa-list-alt'
+            },
+            {
+                _name: 'CSidebarNavItem',
                 name: 'Stores',
                 to: '/stores',
                 fontIcon: 'far fa-map'

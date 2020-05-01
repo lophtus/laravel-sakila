@@ -39,6 +39,9 @@
         <b-tab title="Films" lazy>
           <FilmList v-if="isLoaded" :store="store" />
         </b-tab>
+        <b-tab title="Inventory" lazy>
+          <InventoryList v-if="isLoaded" :store="store" />
+        </b-tab>
       </b-tabs>
     </b-card>
 
@@ -51,13 +54,15 @@ import axios from "axios";
 import CustomerList from "./components/CustomerList";
 import EditModal from "./components/EditModal";
 import FilmList from "./components/FilmList";
+import InventoryList from "./components/InventoryList";
 
 export default {
   name: "StoreView",
   components: {
     CustomerList,
     EditModal,
-    FilmList
+    FilmList,
+    InventoryList
   },
   data() {
     return {

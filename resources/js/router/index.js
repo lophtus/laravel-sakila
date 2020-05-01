@@ -8,6 +8,9 @@ import CustomerView from "../views/customers/view";
 import FilmIndex from "../views/films/index";
 import FilmList from "../views/films/list";
 import FilmView from "../views/films/view";
+import InventoryIndex from "../views/inventory/index";
+import InventoryList from "../views/inventory/list";
+import InventoryView from "../views/inventory/view";
 import StoreIndex from "../views/stores/index";
 import StoreList from "../views/stores/list";
 import StoreView from "../views/stores/view";
@@ -58,6 +61,22 @@ function configRoutes() {
                             path: ":id(\\d+)",
                             name: "film-view",
                             component: FilmView,
+                        },
+                    ],
+                },
+                {
+                    path: "inventory",
+                    component: InventoryIndex,
+                    children: [
+                        {
+                            path: "",
+                            name: "inventory-list",
+                            component: InventoryList,
+                        },
+                        {
+                            path: ":id(\\d+)",
+                            name: "inventory-view",
+                            component: InventoryView,
                         },
                     ],
                 },
