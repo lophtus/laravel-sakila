@@ -22,16 +22,6 @@ class Inventory extends Model
     protected $primaryKey = 'inventory_id';
 
     /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = [
-        'film',
-        'store',
-    ];
-
-    /**
      * Returns the associated film
      *
      * @return Film
