@@ -12,7 +12,13 @@ const mix = require('laravel-mix');
  */
 
 mix.webpackConfig({
-    devtool: 'source-map'
+    devtool: 'source-map',
+    resolve: {
+      extensions: ['.js', '.vue', '.json'],
+      alias: {
+        '@': __dirname + '/resources/js'
+      },
+    }
 });
 
 mix.js('resources/js/app.js', 'public/js')
