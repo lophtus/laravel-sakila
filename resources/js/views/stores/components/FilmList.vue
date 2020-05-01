@@ -90,7 +90,7 @@
         <b-button
           variant="primary"
           size="sm"
-          :to="{name:'inventory-view', params: {id: row.item.id}}"
+          :to="{name:'film-view', params: {id: row.item.id}}"
         >
           <i class="far fa-edit"></i>
           View
