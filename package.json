@@ -30,7 +30,7 @@
     },
     "dependencies": {
         "@coreui/coreui": "^3.0.0",
-        "@coreui/vue": "^3.0.5",
+        "@coreui/vue": "^3.0.7",
         "@fortawesome/fontawesome-free": "^5.12.1",
         "bootstrap-vue": "^2.7.0",
         "vee-validate": "^3.2.5",
