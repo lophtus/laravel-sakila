@@ -23,6 +23,7 @@ import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
 import Toasted from "vue-toasted";
+import Vue2Filters from "vue2-filters";
 
 Vue.config.performance = true;
 
@@ -34,6 +35,7 @@ Vue.use(Toasted, {
   position: "bottom-right",
   duration: 5000
 });
+Vue.use(Vue2Filters);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
