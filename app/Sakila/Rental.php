@@ -21,6 +21,16 @@ class Rental extends Model
     protected $primaryKey = 'rental_id';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'rental_date',
+        'return_date',
+    ];
+
+    /**
      * Returns the associated customer
      *
      * @return Customer

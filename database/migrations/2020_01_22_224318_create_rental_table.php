@@ -19,7 +19,7 @@ class CreateRentalTable extends Migration
             $table->unsignedMediumInteger('inventory_id');
             $table->unsignedSmallInteger('customer_id');
             $table->dateTime('return_date')->nullable();
-            $table->unsignedTinyInteger('staff_id');
+            $table->unsignedTinyInteger('staff_id')->nullable();
             $table->timestamps();
 
             $table->foreign('inventory_id')->references('inventory_id')->on('inventory');
