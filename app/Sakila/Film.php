@@ -110,6 +110,16 @@ class Film extends Model
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'language',
+        'originalLanguage',
+    ];
+
+    /**
      * Returns a collection of associated actors
      *
      * @return Collection<Actor>
@@ -126,7 +136,7 @@ class Film extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class)->withTimestamps();
+        return $this->belongsToMany(Category::class, 'film_category', 'film_id', 'category_id', 'film_id', 'category_id')->withTimestamps();
     }
 
     /**
@@ -136,7 +146,7 @@ class Film extends Model
      */
     public function language()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'language_id', 'language_id');
     }
 
     /**
@@ -146,7 +156,7 @@ class Film extends Model
      */
     public function originalLanguage()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(Language::class, 'original_language_id', 'language_id');
     }
 
     /**

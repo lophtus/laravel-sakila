@@ -63,6 +63,24 @@ class FilmResource extends JsonResource
 
             /**
              * @OA\Property(
+             *   property="language",
+             *   type="string",
+             *   nullable=true,
+             * )
+             */
+            'language' => $this->whenLoaded('language', function () { return $this->language->name; }),
+
+            /**
+             * @OA\Property(
+             *   property="original_language",
+             *   type="string",
+             *   nullable=true,
+             * )
+             */
+            'original_language' => $this->whenLoaded('originalLanguage', function () { return $this->originalLanguage->name; }),
+
+            /**
+             * @OA\Property(
              *   property="rating",
              *   ref="#/components/schemas/Rating",
              * )
