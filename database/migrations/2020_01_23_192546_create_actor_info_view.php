@@ -13,7 +13,7 @@ class CreateActorInfoView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE DEFINER=CURRENT_USER SQL SECURITY INVOKER VIEW `actor_info`
+            CREATE OR REPLACE DEFINER=CURRENT_USER SQL SECURITY INVOKER VIEW `actor_info`
             AS
             SELECT
                 a.actor_id,

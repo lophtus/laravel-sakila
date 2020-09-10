@@ -13,7 +13,7 @@ class CreateNicerButSlowerFilmListView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `nicer_but_slower_film_list`
+            CREATE OR REPLACE VIEW `nicer_but_slower_film_list`
             AS
             SELECT film.film_id AS FID, film.title AS title, film.description AS description, category.name AS category, film.rental_rate AS price,
     	        film.length AS length, film.rating AS rating, GROUP_CONCAT(CONCAT(CONCAT(UCASE(SUBSTR(actor.first_name,1,1)),

@@ -13,7 +13,7 @@ class CreateFilmListView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `film_list`
+            CREATE OR REPLACE VIEW `film_list`
             AS
             SELECT film.film_id AS FID, film.title AS title, film.description AS description, category.name AS category, film.rental_rate AS price,
         	    film.length AS length, film.rating AS rating, GROUP_CONCAT(CONCAT(actor.first_name, _utf8\' \', actor.last_name) SEPARATOR \', \') AS actors

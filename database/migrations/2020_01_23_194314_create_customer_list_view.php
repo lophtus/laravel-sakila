@@ -13,7 +13,7 @@ class CreateCustomerListView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `customer_list`
+            CREATE OR REPLACE VIEW `customer_list`
             AS
             SELECT
                 cu.customer_id AS ID,

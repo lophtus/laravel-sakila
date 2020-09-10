@@ -13,7 +13,7 @@ class CreateStaffListView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `staff_list`
+            CREATE OR REPLACE VIEW `staff_list`
             AS
             SELECT
                 s.staff_id AS ID,

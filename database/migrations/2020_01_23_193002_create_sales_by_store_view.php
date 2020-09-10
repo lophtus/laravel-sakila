@@ -13,7 +13,7 @@ class CreateSalesByStoreView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `sales_by_store`
+            CREATE OR REPLACE VIEW `sales_by_store`
             AS
             SELECT
                 CONCAT(a.city, _utf8\',\', a.country) AS store,

@@ -13,7 +13,7 @@ class CreateSalesByFilmCategoryView extends Migration
     public function up()
     {
         DB::unprepared('
-            CREATE VIEW `sales_by_film_category`
+            CREATE OR REPLACE VIEW `sales_by_film_category`
             AS
             SELECT
                 c.name AS category,
