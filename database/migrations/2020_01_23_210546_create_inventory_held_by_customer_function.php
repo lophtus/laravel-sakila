@@ -12,6 +12,8 @@ class CreateInventoryHeldByCustomerFunction extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP FUNCTION IF EXISTS `inventory_held_by_customer`');
+
         DB::unprepared('
             CREATE FUNCTION `inventory_held_by_customer`(p_inventory_id INT) RETURNS INT
                 READS SQL DATA

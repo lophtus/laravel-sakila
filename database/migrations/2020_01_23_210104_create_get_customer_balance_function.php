@@ -12,6 +12,8 @@ class CreateGetCustomerBalanceFunction extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP FUNCTION IF EXISTS `get_customer_balance`');
+
         DB::unprepared('
             CREATE FUNCTION `get_customer_balance`(p_customer_id INT, p_effective_date DATETIME) RETURNS DECIMAL(5,2)
                 DETERMINISTIC

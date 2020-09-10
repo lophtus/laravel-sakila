@@ -12,6 +12,8 @@ class CreateInventoryInStockFunction extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP FUNCTION IF EXISTS `inventory_in_stock`');
+
         DB::unprepared('
             CREATE FUNCTION `inventory_in_stock`(p_inventory_id INT) RETURNS BOOLEAN
                 READS SQL DATA

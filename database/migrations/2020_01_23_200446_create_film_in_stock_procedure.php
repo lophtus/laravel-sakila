@@ -12,6 +12,8 @@ class CreateFilmInStockProcedure extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP PROCEDURE IF EXISTS `film_in_stock`');
+
         DB::unprepared('
             CREATE PROCEDURE `film_in_stock`(IN p_film_id INT, IN p_store_id INT, OUT p_film_count INT)
             READS SQL DATA

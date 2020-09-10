@@ -12,6 +12,8 @@ class CreateRewardsReportProcedure extends Migration
      */
     public function up()
     {
+        DB::unprepared('DROP PROCEDURE IF EXISTS `rewards_report`');
+
         DB::unprepared('
             CREATE PROCEDURE `rewards_report` (
                 IN min_monthly_purchases TINYINT UNSIGNED,
