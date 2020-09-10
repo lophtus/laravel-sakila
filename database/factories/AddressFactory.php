@@ -12,7 +12,7 @@ $factory->define(Address::class, function (Faker $faker) {
         'city' => $faker->city,
         'state' => $faker->stateAbbr,
         'country' => 'US',
-        'postal_code' => $faker->optional()->postcode,
+        'postal_code' => $faker->postcode,
         'phone' => $faker->numerify('###-###-####'),
     ];
 });
