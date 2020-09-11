@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\DTOs\StaffData;
 use App\Http\Filters\FilterContainsMultipleFields;
-use App\Http\Requests\StoreStaffRequest;
-use App\Http\Requests\UpdateStaffRequest;
-use App\Http\Resources\StaffCollection;
-use App\Http\Resources\StaffResource;
-use App\Sakila\Staff;
+use App\Http\Requests\StoreFilmRequest;
+use App\Http\Requests\UpdateFilmRequest;
+use App\Http\Resources\FilmCollection;
+use App\Http\Resources\FilmResource;
+use App\Sakila\Film;
 use App\Sakila\Store;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class StaffController extends Controller
+class FilmController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,20 +23,19 @@ class StaffController extends Controller
      */
     public function index()
     {
-        return new StaffCollection(
-            QueryBuilder::for(Staff::class)
+        return new FilmCollection(
+            QueryBuilder::for(Film::class)
                 ->allowedFilters([
-                    'first_name',
-                    'last_name',
-                    'email',
-                    'username',
+                    'title',
+                    'description',
+                    'release_year',
+                    'rating',
                     AllowedFilter::custom(
                         'search',
                         new FilterContainsMultipleFields([
-                            'first_name',
-                            'last_name',
-                            'email',
-                            'username',
+                            'title',
+                            'description',
+                            'release_year',
                         ])
                     ),
                 ])
@@ -52,21 +51,22 @@ class StaffController extends Controller
      */
     public function indexByStore(Store $store)
     {
-        return new StaffCollection(
-            QueryBuilder::for(Staff::class)
-                ->where('store_id', $store->store_id)
+        return new FilmCollection(
+            QueryBuilder::for(Film::class)
+                ->whereHas('stores', function (Builder $query) use ($store) {
+                    $query->where('store.store_id', $store->store_id);
+                })
                 ->allowedFilters([
-                    'first_name',
-                    'last_name',
-                    'email',
-                    'username',
+                    'title',
+                    'description',
+                    'release_year',
+                    'rating',
                     AllowedFilter::custom(
                         'search',
                         new FilterContainsMultipleFields([
-                            'first_name',
-                            'last_name',
-                            'email',
-                            'username',
+                            'title',
+                            'description',
+                            'release_year'
                         ])
                     ),
                 ])
@@ -77,15 +77,16 @@ class StaffController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreStaffRequest  $request
+     * @param  StoreFilmRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreStaffRequest $request, Store $store)
+    public function store(StoreFilmRequest $request)
     {
-        $staff = $store->staff()
-            ->create(StaffData::fromRequest($request));
+        $film = new Film();
+        $film->fill($request->all());
+        $film->save();
 
-        return new StaffResource($staff->refresh());
+        return new FilmResource($film);
     }
 
     /**
@@ -96,36 +97,36 @@ class StaffController extends Controller
      */
     public function show($id)
     {
-        $staff = QueryBuilder::for(Staff::class)
+        $film = QueryBuilder::for(Film::class)
             ->find($id);
 
-        if (! $staff) {
+        if (! $film) {
             abort(404);
         }
 
-        return new StaffResource($staff);
+        return new FilmResource($film);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateStaffRequest  $request
+     * @param  UpdateFilmRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateStaffRequest $request, $id)
+    public function update(UpdateFilmRequest $request, $id)
     {
-        $staff = QueryBuilder::for(Staff::class)
+        $film = QueryBuilder::for(Film::class)
             ->find($id);
 
-        if (! $staff) {
+        if (! $film) {
             abort(404);
         }
 
-        $staff->fill(StaffData::fromRequest($request));
-        $staff->push();
+        $film->fill($request->all());
+        $film->save();
 
-        return new StaffResource($staff->refresh());
+        return new FilmResource($film->refresh());
     }
 
     /**
@@ -136,15 +137,15 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        $staff = QueryBuilder::for(Staff::class)
+        $film = QueryBuilder::for(Film::class)
             ->find($id);
 
-        if (! $staff) {
+        if (! $film) {
             abort(404);
         }
 
-        $staff->delete();
+        $film->delete();
 
-        return new StaffResource($staff);
+        return new FilmResource($film);
     }
 }

@@ -17,6 +17,13 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'App\Http\Controllers';
 
     /**
+     * This namespace is applied to your admin controller routes.
+     *
+     * @var string
+     */
+    protected $adminNamespace = 'App\Http\Controllers\Admin';
+
+    /**
      * The path to the "home" route for your application.
      *
      * @var string
@@ -42,11 +49,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+        $this->mapAdminApiRoutes();
+
+        $this->mapAdminWebRoutes();
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
     }
 
     /**
@@ -72,19 +81,42 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
+    }
+
+    /**
+     * Define the "web" routes for the admin application
+     *
+     * @return void
+     */
+    protected function mapAdminWebRoutes()
+    {
+        Route::domain('admin.' . config('app.domain'))
+             ->middleware('web')
+             ->namespace($this->adminNamespace)
+             ->group(base_path('routes/admin/web.php'));
+    }
+
+    /**
+     * Define the "api" routes for the admin application
+     *
+     * @return void
+     */
+    protected function mapAdminApiRoutes()
+    {
+        Route::domain('admin.' . config('app.domain'))
+            ->prefix('api')
             ->middleware('api')
-            ->namespace($this->namespace)
+            ->namespace($this->adminNamespace)
             ->group(function ($router) {
-                require base_path('routes/api/actors.php');
-                require base_path('routes/api/categories.php');
-                require base_path('routes/api/customers.php');
-                require base_path('routes/api/films.php');
-                require base_path('routes/api/inventory.php');
-                require base_path('routes/api/payments.php');
-                require base_path('routes/api/rentals.php');
-                require base_path('routes/api/staffs.php');
-                require base_path('routes/api/stores.php');
+                require base_path('routes/admin/api/actors.php');
+                require base_path('routes/admin/api/categories.php');
+                require base_path('routes/admin/api/customers.php');
+                require base_path('routes/admin/api/films.php');
+                require base_path('routes/admin/api/inventory.php');
+                require base_path('routes/admin/api/payments.php');
+                require base_path('routes/admin/api/rentals.php');
+                require base_path('routes/admin/api/staffs.php');
+                require base_path('routes/admin/api/stores.php');
             });
     }
 }

@@ -22,12 +22,19 @@ window.Vue = require('vue');
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
+import Toasted from "vue-toasted";
 import Vue2Filters from "vue2-filters";
 
 Vue.config.performance = true;
 
 Vue.use(BootstrapVue);
 Vue.use(CoreuiVue);
+Vue.use(Toasted, {
+  theme: "toasted-primary",
+  iconPack: "custom-class",
+  position: "bottom-right",
+  duration: 5000
+});
 Vue.use(Vue2Filters);
 
 /**
@@ -38,6 +45,7 @@ Vue.use(Vue2Filters);
 
 import App from "./App.vue";
 import router from "./router";
+import "./vee-validate";
 
 const app = new Vue({
   el: "#app",
