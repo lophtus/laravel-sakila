@@ -36,7 +36,7 @@ class RentalController extends Controller
     {
         return new RentalCollection(
             QueryBuilder::for(Rental::class)
-                ->whereHas('customer', function (Builder $query)  use ($customer) {
+                ->whereHas('customer', function (Builder $query) use ($customer) {
                     $query->where('customer.customer_id', $customer->customer_id);
                 })
                 ->jsonPaginate()
@@ -53,7 +53,7 @@ class RentalController extends Controller
     {
         return new RentalCollection(
             QueryBuilder::for(Rental::class)
-                ->whereHas('store', function (Builder $query)  use ($store) {
+                ->whereHas('store', function (Builder $query) use ($store) {
                     $query->where('store.store_id', $store->store_id);
                 })
                 ->jsonPaginate()

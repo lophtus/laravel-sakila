@@ -53,7 +53,7 @@ class CustomerController extends Controller
     {
         return new CustomerCollection(
             QueryBuilder::for(Customer::class)
-                ->whereHas('store', function (Builder $query ) use ($store) {
+                ->whereHas('store', function (Builder $query) use ($store) {
                     $query->where('store.store_id', $store->store_id);
                 })
                 ->allowedFilters([

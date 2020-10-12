@@ -51,7 +51,7 @@ class OpenApiCommand extends Command
         $schemaFile = 'openapi.json';
 
         // generate schema for admin api
-        if($this->option('admin')) {
+        if ($this->option('admin')) {
             $options = [
                 'exclude' => [
                     'vendor',
@@ -63,7 +63,7 @@ class OpenApiCommand extends Command
         }
 
         // confirm overwrite when file exists
-        if(Storage::disk($storageDisk)->exists($schemaFile) &&
+        if (Storage::disk($storageDisk)->exists($schemaFile) &&
            ! $this->confirm('File already exists! Do you wish to continue?')) {
             return;
         }

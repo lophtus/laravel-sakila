@@ -35,7 +35,7 @@ class PaymentController extends Controller
     {
         return new PaymentCollection(
             QueryBuilder::for(Payment::class)
-                ->whereHas('customer', function (Builder $query)  use ($customer) {
+                ->whereHas('customer', function (Builder $query) use ($customer) {
                     $query->where('customer.customer_id', $customer->customer_id);
                 })
                 ->jsonPaginate()
