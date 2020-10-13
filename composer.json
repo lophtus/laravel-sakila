@@ -65,6 +65,11 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "install-hooks": [
+            "sh ./contrib/setup.sh"
+        ],
+        "post-install-cmd": ["@install-hooks"],
+        "post-update-cmd": ["@install-hooks"]
     }
 }
