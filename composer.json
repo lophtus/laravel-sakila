@@ -67,7 +67,7 @@
             "@php artisan key:generate --ansi"
         ],
         "install-hooks": [
-            "sh ./contrib/setup.sh"
+            "@php ./contrib/setup"
         ],
         "post-install-cmd": ["@install-hooks"],
         "post-update-cmd": ["@install-hooks"]
