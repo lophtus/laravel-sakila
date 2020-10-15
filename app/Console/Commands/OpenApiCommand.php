@@ -44,7 +44,7 @@ class OpenApiCommand extends Command
         $options = [
             'exclude' => [
                 'vendor',
-                'routes/api',
+                'routes/admin',
             ]
         ];
 
@@ -55,7 +55,7 @@ class OpenApiCommand extends Command
             $options = [
                 'exclude' => [
                     'vendor',
-                    'routes/admin',
+                    'routes/api',
                 ]
             ];
 
