@@ -11,6 +11,7 @@ $factory->define(Customer::class, function (Faker $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'email' => $faker->optional()->email,
+        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'address_id' => factory(Address::class),
         'active' => $faker->boolean,
     ];

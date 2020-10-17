@@ -68,7 +68,9 @@ class FilmResource extends JsonResource
              *   nullable=true,
              * )
              */
-            'language' => $this->whenLoaded('language', function () { return $this->language->name; }),
+            'language' => $this->whenLoaded('language', function () {
+                return $this->language->name;
+            }),
 
             /**
              * @OA\Property(
@@ -77,7 +79,9 @@ class FilmResource extends JsonResource
              *   nullable=true,
              * )
              */
-            'original_language' => $this->whenLoaded('originalLanguage', function () { return $this->originalLanguage->name; }),
+            'original_language' => $this->whenLoaded('originalLanguage', function () {
+                return $this->originalLanguage->name;
+            }),
 
             /**
              * @OA\Property(
@@ -120,6 +124,33 @@ class FilmResource extends JsonResource
              * )
              */
             'replacement_cost' => $this->replacement_cost,
+
+            /**
+             * @OA\Property(
+             *   property="actors",
+             *   type="array",
+             *   @OA\Items(ref="#/components/schemas/ActorResource"),
+             * )
+             */
+            'actors' => ActorResource::collection($this->whenLoaded('actors')),
+
+            /**
+             * @OA\Property(
+             *   property="inventory",
+             *   type="array",
+             *   @OA\Items(ref="#/components/schemas/InventoryResource"),
+             * )
+             */
+            'inventory' => InventoryResource::collection($this->whenLoaded('inventory')),
+
+            /**
+             * @OA\Property(
+             *   property="in_stock_inventory",
+             *   type="array",
+             *   @OA\Items(ref="#/components/schemas/InventoryResource"),
+             * )
+             */
+            'in_stock_inventory' => InventoryResource::collection($this->whenLoaded('inStockInventory')),
 
             /**
              * @OA\Property(

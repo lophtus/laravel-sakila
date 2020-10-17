@@ -2,8 +2,8 @@
   <div class="c-app">
     <div class="c-wrapper">
       <div class="c-body">
-        <main class="c-main">
-          <router-view></router-view>
+        <main class="c-main p-0">
+          <router-view :key="$route.path"></router-view>
         </main>
       </div>
     </div>
@@ -12,10 +12,9 @@
 
 <script>
 export default {
-  name: "DefaultContainer"
-}
+  name: "DefaultContainer",
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -67,7 +67,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
+        Route::name('web')
+             ->middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
     }
@@ -81,6 +82,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
+        Route::prefix('api')
+             ->middleware('api')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/api.php'));
     }
 
     /**
@@ -90,7 +95,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminWebRoutes()
     {
-        Route::domain('admin.' . config('app.domain'))
+        Route::name('admin-web')
+             ->domain('admin.' . config('app.domain'))
              ->middleware('web')
              ->namespace($this->adminNamespace)
              ->group(base_path('routes/admin/web.php'));
@@ -103,20 +109,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapAdminApiRoutes()
     {
-        Route::domain('admin.' . config('app.domain'))
-            ->prefix('api')
-            ->middleware('api')
-            ->namespace($this->adminNamespace)
-            ->group(function ($router) {
-                require base_path('routes/admin/api/actors.php');
-                require base_path('routes/admin/api/categories.php');
-                require base_path('routes/admin/api/customers.php');
-                require base_path('routes/admin/api/films.php');
-                require base_path('routes/admin/api/inventory.php');
-                require base_path('routes/admin/api/payments.php');
-                require base_path('routes/admin/api/rentals.php');
-                require base_path('routes/admin/api/staffs.php');
-                require base_path('routes/admin/api/stores.php');
-            });
+        Route::name('admin-api')
+             ->prefix('api')
+             ->middleware('api')
+             ->namespace($this->adminNamespace)
+             ->group(base_path('routes/admin/api.php'));
     }
 }

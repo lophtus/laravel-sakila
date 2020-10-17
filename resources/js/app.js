@@ -23,12 +23,14 @@ import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
 import Vue2Filters from "vue2-filters";
+import VueInitialsImg from "vue-initials-img";
 
 Vue.config.performance = true;
 
 Vue.use(BootstrapVue);
 Vue.use(CoreuiVue);
 Vue.use(Vue2Filters);
+Vue.use(VueInitialsImg);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,12 +38,18 @@ Vue.use(Vue2Filters);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import App from "./App.vue";
-import router from "./router";
+import App from "@/App.vue";
+import router from "@/router";
+import store from "@/store";
+
+//importing whole set
+import { cilAccountLogout, cilSettings, cilUser } from '@coreui/icons'
 
 const app = new Vue({
   el: "#app",
   router,
+  store,
+  icons: { cilAccountLogout, cilSettings, cilUser },
   components: {
     App
   },
