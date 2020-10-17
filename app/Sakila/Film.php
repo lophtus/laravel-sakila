@@ -166,7 +166,17 @@ class Film extends Model
      */
     public function inventory()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->hasMany(Inventory::class, 'film_id', 'film_id');
+    }
+
+    /**
+     * Returns the associated store inventory
+     *
+     * @return Collection<Inventory>
+     */
+    public function inStockInventory()
+    {
+        return $this->inventory()->whereRaw('inventory_in_stock(inventory.inventory_id)');
     }
 
     /**

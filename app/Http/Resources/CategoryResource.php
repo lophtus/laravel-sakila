@@ -37,6 +37,15 @@ class CategoryResource extends JsonResource
 
             /**
              * @OA\Property(
+             *   property="films",
+             *   type="array",
+             *   @OA\Items(ref="#/components/schemas/FilmResource"),
+             * )
+             */
+            'films' => FilmResource::collection($this->whenLoaded('films')),
+
+            /**
+             * @OA\Property(
              *   property="created_at",
              *   type="string",
              *   format="date-time",
