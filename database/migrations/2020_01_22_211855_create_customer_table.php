@@ -15,7 +15,7 @@ class CreateCustomerTable extends Migration
     {
         Schema::create('customer', function (Blueprint $table) {
             $table->smallIncrements('customer_id');
-            $table->unsignedTinyInteger('store_id');
+            $table->unsignedTinyInteger('store_id')->nullable();
             $table->string('first_name', 45);
             $table->string('last_name', 45);
             $table->string('email', 50)->nullable();
