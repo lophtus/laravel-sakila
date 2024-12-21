@@ -17,14 +17,9 @@ $ php artisan serve
 # Visit http://localhost:8000
 ```
 
-# Laravel Homestead
+# Devcontainer
 
-```bash
-$ cp Homestead.yaml.example Homestead.yaml
-$ vagrant up
-
-# Add homestead.test to hosts file & visit http://homestead.test
-```
+Start in Visual Studio Code and re-open in remote containers (`Remote-Containers: Reopen in Container`).
 
 # License
 
