@@ -1,8 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Sakila\Film;
 use App\Sakila\Language;
 use Illuminate\Database\Seeder;
+use Exception;
 
 class FilmSeeder extends Seeder
 {

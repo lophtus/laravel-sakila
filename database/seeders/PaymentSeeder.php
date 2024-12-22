@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Sakila\Payment;
 use App\Sakila\Rental;
 use Illuminate\Database\Seeder;
