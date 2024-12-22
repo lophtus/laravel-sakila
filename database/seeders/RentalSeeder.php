@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Sakila\Customer;
 use App\Sakila\Inventory;
 use App\Sakila\Rental;

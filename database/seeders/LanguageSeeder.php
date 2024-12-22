@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Sakila\Language;
 use Illuminate\Database\Seeder;
 

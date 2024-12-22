@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Sakila\Customer;
 use App\Sakila\Film;
 use App\Sakila\Staff;
