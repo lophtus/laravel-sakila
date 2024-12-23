@@ -18,7 +18,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
         "spatie/laravel-json-api-paginate": "^1.6",
-        "spatie/laravel-query-builder": "^3.6.3",
+        "spatie/laravel-query-builder": "^4.0.4",
         "zircote/swagger-php": "^3.0"
     },
     "require-dev": {

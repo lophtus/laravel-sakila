@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8367d3f0c9fc340d9b0a66e414d307e",
+    "content-hash": "8834d3bd0845fd436477f12100ea9f7b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3300,16 +3300,16 @@
         },
         {
             "name": "spatie/laravel-query-builder",
-            "version": "3.6.3",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-query-builder.git",
-                "reference": "4510ac8a450656df45b6d1bcb222fe12e413ad56"
+                "reference": "fa289437588dfce89c72a16515113f3bade0590b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/4510ac8a450656df45b6d1bcb222fe12e413ad56",
-                "reference": "4510ac8a450656df45b6d1bcb222fe12e413ad56",
+                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/fa289437588dfce89c72a16515113f3bade0590b",
+                "reference": "fa289437588dfce89c72a16515113f3bade0590b",
                 "shasum": ""
             },
             "require": {
@@ -3320,6 +3320,7 @@
             },
             "require-dev": {
                 "ext-json": "*",
+                "friendsofphp/php-cs-fixer": "^3.0",
                 "laravel/legacy-factories": "^1.0.4",
                 "mockery/mockery": "^1.4",
                 "orchestra/testbench": "^4.9|^5.8|^6.3",
@@ -3366,7 +3367,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2022-08-30T06:53:23+00:00"
+            "time": "2022-11-28T13:50:55+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -8349,12 +8350,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3|^8.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
