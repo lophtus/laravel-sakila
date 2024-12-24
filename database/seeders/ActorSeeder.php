@@ -9,10 +9,8 @@ class ActorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         factory(Actor::class, 100)->create();
     }
