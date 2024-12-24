@@ -12,10 +12,8 @@ class StoreSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $storeCount = (int)$this->command->ask('How many stores do you need? Default: ', 1);
         $staffCount = (int)$this->command->ask('How many staff members do you need (excl. manager)? Default: ', 5);

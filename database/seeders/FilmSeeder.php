@@ -11,10 +11,8 @@ class FilmSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $filmCount = (int)$this->command->ask('How many films do you need? Default: ', 'all');
 

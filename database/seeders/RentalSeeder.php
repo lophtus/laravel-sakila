@@ -12,10 +12,8 @@ class RentalSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $storeId = (int)$this->command->ask('What store do you want to seed? Default: ', 1);
 

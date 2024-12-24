@@ -10,10 +10,8 @@ class PaymentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $rentalId = (int)$this->command->ask('What rental do you want to seed? Default: ', 1);
 
