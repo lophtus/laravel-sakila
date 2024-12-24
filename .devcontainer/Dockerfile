@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/php:7.4-bullseye
-#FROM mcr.microsoft.com/devcontainers/php:1-8.2-bookworm
+FROM mcr.microsoft.com/devcontainers/php:8.3-bullseye
 
 # Disable Yarn
 RUN mv /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list-disabled 
