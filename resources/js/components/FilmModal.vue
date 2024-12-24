@@ -159,7 +159,7 @@ export default {
 
       vm.isBusy = true;
 
-      const promise = api.getFilm(filmId, "in_stock_inventory.store");
+      const promise = api.getFilm(filmId, "inStockInventory.store");
 
       return promise.then(({ data }) => {
         vm.film = data.data;
