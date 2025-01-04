@@ -10,9 +10,9 @@ return [
     | Application Name
     |--------------------------------------------------------------------------
     |
-    | This value is the name of your application. This value is used when the
+    | This value is the name of your application, which will be used when the
     | framework needs to place the application's name in a notification or
-    | any other location as required by the application or its packages.
+    | other UI elements where an application name needs to be displayed.
     |
     */
 
@@ -51,13 +51,11 @@ return [
     |
     | This URL is used by the console to properly generate URLs when using
     | the Artisan command line tool. You should set this to the root of
-    | your application so that it is used when running Artisan tasks.
+    | the application so that it's available within Artisan commands.
     |
     */
 
     'url' => env('APP_URL', 'http://localhost'),
-
-    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +79,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -94,7 +92,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('APP_LOCALE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +105,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -120,22 +118,28 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |
-    | This key is used by the Illuminate encrypter service and should be set
-    | to a random, 32 character string, otherwise these encrypted strings
-    | will not be safe. Please do this before deploying an application!
+    | This key is utilized by Laravel's encryption services and should be set
+    | to a random, 32 character string to ensure that all encrypted values
+    | are secure. You should do this prior to deploying the application.
     |
     */
 
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+
+    'previous_keys' => [
+        ...array_filter(
+            explode(',', env('APP_PREVIOUS_KEYS', ''))
+        ),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -151,8 +155,8 @@ return [
     */
 
     'maintenance' => [
-        'driver' => 'file',
-        // 'store' => 'redis',
+        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
+        'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
     /*

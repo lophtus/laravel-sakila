@@ -1,4 +1,5 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "lophtus/laravel-sakila",
     "type": "project",
     "description": "A system for managing film rentals.",
@@ -11,22 +12,19 @@
     "require": {
         "php": "^8.1",
         "gregoryduckworth/encryptable": "^1.0",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.10",
+        "laravel/framework": "^11.31",
         "laravel/legacy-factories": "^1.4",
-        "laravel/tinker": "^2.8",
-        "laravel/ui": "^4.6",
+        "laravel/tinker": "^2.9",
         "spatie/laravel-json-api-paginate": "^1.14",
         "spatie/laravel-query-builder": "6.2.2",
         "zircote/swagger-php": "^3.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
+        "fakerphp/faker": "^1.23",
         "jkocik/laravel-profiler": "^2.0.3",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.1",
-        "spatie/laravel-ignition": "^2.0",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^11.0.1",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
