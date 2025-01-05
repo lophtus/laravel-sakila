@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/categories', 'Api\\CategoryController@index');
+Route::get('/categories', CategoryController::class . '@index');
 
 /**
  * @OA\Get(
@@ -51,7 +52,7 @@ Route::get('/categories', 'Api\\CategoryController@index');
  *   ),
  * )
  */
-Route::get('/categories/{id}', 'Api\\CategoryController@show');
+Route::get('/categories/{id}', CategoryController::class . '@show');
 
 /**
  * @OA\Post(
@@ -73,7 +74,7 @@ Route::get('/categories/{id}', 'Api\\CategoryController@show');
  *   ),
  * )
  */
-Route::post('/categories', 'Api\\CategoryController@store');
+Route::post('/categories', CategoryController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -107,7 +108,7 @@ Route::post('/categories', 'Api\\CategoryController@store');
  *   ),
  * )
  */
-Route::patch('/categories/{id}', 'Api\\CategoryController@update');
+Route::patch('/categories/{id}', CategoryController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -134,4 +135,4 @@ Route::patch('/categories/{id}', 'Api\\CategoryController@update');
  *   ),
  * )
  */
-Route::delete('/categories/{id}', 'Api\\CategoryController@destroy');
+Route::delete('/categories/{id}', CategoryController::class . '@destroy');

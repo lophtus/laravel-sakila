@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -14,4 +15,4 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/my/suggestions', 'Api\CustomerController@getSuggestions');
+Route::get('/my/suggestions', CustomerController::class . '@getSuggestions');

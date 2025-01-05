@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\ActorController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -40,7 +41,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/actors', 'Api\\ActorController@index');
+Route::get('/actors', ActorController::class . '@index');
 
 /**
  * @OA\Get(
@@ -67,7 +68,7 @@ Route::get('/actors', 'Api\\ActorController@index');
  *   ),
  * )
  */
-Route::get('/actors/{id}', 'Api\\ActorController@show');
+Route::get('/actors/{id}', ActorController::class . '@show');
 
 /**
  * @OA\Post(
@@ -89,7 +90,7 @@ Route::get('/actors/{id}', 'Api\\ActorController@show');
  *   ),
  * )
  */
-Route::post('/actors', 'Api\\ActorController@store');
+Route::post('/actors', ActorController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -123,7 +124,7 @@ Route::post('/actors', 'Api\\ActorController@store');
  *   ),
  * )
  */
-Route::patch('/actors/{id}', 'Api\\ActorController@update');
+Route::patch('/actors/{id}', ActorController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -150,4 +151,4 @@ Route::patch('/actors/{id}', 'Api\\ActorController@update');
  *   ),
  * )
  */
-Route::delete('/actors/{id}', 'Api\\ActorController@destroy');
+Route::delete('/actors/{id}', ActorController::class . '@destroy');

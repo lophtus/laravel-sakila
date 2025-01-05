@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\StoreController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/stores', 'Api\\StoreController@index');
+Route::get('/stores', StoreController::class . '@index');
 
 /**
  * @OA\Get(
@@ -37,7 +38,7 @@ Route::get('/stores', 'Api\\StoreController@index');
  *   ),
  * )
  */
-Route::get('/films/{film}/stores', 'Api\\StoreController@indexbyFilm');
+Route::get('/films/{film}/stores', StoreController::class . '@indexbyFilm');
 
 /**
  * @OA\Get(
@@ -64,7 +65,7 @@ Route::get('/films/{film}/stores', 'Api\\StoreController@indexbyFilm');
  *   ),
  * )
  */
-Route::get('/stores/{id}', 'Api\\StoreController@show');
+Route::get('/stores/{id}', StoreController::class . '@show');
 
 /**
  * @OA\Post(
@@ -86,7 +87,7 @@ Route::get('/stores/{id}', 'Api\\StoreController@show');
  *   ),
  * )
  */
-Route::post('/stores', 'Api\\StoreController@store');
+Route::post('/stores', StoreController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -120,7 +121,7 @@ Route::post('/stores', 'Api\\StoreController@store');
  *   ),
  * )
  */
-Route::patch('/stores/{id}', 'Api\\StoreController@update');
+Route::patch('/stores/{id}', StoreController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -147,4 +148,4 @@ Route::patch('/stores/{id}', 'Api\\StoreController@update');
  *   ),
  * )
  */
-Route::delete('/stores/{id}', 'Api\\StoreController@destroy');
+Route::delete('/stores/{id}', StoreController::class . '@destroy');

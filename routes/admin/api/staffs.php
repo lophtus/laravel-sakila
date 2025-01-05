@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\StaffController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -57,7 +58,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/staffs', 'Api\\StaffController@index');
+Route::get('/staffs', StaffController::class . '@index');
 
 /**
  * @OA\Get(
@@ -122,7 +123,7 @@ Route::get('/staffs', 'Api\\StaffController@index');
  *   ),
  * )
  */
-Route::get('/stores/{store}/staffs', 'Api\StaffController@indexByStore');
+Route::get('/stores/{store}/staffs', StaffController::class . '@indexByStore');
 
 /**
  * @OA\Get(
@@ -149,7 +150,7 @@ Route::get('/stores/{store}/staffs', 'Api\StaffController@indexByStore');
  *   ),
  * )
  */
-Route::get('/staffs/{id}', 'Api\\StaffController@show');
+Route::get('/staffs/{id}', StaffController::class . '@show');
 
 /**
  * @OA\Post(
@@ -179,7 +180,7 @@ Route::get('/staffs/{id}', 'Api\\StaffController@show');
  *   ),
  * )
  */
-Route::post('/stores/{store}/staffs', 'Api\\StaffController@store');
+Route::post('/stores/{store}/staffs', StaffController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -213,7 +214,7 @@ Route::post('/stores/{store}/staffs', 'Api\\StaffController@store');
  *   ),
  * )
  */
-Route::patch('/staffs/{id}', 'Api\\StaffController@update');
+Route::patch('/staffs/{id}', StaffController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -240,4 +241,4 @@ Route::patch('/staffs/{id}', 'Api\\StaffController@update');
  *   ),
  * )
  */
-Route::delete('/staffs/{id}', 'Api\\StaffController@destroy');
+Route::delete('/staffs/{id}', StaffController::class . '@destroy');

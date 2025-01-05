@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\InventoryController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/inventory', 'Api\\InventoryController@index');
+Route::get('/inventory', InventoryController::class . '@index');
 
 /**
  * @OA\Get(
@@ -42,7 +43,7 @@ Route::get('/inventory', 'Api\\InventoryController@index');
  *   ),
  * )
  */
-Route::get('/films/{film}/inventory', 'Api\\InventoryController@indexByFilm');
+Route::get('/films/{film}/inventory', InventoryController::class . '@indexByFilm');
 
 /**
  * @OA\Get(
@@ -105,7 +106,7 @@ Route::get('/films/{film}/inventory', 'Api\\InventoryController@indexByFilm');
  *   ),
  * )
  */
-Route::get('/stores/{store}/inventory', 'Api\\InventoryController@indexByStore');
+Route::get('/stores/{store}/inventory', InventoryController::class . '@indexByStore');
 
 /**
  * @OA\Get(
@@ -133,7 +134,7 @@ Route::get('/stores/{store}/inventory', 'Api\\InventoryController@indexByStore')
  *   ),
  * )
  */
-Route::get('/inventory/{id}', 'Api\\InventoryController@show');
+Route::get('/inventory/{id}', InventoryController::class . '@show');
 
 /**
  * @OA\Delete(
@@ -160,4 +161,4 @@ Route::get('/inventory/{id}', 'Api\\InventoryController@show');
  *   ),
  * )
  */
-Route::delete('/inventory/{id}', 'Api\\InventoryController@destroy');
+Route::delete('/inventory/{id}', InventoryController::class . '@destroy');
