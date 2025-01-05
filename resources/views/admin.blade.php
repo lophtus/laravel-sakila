@@ -6,8 +6,7 @@
 
         <title>{{ config('app.name', 'Laravel') }} Admin</title>
 
-        <!-- Scripts -->
-        <script src="{{ asset('js/admin.js') }}" defer></script>
+        @vite(['resources/sass/admin/app.scss', 'resources/js/admin/app.js'])
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">

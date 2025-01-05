@@ -1,24 +1,24 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=webpack.config.js",
-        "watch": "npm run development -- --watch",
-        "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=webpack.config.js",
+        "dev": "vite",
+        "build": "vite build",
+        "build-admin": "vite build --config vite.config-admin.js",
         "profiler-server": "node node_modules/laravel-profiler-client/server/server.js http=8099 ws=1901",
         "profiler-client": "http-server node_modules/laravel-profiler-client/dist/ -o -s",
         "ps": "npm run profiler-server",
         "pc": "npm run profiler-client"
     },
     "devDependencies": {
+        "@vitejs/plugin-vue2": "^2.3.3",
         "cross-env": "^5.1",
         "laravel-profiler-client": "^1.3.0",
+        "laravel-vite-plugin": "^0.7.8",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.20.1",
-        "sass-loader": "7.*"
+        "sass-loader": "7.*",
+        "vite": "^4.5.5",
+        "vite-plugin-commonjs": "^0.10.4"
     },
     "dependencies": {
         "@coreui/coreui": "^3.0.0",
@@ -28,15 +28,13 @@
         "bootstrap": "^4.4.1",
         "bootstrap-vue": "^2.7.0",
         "jquery": "^3.5",
-        "laravel-mix": "^5.0.7",
         "lodash": "^4.17.21",
         "popper.js": "^1.12",
         "swiper": "^6.5.1",
         "vee-validate": "^3.2.5",
-        "vue": "^2.6.11",
+        "vue": "^2.7",
         "vue-initials-img": "^1.0.4",
         "vue-router": "^3.1.5",
-        "vue-template-compiler": "^2.6.11",
         "vue-toasted": "^1.1.27",
         "vue2-filters": "^0.11.0",
         "vuex": "^3.5.1"
