@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\RentalController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -22,4 +23,4 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::post('/stores/{store}/films/{film}/rent', 'Api\RentalController@store');
+Route::post('/stores/{store}/films/{film}/rent', RentalController::class . '@store');

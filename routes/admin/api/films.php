@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\FilmController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -54,7 +55,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/films', 'Api\\FilmController@index');
+Route::get('/films', FilmController::class . '@index');
 
 /**
  * @OA\Get(
@@ -113,7 +114,7 @@ Route::get('/films', 'Api\\FilmController@index');
  *   ),
  * )
  */
-Route::get('/stores/{store}/films', 'Api\\FilmController@indexByStore');
+Route::get('/stores/{store}/films', FilmController::class . '@indexByStore');
 
 /**
  * @OA\Get(
@@ -140,7 +141,7 @@ Route::get('/stores/{store}/films', 'Api\\FilmController@indexByStore');
  *   ),
  * )
  */
-Route::get('/films/{id}', 'Api\\FilmController@show');
+Route::get('/films/{id}', FilmController::class . '@show');
 
 /**
  * @OA\Post(
@@ -162,7 +163,7 @@ Route::get('/films/{id}', 'Api\\FilmController@show');
  *   ),
  * )
  */
-Route::post('/films', 'Api\\FilmController@store');
+Route::post('/films', FilmController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -196,7 +197,7 @@ Route::post('/films', 'Api\\FilmController@store');
  *   ),
  * )
  */
-Route::patch('/films/{id}', 'Api\\FilmController@update');
+Route::patch('/films/{id}', FilmController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -223,4 +224,4 @@ Route::patch('/films/{id}', 'Api\\FilmController@update');
  *   ),
  * )
  */
-Route::delete('/films/{id}', 'Api\\FilmController@destroy');
+Route::delete('/films/{id}', FilmController::class . '@destroy');

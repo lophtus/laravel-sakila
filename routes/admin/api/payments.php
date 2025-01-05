@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/payments', 'Api\\PaymentController@index');
+Route::get('/payments', PaymentController::class . '@index');
 
 /**
  * @OA\Get(
@@ -37,7 +38,7 @@ Route::get('/payments', 'Api\\PaymentController@index');
  *   ),
  * )
  */
-Route::get('/customers/{customer}/payments', 'Api\\PaymentController@indexByCustomer');
+Route::get('/customers/{customer}/payments', PaymentController::class . '@indexByCustomer');
 
 /**
  * @OA\Get(
@@ -64,7 +65,7 @@ Route::get('/customers/{customer}/payments', 'Api\\PaymentController@indexByCust
  *   ),
  * )
  */
-Route::get('/payments/{id}', 'Api\\PaymentController@show');
+Route::get('/payments/{id}', PaymentController::class . '@show');
 
 /**
  * @OA\Delete(
@@ -91,4 +92,4 @@ Route::get('/payments/{id}', 'Api\\PaymentController@show');
  *   ),
  * )
  */
-Route::delete('/payments/{id}', 'Api\\PaymentController@destroy');
+Route::delete('/payments/{id}', PaymentController::class . '@destroy');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\FilmController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -49,7 +50,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/films', 'Api\\FilmController@index');
+Route::get('/films', FilmController::class . '@index');
 
 /**
  * @OA\Get(
@@ -77,7 +78,7 @@ Route::get('/films', 'Api\\FilmController@index');
  *   ),
  * )
  */
-Route::get('/films/{id}', 'Api\\FilmController@show');
+Route::get('/films/{id}', FilmController::class . '@show');
 
 /**
  * @OA\Get(
@@ -137,4 +138,4 @@ Route::get('/films/{id}', 'Api\\FilmController@show');
  *   ),
  * )
  */
-Route::get('/categories/{category}/films', 'Api\\FilmController@indexByCategory');
+Route::get('/categories/{category}/films', FilmController::class . '@indexByCategory');

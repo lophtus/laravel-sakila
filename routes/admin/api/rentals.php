@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\RentalController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/rentals', 'Api\\RentalController@index');
+Route::get('/rentals', RentalController::class . '@index');
 
 /**
  * @OA\Get(
@@ -37,7 +38,7 @@ Route::get('/rentals', 'Api\\RentalController@index');
  *   ),
  * )
  */
-Route::get('/customers/{customer}/rentals', 'Api\\RentalController@indexByCustomer');
+Route::get('/customers/{customer}/rentals', RentalController::class . '@indexByCustomer');
 
 /**
  * @OA\Get(
@@ -58,7 +59,7 @@ Route::get('/customers/{customer}/rentals', 'Api\\RentalController@indexByCustom
  *   ),
  * )
  */
-Route::get('/stores/{store}/rentals', 'Api\\RentalController@indexByStore');
+Route::get('/stores/{store}/rentals', RentalController::class . '@indexByStore');
 
 /**
  * @OA\Get(
@@ -85,7 +86,7 @@ Route::get('/stores/{store}/rentals', 'Api\\RentalController@indexByStore');
  *   ),
  * )
  */
-Route::get('/rentals/{id}', 'Api\\RentalController@show');
+Route::get('/rentals/{id}', RentalController::class . '@show');
 
 /**
  * @OA\Delete(
@@ -112,4 +113,4 @@ Route::get('/rentals/{id}', 'Api\\RentalController@show');
  *   ),
  * )
  */
-Route::delete('/rentals/{id}', 'Api\\RentalController@destroy');
+Route::delete('/rentals/{id}', RentalController::class . '@destroy');

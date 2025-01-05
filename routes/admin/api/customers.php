@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Api\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -49,7 +50,7 @@ use Illuminate\Support\Facades\Route;
  *   ),
  * )
  */
-Route::get('/customers', 'Api\\CustomerController@index');
+Route::get('/customers', CustomerController::class . '@index');
 
 /**
  * @OA\Get(
@@ -102,7 +103,7 @@ Route::get('/customers', 'Api\\CustomerController@index');
  *   ),
  * )
  */
-Route::get('/stores/{store}/customers', 'Api\\CustomerController@indexByStore');
+Route::get('/stores/{store}/customers', CustomerController::class . '@indexByStore');
 
 /**
  * @OA\Get(
@@ -129,7 +130,7 @@ Route::get('/stores/{store}/customers', 'Api\\CustomerController@indexByStore');
  *   ),
  * )
  */
-Route::get('/customers/{id}', 'Api\\CustomerController@show');
+Route::get('/customers/{id}', CustomerController::class . '@show');
 
 /**
  * @OA\Post(
@@ -156,7 +157,7 @@ Route::get('/customers/{id}', 'Api\\CustomerController@show');
  *   ),
  * )
  */
-Route::post('/stores/{store}/customers', 'Api\\CustomerController@store');
+Route::post('/stores/{store}/customers', CustomerController::class . '@store');
 
 /**
  * @OA\Patch(
@@ -190,7 +191,7 @@ Route::post('/stores/{store}/customers', 'Api\\CustomerController@store');
  *   ),
  * )
  */
-Route::patch('/customers/{id}', 'Api\\CustomerController@update');
+Route::patch('/customers/{id}', CustomerController::class . '@update');
 
 /**
  * @OA\Delete(
@@ -217,4 +218,4 @@ Route::patch('/customers/{id}', 'Api\\CustomerController@update');
  *   ),
  * )
  */
-Route::delete('/customers/{id}', 'Api\\CustomerController@destroy');
+Route::delete('/customers/{id}', CustomerController::class . '@destroy');
