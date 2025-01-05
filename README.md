@@ -21,6 +21,12 @@ $ php artisan serve
 
 Start in Visual Studio Code and re-open in remote containers (`Remote-Containers: Reopen in Container`).
 
+# UI
+
+```bash
+$ npm run build
+```
+
 # License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

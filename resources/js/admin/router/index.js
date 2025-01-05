@@ -1,19 +1,19 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import DefaultContainer from "@/containers/DefaultContainer";
-import CustomerIndex from "@/views/customers/index";
-import CustomerList from "@/views/customers/list";
-import CustomerView from "@/views/customers/view";
-import FilmIndex from "@/views/films/index";
-import FilmList from "@/views/films/list";
-import FilmView from "@/views/films/view";
-import InventoryIndex from "@/views/inventory/index";
-import InventoryList from "@/views/inventory/list";
-import InventoryView from "@/views/inventory/view";
-import StoreIndex from "@/views/stores/index";
-import StoreList from "@/views/stores/list";
-import StoreView from "@/views/stores/view";
+import DefaultContainer from "@/admin/containers/DefaultContainer";
+import CustomerIndex from "@/admin/views/customers/index";
+import CustomerList from "@/admin/views/customers/list";
+import CustomerView from "@/admin/views/customers/view";
+import FilmIndex from "@/admin/views/films/index";
+import FilmList from "@/admin/views/films/list";
+import FilmView from "@/admin/views/films/view";
+import InventoryIndex from "@/admin/views/inventory/index";
+import InventoryList from "@/admin/views/inventory/list";
+import InventoryView from "@/admin/views/inventory/view";
+import StoreIndex from "@/admin/views/stores/index";
+import StoreList from "@/admin/views/stores/list";
+import StoreView from "@/admin/views/stores/view";
 
 Vue.use(Router);
 
