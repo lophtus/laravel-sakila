@@ -174,7 +174,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -1,19 +1,30 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Address;
 use App\Sakila\Staff;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Staff::class, function (Faker $faker) {
-    return [
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'address_id' => factory(Address::class),
-        'email' => $faker->optional()->email,
-        'active' => $faker->boolean,
-        'username' => $faker->userName,
-        'password' => $faker->optional()->password,
-    ];
-});
+class StaffFactory extends Factory
+{
+    protected $model = Staff::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'first_name' => fake()->firstName,
+            'last_name' => fake()->lastName,
+            'address_id' => Address::factory(),
+            'email' => fake()->optional()->email,
+            'active' => fake()->boolean,
+            'username' => fake()->userName,
+            'password' => fake()->optional()->password,
+        ];
+    }
+}

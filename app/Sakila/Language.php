@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\LanguageFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Language extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -19,4 +23,12 @@ class Language extends Model
      * @var string
      */
     protected $primaryKey = 'language_id';
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): LanguageFactory
+    {
+        return LanguageFactory::new();
+    }
 }

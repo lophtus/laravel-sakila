@@ -3,12 +3,15 @@
 namespace App\Sakila;
 
 use App\Sakila\Concerns\HasFillableRelations;
+use Database\Factories\StaffFactory;
 use GregoryDuckworth\Encryptable\EncryptableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Staff extends Model
 {
     use EncryptableTrait;
+    use HasFactory;
     use HasFillableRelations;
 
     /**
@@ -102,5 +105,13 @@ class Staff extends Model
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id', 'store_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): StaffFactory
+    {
+        return StaffFactory::new();
     }
 }

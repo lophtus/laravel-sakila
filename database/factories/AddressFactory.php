@@ -1,18 +1,29 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Address;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Address::class, function (Faker $faker) {
-    return [
-        'address' => $faker->streetAddress,
-        'address2' => $faker->optional()->secondaryAddress,
-        'city' => $faker->city,
-        'state' => $faker->stateAbbr,
-        'country' => 'US',
-        'postal_code' => $faker->postcode,
-        'phone' => $faker->numerify('###-###-####'),
-    ];
-});
+class AddressFactory extends Factory
+{
+    protected $model = Address::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'address' => fake()->streetAddress,
+            'address2' => fake()->optional()->secondaryAddress,
+            'city' => fake()->city,
+            'state' => fake()->stateAbbr,
+            'country' => 'US',
+            'postal_code' => fake()->postcode,
+            'phone' => fake()->numerify('###-###-####'),
+        ];
+    }
+}
