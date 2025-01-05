@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\PaymentFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -77,5 +81,13 @@ class Payment extends Model
     public function staff()
     {
         return $this->belongsTo(Staff::class, 'staff_id', 'staff_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): PaymentFactory
+    {
+        return PaymentFactory::new();
     }
 }

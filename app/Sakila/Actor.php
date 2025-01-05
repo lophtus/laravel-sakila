@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\ActorFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Actor extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -38,5 +42,13 @@ class Actor extends Model
     public function films()
     {
         return $this->belongsToMany(Film::class);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): ActorFactory
+    {
+        return ActorFactory::new();
     }
 }

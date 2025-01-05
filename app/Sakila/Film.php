@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\FilmFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
+    use HasFactory;
+
     /**
      * @OA\Schema(
      *   schema="Rating",
@@ -187,5 +191,13 @@ class Film extends Model
     public function stores()
     {
         return $this->hasManyThrough(Store::class, Inventory::class, 'film_id', 'store_id', 'film_id', 'store_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): FilmFactory
+    {
+        return FilmFactory::new();
     }
 }

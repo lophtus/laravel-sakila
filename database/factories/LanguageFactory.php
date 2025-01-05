@@ -1,12 +1,23 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Language;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Language::class, function (Faker $faker) {
-    return [
-        'name' => $faker->languageCode,
-    ];
-});
+class LanguageFactory extends Factory
+{
+    protected $model = Language::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->languageCode,
+        ];
+    }
+}

@@ -3,10 +3,13 @@
 namespace App\Sakila;
 
 use App\Sakila\Concerns\HasFillableRelations;
+use Database\Factories\CustomerFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Customer extends Authenticatable
 {
+    use HasFactory;
     use HasFillableRelations;
 
     /**
@@ -111,5 +114,13 @@ class Customer extends Authenticatable
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id', 'store_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): CustomerFactory
+    {
+        return CustomerFactory::new();
     }
 }

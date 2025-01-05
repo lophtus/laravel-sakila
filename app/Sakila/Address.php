@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\AddressFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -43,4 +47,12 @@ class Address extends Model
         'postal_code',
         'phone',
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): AddressFactory
+    {
+        return AddressFactory::new();
+    }
 }

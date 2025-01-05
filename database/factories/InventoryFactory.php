@@ -1,15 +1,26 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Film;
 use App\Sakila\Inventory;
 use App\Sakila\Store;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Inventory::class, function (Faker $faker) {
-    return [
-        'film_id' => factory(Film::class),
-        'store_id' => factory(Store::class),
-    ];
-});
+class InventoryFactory extends Factory
+{
+    protected $model = Inventory::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'film_id' => Film::factory(),
+            'store_id' => Store::factory(),
+        ];
+    }
+}

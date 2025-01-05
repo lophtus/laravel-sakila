@@ -1,19 +1,31 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Customer;
 use App\Sakila\Inventory;
 use App\Sakila\Rental;
 use App\Sakila\Staff;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Rental::class, function (Faker $faker) {
-    return [
-        'rental_date' => $faker->dateTime,
-        'inventory_id' => factory(Inventory::class),
-        'customer_id' => factory(Customer::class),
-        'return_date' => $faker->optional()->dateTime,
-        'staff_id' => factory(Staff::class),
-    ];
-});
+
+class RentalFactory extends Factory
+{
+    protected $model = Rental::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'rental_date' => fake()->dateTime,
+            'inventory_id' => Inventory::factory(),
+            'customer_id' => Customer::factory(),
+            'return_date' => fake()->optional()->dateTime,
+            'staff_id' => Staff::factory(),
+        ];
+    }
+}

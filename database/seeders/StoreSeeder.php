@@ -20,19 +20,19 @@ class StoreSeeder extends Seeder
         $customerCount = (int)$this->command->ask('How many customers do you need? Default: ', 20);
         $inventoryCount = (int)$this->command->ask('How much inventory do you need? Default: ', 100);
 
-        factory(Store::class, $storeCount)->create()
+        Store::factory()->count($storeCount)->create()
             ->each(function (Store $store) use ($staffCount, $customerCount, $inventoryCount) {
 
                 $this->command->info(sprintf("Created %s store(s)'", $store->store_id));
 
-                $store->manager()->associate(factory(Staff::class)->create(['store_id' => $store->store_id]));
+                $store->manager()->associate(Staff::factory()->create(['store_id' => $store->store_id]));
                 $store->save();
 
-                $store->staff()->saveMany(factory(Staff::class, $staffCount)->make());
+                $store->staff()->saveMany(Staff::factory()->count($staffCount)->make());
 
                 $this->command->info(sprintf("Added %s staff member(s)", $staffCount));
 
-                $store->customers()->saveMany(factory(Customer::class, $customerCount)->make());
+                $store->customers()->saveMany(Customer::factory()->count($customerCount)->create());
 
                 $this->command->info(sprintf("Added %s customer(s)", $customerCount));
 

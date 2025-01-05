@@ -1,18 +1,29 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Address;
 use App\Sakila\Customer;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Customer::class, function (Faker $faker) {
-    return [
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'email' => $faker->optional()->email,
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'address_id' => factory(Address::class),
-        'active' => $faker->boolean,
-    ];
-});
+class CustomerFactory extends Factory
+{
+    protected $model = Customer::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'first_name' => fake()->firstName,
+            'last_name' => fake()->lastName,
+            'email' => fake()->optional()->email,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'address_id' => Address::factory(),
+            'active' => fake()->boolean,
+        ];
+    }
+}

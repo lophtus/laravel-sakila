@@ -1,19 +1,30 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Sakila\Customer;
 use App\Sakila\Payment;
 use App\Sakila\Rental;
 use App\Sakila\Staff;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Payment::class, function (Faker $faker) {
-    return [
-        'customer_id' => factory(Customer::class),
-        'staff_id' => factory(Staff::class),
-        'rental_id' => factory(Rental::class),
-        'amount' => $faker->randomFloat(5, 2),
-        'payment_date' => $faker->dateTime,
-    ];
-});
+class PaymentFactory extends Factory
+{
+    protected $model = Payment::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'customer_id' => Customer::factory(),
+            'staff_id' => Staff::factory(),
+            'rental_id' => Rental::factory(),
+            'amount' => fake()->randomFloat(5, 2),
+            'payment_date' => fake()->dateTime,
+        ];
+    }
+}

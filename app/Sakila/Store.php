@@ -3,10 +3,13 @@
 namespace App\Sakila;
 
 use App\Sakila\Concerns\HasFillableRelations;
+use Database\Factories\StoreFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
 {
+    use HasFactory;
     use HasFillableRelations;
 
     /**
@@ -100,5 +103,13 @@ class Store extends Model
     public function staff()
     {
         return $this->hasMany(Staff::class, 'store_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): StoreFactory
+    {
+        return StoreFactory::new();
     }
 }

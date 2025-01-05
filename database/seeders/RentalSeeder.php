@@ -31,7 +31,7 @@ class RentalSeeder extends Seeder
                 ->get()
                 ->each(function (Inventory $inventory) use ($customer, $store) {
                     if ($inventory->isInStock()) {
-                        $rental = factory(Rental::class)->create([
+                        $rental = Rental::factory()->create([
                             'customer_id' => $customer->customer_id,
                             'inventory_id' => $inventory->inventory_id,
                             'staff_id' => $store->staff()->orderByRaw('RAND()')->first()->staff_id,

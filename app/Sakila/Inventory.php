@@ -2,11 +2,15 @@
 
 namespace App\Sakila;
 
+use Database\Factories\InventoryFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Inventory extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -53,5 +57,13 @@ class Inventory extends Model
         )->first();
 
         return (bool)$result->is_in_stock;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): InventoryFactory
+    {
+        return InventoryFactory::new();
     }
 }

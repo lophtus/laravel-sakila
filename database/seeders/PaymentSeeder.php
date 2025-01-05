@@ -27,7 +27,7 @@ class PaymentSeeder extends Seeder
             return;
         }
 
-        $payment = factory(Payment::class)->create([
+        $payment = Payment::factory()->create([
             'rental_id' => $rental->rental_id,
             'staff_id' => $rental->staff_id,
             'customer_id' => $rental->customer_id,

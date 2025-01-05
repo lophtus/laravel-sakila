@@ -2,10 +2,14 @@
 
 namespace App\Sakila;
 
+use Database\Factories\RentalFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Rental extends Model
 {
+    use HasFactory;
+
     /**
      * The table associated with the model.
      *
@@ -78,5 +82,13 @@ class Rental extends Model
     public function store()
     {
         return $this->hasOneThrough(Store::class, Inventory::class, 'inventory_id', 'store_id', 'inventory_id', 'store_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): RentalFactory
+    {
+        return RentalFactory::new();
     }
 }
