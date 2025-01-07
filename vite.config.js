@@ -27,5 +27,10 @@ export default defineConfig({
         '~@coreui': path.resolve(__dirname, 'node_modules/@coreui'),
         '~@fortawesome': path.resolve(__dirname, 'node_modules/@fortawesome'),
       }
+    },
+    server: {
+      watch: {
+        usePolling: true,
+      }
     }
 });

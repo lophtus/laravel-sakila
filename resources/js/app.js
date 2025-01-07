@@ -22,14 +22,12 @@ window.Vue = require('vue');
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
-import Vue2Filters from "vue2-filters";
 import VueInitialsImg from "vue-initials-img";
 
 Vue.config.performance = true;
 
 Vue.use(BootstrapVue);
 Vue.use(CoreuiVue);
-Vue.use(Vue2Filters);
 Vue.use(VueInitialsImg);
 
 /**
