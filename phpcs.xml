@@ -39,6 +39,7 @@
     <exclude-pattern>*/autoload.php</exclude-pattern>
     <exclude-pattern>*/storage/*</exclude-pattern>
     <exclude-pattern>*/docs/*</exclude-pattern>
+   <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/migrations/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
@@ -66,6 +67,6 @@
        PEAR standard exists inside the PHP_CodeSniffer install
        directory.
     -->
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
 
 </ruleset>

@@ -1,5 +1,7 @@
 <?php
 
+/** Payment route definitions */
+
 use App\Http\Controllers\Admin\Api\PaymentController;
 use Illuminate\Support\Facades\Route;
 

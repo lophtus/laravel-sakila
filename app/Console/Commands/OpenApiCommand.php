@@ -63,8 +63,10 @@ class OpenApiCommand extends Command
         }
 
         // confirm overwrite when file exists
-        if (Storage::disk($storageDisk)->exists($schemaFile) &&
-           ! $this->confirm('File already exists! Do you wish to continue?')) {
+        if (
+            Storage::disk($storageDisk)->exists($schemaFile) &&
+            ! $this->confirm('File already exists! Do you wish to continue?')
+        ) {
             return;
         }
 

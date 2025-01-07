@@ -1,5 +1,7 @@
 <?php
 
+/** Actor route definitions */
+
 use App\Http\Controllers\Admin\Api\ActorController;
 use Illuminate\Support\Facades\Route;
 

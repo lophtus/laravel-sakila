@@ -1,5 +1,7 @@
 <?php
 
+/** Auth route definitions */
+
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 

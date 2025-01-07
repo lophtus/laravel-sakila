@@ -65,7 +65,7 @@ trait HasFillableRelations
 
     public static function create(array $attributes = [])
     {
-        list($relations, $attributes) = (new static)->extractFillableRelations($attributes);
+        list($relations, $attributes) = (new static())->extractFillableRelations($attributes);
 
         $model = new static($attributes);
         $model->fillRelations($relations);

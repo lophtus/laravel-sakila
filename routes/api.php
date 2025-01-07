@@ -1,5 +1,7 @@
 <?php
 
+/** Api route definitions */
+
 use Illuminate\Support\Facades\Route;
 
  /**

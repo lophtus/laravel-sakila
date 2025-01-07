@@ -1,5 +1,7 @@
 <?php
 
+/** Store route definitions */
+
 use App\Http\Controllers\Admin\Api\StoreController;
 use Illuminate\Support\Facades\Route;
 
