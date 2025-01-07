@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/php:8.3-bullseye
 
 # Disable Yarn
-RUN mv /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list-disabled 
+RUN mv /etc/apt/sources.list.d/yarn.list /etc/apt/sources.list.d/yarn.list-disabled
 
 # Install MariaDB client
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -17,4 +17,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
-
