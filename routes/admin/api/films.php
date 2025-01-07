@@ -1,5 +1,7 @@
 <?php
 
+/** Film route definitions */
+
 use App\Http\Controllers\Admin\Api\FilmController;
 use Illuminate\Support\Facades\Route;
 

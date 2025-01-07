@@ -1,0 +1,38 @@
+name: Continuous integration
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-standards:
+    if: github.event.pull_request.draft == false && github.actor != 'dependabot[bot]'
+    name: Coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important!
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, zip, curl, intl, json, mysqlnd, pdo_mysql
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction
+
+      - name: Run lint check
+        run: |
+          composer lint:check
+
+      - name: Run style check
+        run: |
+          composer style:check

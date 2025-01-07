@@ -1,5 +1,7 @@
 <?php
 
+/** Rentals route definitions */
+
 use App\Http\Controllers\Api\RentalController;
 use Illuminate\Support\Facades\Route;
 

@@ -1,5 +1,7 @@
 <?php
 
+/** Inventory route definitions */
+
 use App\Http\Controllers\Admin\Api\InventoryController;
 use Illuminate\Support\Facades\Route;
 

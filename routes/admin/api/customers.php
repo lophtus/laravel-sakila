@@ -1,5 +1,7 @@
 <?php
 
+/** Customer route definitions */
+
 use App\Http\Controllers\Admin\Api\CustomerController;
 use Illuminate\Support\Facades\Route;
 
