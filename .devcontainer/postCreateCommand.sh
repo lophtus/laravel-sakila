@@ -7,4 +7,8 @@ sudo a2ensite laravel-sakila
 # Enable mod_rewrite
 sudo a2enmod rewrite
 
+# Restart Apache
 sudo service apache2 restart
+
+# Install Node.js
+nvm install 16
