@@ -26,7 +26,6 @@
         "axios": "^0.21",
         "bootstrap": "^4.4.1",
         "bootstrap-vue": "^2.7.0",
-        "jquery": "^3.5",
         "lodash": "^4.17.21",
         "popper.js": "^1.12",
         "swiper": "^6.5.1",
