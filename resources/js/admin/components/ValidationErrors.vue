@@ -6,19 +6,18 @@
   </b-alert>
 </template>
 
-<script>
-export default {
-  props: {
-    errors: null,
-  },
-  computed: {
-    validationErrors() {
-      let errors = Object.values(this.errors);
-      errors = errors.flat();
-      return errors;
-    }
-  }
-};
+<script setup lang="ts">
+import { computed } from "vue";
+
+const props = defineProps({
+  errors: null,
+});
+
+const validationErrors = computed(() => {
+  let errors = Object.values(props.errors);
+  errors = errors.flat();
+  return errors;
+});
 </script>
 
 <style scoped>

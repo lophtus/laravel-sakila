@@ -103,66 +103,64 @@
   </b-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import { RatingList, SpecialFeatureList } from "../../../data/film_constants";
+import { getCurrentInstance, ref } from "vue";
+import { RatingList, SpecialFeatureList } from "@/admin/data/film_constants";
 
-export default {
-  name: "EditModal",
-  props: {
-    populateWith: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isSaving: false,
-      ratings: RatingList,
-      special_features: SpecialFeatureList,
-      form: {}
-    };
-  },
-  methods: {
-    resetModal() {
-      this.form = Object.assign({}, this.populateWith);
-    },
-    handleOkay(bvModalEvt) {
-      bvModalEvt.preventDefault();
-
-      this.onSubmit();
-    },
-    async onSubmit() {
-      let vm = this;
-
-      vm.isSaving = true;
-
-      const promise = axios.patch("/films/" + vm.form.id, vm.form);
-
-      promise
-        .then(({ data }) => {
-          const film = data.data;
-
-          vm.$emit("saved", film);
-
-          vm.$refs.editModal.hide();
-
-          vm.$toasted.show("Film was updated successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        })
-        .catch(error => {
-          if (error.response.data.errors) {
-            vm.$refs.formObserver.setErrors(error.response.data.errors);
-          }
-        })
-        .finally(() => {
-          vm.isSaving = false;
-        });
-    }
+const props = defineProps({
+  populateWith: {
+    type: Object,
+    required: true
   }
-};
+});
+
+const emit = defineEmits(['saved']);
+
+const { proxy } = getCurrentInstance();
+
+const isSaving = ref(false);
+const ratings = RatingList;
+const special_features = SpecialFeatureList;
+const form = ref({});
+
+const resetModal = () => {
+  form.value = Object.assign({}, props.populateWith);
+}
+
+const handleOkay = (bvModalEvt) => {
+  bvModalEvt.preventDefault();
+
+  onSubmit();
+}
+
+const onSubmit = async () => {
+  isSaving.value = true;
+
+  const promise = axios.patch("/films/" + form.value.id, form.value);
+
+  promise
+    .then(({ data }) => {
+      const film = data.data;
+
+      emit('saved', film);
+
+      proxy.$refs.editModal.hide();
+
+      proxy.$toasted.show("Film was updated successfully", {
+        type: "success",
+        icon: "far fa-check-circle"
+      });
+    })
+    .catch(error => {
+      if (error.response.data.errors) {
+        proxy.$refs.formObserver.setErrors(error.response.data.errors);
+      }
+    })
+    .finally(() => {
+      isSaving.value = false;
+    });
+}
 </script>
 
 <style scoped>

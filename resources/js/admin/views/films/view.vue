@@ -32,7 +32,7 @@
         </b-row>
       </b-col>
       <b-col cols="auto">
-        <b-img src="https://via.placeholder.com/300x300"></b-img>
+        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
       </b-col>
     </b-row>
 
@@ -50,58 +50,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import EditModal from "./components/EditModal";
+import { getCurrentInstance, onBeforeMount, ref } from "vue";
+import { useRoute, useRouter } from "vue-router/composables";
+import EditModal from "./components/EditModal.vue";
 
-export default {
-  name: "FilmView",
-  components: {
-    EditModal
-  },
-  data() {
-    return {
-      isLoaded: false,
-      film: {}
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    const promise = axios.get("/films/" + to.params.id);
+const { proxy } = getCurrentInstance();
+const route = useRoute();
+const router = useRouter();
 
-    return promise.then(({ data }) => {
-      const film = data.data;
+const isLoaded = ref(false);
+const film = ref({});
 
-      next(vm => {
-        vm.film = film || {};
-        vm.isLoaded = true;
-      });
-    });
-  },
-  methods: {
-    onSave(film) {
-      this.film = film;
-    },
-    async onDelete() {
-      let vm = this;
+onBeforeMount(() => {
+  const promise = axios.get("/films/" + route.params.id);
 
-      vm.$bvModal
-        .msgBoxConfirm("Do you really want to delete this film?", {})
-        .then(value => {
-          if (value) {
-            const promise = axios.delete("/films/" + vm.film.id);
+  return promise.then(({ data }) => {
+    const item = data.data;
 
-            promise.then(() => {
-              vm.$router.push({ name: "film-list" });
-              vm.$toasted.show("Film was deleted successfully", {
-                type: "success",
-                icon: "far fa-check-circle"
-              });
-            });
-          }
+    film.value = item || {};
+    isLoaded.value = true;
+  });
+});
+
+const onSave = (filmObj) => {
+  film.value = filmObj;
+}
+
+const onDelete = async () => {
+  proxy.$bvModal
+    .msgBoxConfirm("Do you really want to delete this film?", {})
+    .then(value => {
+      if (value) {
+        const promise = axios.delete("/films/" + film.value.id);
+
+        promise.then(() => {
+          router.push({ name: "film-list" });
+          proxy.$toasted.show("Film was deleted successfully", {
+            type: "success",
+            icon: "far fa-check-circle"
+          });
         });
-    }
-  }
-};
+      }
+    });
+}
 </script>
 
 <style scoped>

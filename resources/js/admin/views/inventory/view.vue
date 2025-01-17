@@ -36,40 +36,36 @@
         </b-row>
       </b-col>
       <b-col cols="auto">
-        <b-img src="https://via.placeholder.com/300x300"></b-img>
+        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
       </b-col>
     </b-row>
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router/composables";
 
-export default {
-  name: "InventoryView",
-  data() {
-    return {
-      isLoaded: false,
-      film: {},
-      inventory: {},
-      store: {}
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    const promise = axios.get("/inventory/" + to.params.id + "?include=film,store");
+const route = useRoute();
+
+const isLoaded = ref(false);
+const film = ref({});
+const inventory = ref({});
+const store = ref({});
+
+onBeforeMount(() => {
+    const promise = axios.get("/inventory/" + route.params.id + "?include=film,store");
 
     return promise.then(({ data }) => {
-      const inventory = data.data;
+      const item = data.data;
 
-      next(vm => {
-        vm.film = inventory.film || {};
-        vm.inventory = inventory || {};
-        vm.store = inventory.store || {};
-        vm.isLoaded = true;
-      });
+      film.value = item.film || {};
+      inventory.value = item || {};
+      store.value = item.store || {};
+      isLoaded.value = true;
     });
-  }
-};
+});
 </script>
 
 <style scoped>

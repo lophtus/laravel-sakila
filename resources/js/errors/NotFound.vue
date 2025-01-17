@@ -14,10 +14,7 @@
   </CContainer>
 </template>
 
-<script>
-export default {
-  name: "NotFound",
-}
+<script setup type="ts">
 </script>
 
 <style lang="scss" scoped>

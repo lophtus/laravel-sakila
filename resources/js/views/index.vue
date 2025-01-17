@@ -8,15 +8,9 @@
   </div>
 </template>
 
-<script>
-import DefaultHeader from "@/containers/DefaultHeader";
+<script setup lang="ts">
+import DefaultHeader from "@/containers/DefaultHeader.vue";
 
-export default {
-  name: "IndexView",
-  components: {
-    DefaultHeader,
-  }
-};
 </script>
 
 <style lang="scss" scoped>

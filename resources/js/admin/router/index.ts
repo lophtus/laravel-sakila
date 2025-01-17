@@ -1,26 +1,26 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import DefaultContainer from "@/admin/containers/DefaultContainer";
-import CustomerIndex from "@/admin/views/customers/index";
-import CustomerList from "@/admin/views/customers/list";
-import CustomerView from "@/admin/views/customers/view";
-import FilmIndex from "@/admin/views/films/index";
-import FilmList from "@/admin/views/films/list";
-import FilmView from "@/admin/views/films/view";
-import InventoryIndex from "@/admin/views/inventory/index";
-import InventoryList from "@/admin/views/inventory/list";
-import InventoryView from "@/admin/views/inventory/view";
-import StoreIndex from "@/admin/views/stores/index";
-import StoreList from "@/admin/views/stores/list";
-import StoreView from "@/admin/views/stores/view";
+import DefaultContainer from "@/admin/containers/DefaultContainer.vue";
+import CustomerIndex from "@/admin/views/customers/index.vue";
+import CustomerList from "@/admin/views/customers/list.vue";
+import CustomerView from "@/admin/views/customers/view.vue";
+import FilmIndex from "@/admin/views/films/index.vue";
+import FilmList from "@/admin/views/films/list.vue";
+import FilmView from "@/admin/views/films/view.vue";
+import InventoryIndex from "@/admin/views/inventory/index.vue";
+import InventoryList from "@/admin/views/inventory/list.vue";
+import InventoryView from "@/admin/views/inventory/view.vue";
+import StoreIndex from "@/admin/views/stores/index.vue";
+import StoreList from "@/admin/views/stores/list.vue";
+import StoreView from "@/admin/views/stores/view.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     mode: 'history',
     linkActiveClass: 'active',
-    scrollBehavior: () => ({ y: 0 }),
+    // scrollBehavior: () => ({ y: 0 }),
     routes: configRoutes()
 });
 
@@ -100,3 +100,5 @@ function configRoutes() {
         }
     ];
 }
+
+export default router;

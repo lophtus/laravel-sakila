@@ -2,12 +2,16 @@
   <div />
 </template>
 
-<script>
-export default {
-  name: "Logout",
-  beforeMount() {
-    this.$store.commit("logoutUser");
-    this.$router.push({name: "login"});
-  }
-};
+<script setup lang="ts">
+import { useStore } from "@/store.js";
+import { onBeforeMount } from "vue";
+import { useRouter } from "vue-router/composables";
+
+const store = useStore();
+const router = useRouter();
+
+onBeforeMount(() => {
+  store.commit("logoutUser");
+  router.push({name: "login"});
+});
 </script>

@@ -88,61 +88,49 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import CreateModal from "../../customers/components/CreateModal";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import { ref } from "vue";
+import CreateModal from "../../customers/components/CreateModal.vue";
+import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
 
-export default {
-  name: "CustomerList",
-  props: {
-    store: Object
-  },
-  components: {
-    CreateModal,
-    LoadingSpinner
-  },
-  data() {
-    return {
-      isBusy: false,
-      totalRows: 1,
-      currentPage: 1,
-      lastPage: 1,
-      perPage: 30,
-      pageOptions: [10, 20, 30],
-      filter: "",
-      fields: ["id", "name", "email", "address", "actions"]
-    };
-  },
-  methods: {
-    async fetchData(ctx) {
-      let vm = this;
+const props = defineProps({
+  store: Object
+});
 
-      const promise = axios.get(
-        "/stores/" +
-          vm.store.id +
-          "/customers?page[number]=" +
-          ctx.currentPage +
-          "&page[size]=" +
-          ctx.perPage +
-          "&filter[search]=" +
-          ctx.filter
-      );
+const isBusy = ref(false);
+const totalRows = ref(1);
+const currentPage = ref(1);
+const lastPage = ref(1);
+const perPage = ref(30);
+const pageOptions = [10, 20, 30];
+const filter = ref("");
+const fields = ["id", "name", "email", "address", "actions"];
 
-      return promise.then(({ data }) => {
-        const items = data.data;
+const fetchData = async (ctx) => {
+  const promise = axios.get(
+    "/stores/" +
+      props.store.id +
+      "/customers?page[number]=" +
+      ctx.currentPage +
+      "&page[size]=" +
+      ctx.perPage +
+      "&filter[search]=" +
+      ctx.filter
+  );
 
-        vm.currentPage = data.meta.current_page;
-        vm.lastPage = data.meta.last_page;
-        vm.totalRows = data.meta.total;
+  return promise.then(({ data }) => {
+    const items = data.data;
 
-        vm.isBusy = false;
+    currentPage.value = data.meta.current_page;
+    lastPage.value = data.meta.last_page;
+    totalRows.value = data.meta.total;
 
-        return items || [];
-      });
-    }
-  }
-};
+    isBusy.value = false;
+
+    return items || [];
+  });
+}
 </script>
 
 <style scoped>

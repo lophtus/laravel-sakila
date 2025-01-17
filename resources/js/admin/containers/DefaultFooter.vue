@@ -14,10 +14,7 @@
   </CFooter>
 </template>
 
-<script>
-export default {
-  name: "DefaultFooter"
-};
+<script setup lang="ts">
 </script>
 
 <style scoped>

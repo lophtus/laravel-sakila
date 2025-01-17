@@ -1,28 +1,28 @@
 import Vue from "vue";
-import Router from "vue-router";
+import VueRouter, { RouteConfig } from "vue-router";
 
-import DefaultContainer from "@/containers/DefaultContainer";
-import IndexView from "@/views/index";
-import DashboardView from "@/views/dashboard";
-import BrowseView from "@/views/browse";
-import BrowseByCategoryView from "@/views/browseByCategory";
-import SearchView from "@/views/search";
-import LoginView from "@/views/auth/login";
-import LogoutView from "@/views/auth/logout";
+import DefaultContainer from "@/containers/DefaultContainer.vue";
+import IndexView from "@/views/index.vue";
+import DashboardView from "@/views/dashboard.vue";
+import BrowseView from "@/views/browse.vue";
+import BrowseByCategoryView from "@/views/browseByCategory.vue";
+import SearchView from "@/views/search.vue";
+import LoginView from "@/views/auth/login.vue";
+import LogoutView from "@/views/auth/logout.vue";
 
-import NotFound from "@/errors/NotFound";
-import store from "../store";
+import NotFound from "@/errors/NotFound.vue";
+import store from "@/store.js";
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-const router = new Router({
+const router = new VueRouter({
   mode: 'history',
   linkActiveClass: 'active',
-  scrollBehavior: () => ({ y: 0 }),
+//   scrollBehavior: () => ({ y: 0 }),
   routes: configRoutes()
 });
 
-function configRoutes() {
+function configRoutes(): Array<RouteConfig> {
   return [
     {
       path: "/",

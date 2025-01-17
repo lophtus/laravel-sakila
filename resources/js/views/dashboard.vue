@@ -23,60 +23,44 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import api from "@/api";
 import CategoryDashboardWidget from "@/components/CategoryDashboardWidget";
 import FilmModal from "@/components/FilmModal";
+import { onMounted, ref } from "vue";
 
-export default {
-  name: "DashboardView",
-  components: {
-    CategoryDashboardWidget,
-    FilmModal,
-  },
-  data() {
-    return {
-      isBusy: false,
-      currentItem: {},
-      items: [],
-      isModalVisible: false,
-    };
-  },
-  mounted() {
-    const vm = this;
+const isBusy = ref(false);
+const currentItem = ref();
+const items = ref([]);
+const isModalVisible = ref(false);
 
-    this.fetchData();
-  },
-  methods: {
-    fetchData: function () {
-      const vm = this;
+onMounted(() => {
+    fetchData();
+})
 
-      vm.isBusy = true;
+const fetchData = () => {
+  isBusy.value = true;
 
-      const promise = api.getSuggestions();
+  const promise = api.getSuggestions();
 
-      return promise.then(({ data }) => {
-        vm.items = data.data;
+  return promise.then(({ data }) => {
+    items.value = data.data;
 
-        vm.isBusy = false;
+    isBusy.value = false;
 
-        return vm.items || [];
-      });
-    },
-    onSlideClick: function (film) {
-      const vm = this;
+    return items || [];
+  });
+}
 
-      vm.currentItem = film;
-      vm.isModalVisible = true;
-    },
-    onModalClose: function () {
-      const vm = this;
+const onSlideClick = (film) => {
+  currentItem.value = film;
+  isModalVisible.value = true;
+}
 
-      vm.currentItem = null;
-      vm.isModalVisible = false;
-    }
-  },
-};
+const onModalClose = () => {
+  currentItem.value = null;
+  isModalVisible.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

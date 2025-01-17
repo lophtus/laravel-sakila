@@ -37,48 +37,38 @@
   </div>
 </template>
 
-<script>
-import FilmSlide from "./FilmSlide";
+<script setup lang="ts">
+import FilmSlide from "./FilmSlide.vue";
 import "swiper/swiper-bundle.css";
 import Swiper, { Navigation } from "swiper";
+import { onMounted } from "vue";
 
 Swiper.use(Navigation);
 
-export default {
-  name: "CategoryDashboardWidget",
-  props: {
-    category: Object,
-  },
-  components: {
-    FilmSlide,
-  },
-  data() {
-    return {
-      swiper: null,
-      swiperOptions: {
-        slidesPerView: "auto",
-        spaceBetween: 10,
-        observer: true,
-        observeParents: true,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      },
-    };
-  },
-  mounted() {
-    const vm = this;
+const props = defineProps({
+  category: Object,
+});
 
-    vm.swiper = new Swiper(".swiper-container", vm.swiperOptions);
-  },
-  methods: {
-    onClick: function (film) {
-      const vm = this;
-      vm.$emit("click", film);
+const emit = defineEmits([ 'click' ]);
+
+onMounted(() => {
+  const swiperOptions = {
+    slidesPerView: "auto",
+    spaceBetween: 10,
+    observer: true,
+    observeParents: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
     },
-  },
-};
+  };
+
+  const swiper = new Swiper(".swiper-container", swiperOptions);
+});
+
+const onClick = (film) => {
+  emit("click", film);
+}
 </script>
 
 <style lang="scss" scoped>

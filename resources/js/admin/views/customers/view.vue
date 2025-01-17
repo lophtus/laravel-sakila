@@ -21,39 +21,31 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import EditModal from "./components/EditModal";
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router/composables";
+import EditModal from "./components/EditModal.vue";
 
-export default {
-  name: "CustomerView",
-  components: {
-    EditModal
-  },
-  data() {
-    return {
-      isLoaded: false,
-      customer: {}
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    const promise = axios.get("/customers/" + to.params.id);
+const route = useRoute();
 
-    return promise.then(({ data }) => {
-      const customer = data.data;
+const isLoaded = ref(false);
+const customer = ref({});
 
-      next(vm => {
-        vm.customer = customer || {};
-        vm.isLoaded = true;
-      });
-    });
-  },
-  methods: {
-    onSave(customer) {
-      this.customer = customer;
-    },
-  }
-};
+onBeforeMount(() => {
+  const promise = axios.get("/customers/" + route.params.id);
+
+  return promise.then(({ data }) => {
+    const item = data.data;
+
+    customer.value = item || {};
+    isLoaded.value = true;
+  });
+});
+
+const onSave = (customerObj) => {
+  customer.value = customerObj;
+}
 </script>
 
 <style scoped>

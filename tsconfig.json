@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "strict": true,
+      "jsx": "preserve",
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "allowJs": true,
+      "esModuleInterop": true,
+      "lib": [
+        "esnext",
+        "dom"
+      ],
+      "baseUrl": "./resources/js",
+      "outDir": "dist",
+      "paths": {
+          "@/*": ["./*"] // Alias '@' to the 'src' directory
+      }
+    },
+    "include": [
+      "**/*.js",
+      "**/*.ts",
+      "**/*.vue"
+    ],
+    "exclude": ["dist", "node_modules"]
+}

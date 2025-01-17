@@ -9,29 +9,25 @@
   </CSidebar>
 </template>
 
-<script>
+<script setup lang="ts">
+import { getCurrentInstance, onMounted, ref } from "vue";
 import nav from "./_nav";
 
-export default {
-  name: "DefaultSidebar",
-  data() {
-    return {
-      minimize: false,
-      nav,
-      show: "responsive"
-    };
-  },
-  mounted() {
-    this.$root.$on("toggle-sidebar", () => {
-      const sidebarOpened = this.show === true || this.show === "responsive";
-      this.show = sidebarOpened ? false : "responsive";
-    });
-    this.$root.$on("toggle-sidebar-mobile", () => {
-      const sidebarClosed = this.show === "responsive" || this.show === false;
-      this.show = sidebarClosed ? true : "responsive";
-    });
-  }
-};
+const { proxy } = getCurrentInstance();
+
+const minimize = ref(false);
+const show = ref("responsive");
+
+onMounted(() => {
+  proxy.$on("toggle-sidebar", () => {
+    const sidebarOpened = show.value === true || show.value === "responsive";
+    show.value = sidebarOpened ? false : "responsive";
+  });
+  proxy.$on("toggle-sidebar-mobile", () => {
+    const sidebarClosed = show.value === "responsive" || show.value === false;
+    show.value = sidebarClosed ? true : "responsive";
+  });
+});
 </script>
 
 <style scoped>

@@ -13,65 +13,55 @@
         ></CategorySlide>
       </div>
     </div>
-
-    <b-alert v-else variant="danger" show>No categories found.</b-alert>
   </div>
 </template>
 
-<script>
-let isRouted = false;
-
+<script setup lang="ts">
 import api from "@/api";
 import CategorySlide from "@/components/CategorySlide";
+import { onBeforeMount, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router/composables";
 
-export default {
-  name: "BrowseView",
-  components: {
-    CategorySlide,
-  },
-  data() {
-    return {
-      items: [],
-      isLoaded: false,
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    isRouted = true;
+const router = useRouter();
+const route = useRoute();
 
-    const promise = api.getCategories();
+const isRouted = ref(false);
+const isLoaded = ref(false);
+const items = ref([]);
 
-    return promise.then(({ data }) => {
-      next((vm) => {
-        vm.items = data.data || [];
-        vm.isLoaded = true;
-      });
-    });
-  },
-  created() {
-    const vm = this;
-
-    if (!vm.isLoaded && !isRouted) {
-      vm.init(vm.$route.params.id);
-    }
-  },
-  methods: {
-    init: function (id) {
-      const vm = this;
+onBeforeMount(() => {
+  watch(
+    () => route,
+    (newRoute, oldRoute) => {
+      isRouted.value = true;
 
       const promise = api.getCategories();
 
-      return promise.then(({ data }) => {
-        vm.items = data.data;
-        vm.isLoaded = true;
+      promise.then(({ data }) => {
+        items.value = data.data || [];
+        isLoaded.value = true;
       });
     },
-    onClick: function (item) {
-      const vm = this;
+    { deep: true }
+  );
 
-      vm.$router.push({ name: "browse-by-category", params: { id: item.id } });
-    },
-  },
-};
+  if (!isLoaded.value && !isRouted.value) {
+    init(route.params.id);
+  }
+});
+
+const init = (id) => {
+  const promise = api.getCategories();
+
+  return promise.then(({ data }) => {
+    items.value = data.data;
+    isLoaded.value = true;
+  });
+}
+
+const onClick = (item) => {
+  router.push({ name: "browse-by-category", params: { id: item.id } });
+}
 </script>
 
 <style lang="scss" scoped>
