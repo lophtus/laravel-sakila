@@ -1,5 +1,6 @@
 <template>
   <div class="c-app">
+    <vue-progress-bar></vue-progress-bar>
     <DefaultSidebar />
     <div class="c-wrapper">
       <DefaultHeader />

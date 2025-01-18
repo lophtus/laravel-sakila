@@ -19,10 +19,12 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+import axios from "axios";
 import Vue from "vue";
 import { BootstrapVue } from "bootstrap-vue";
 import CoreuiVue from "@coreui/vue";
 import Toasted from "vue-toasted";
+import VueProgressBar from "vue-progressbar";
 
 Vue.config.performance = true;
 
@@ -34,6 +36,12 @@ Vue.use(Toasted, {
   position: "bottom-right",
   duration: 5000
 });
+
+const options = {
+    color: '#3490dc',
+    failedColor: '#e3342f',
+}
+Vue.use(VueProgressBar, options);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -52,4 +60,15 @@ const app = new Vue({
     App
   },
   render: h => h(App)
+});
+
+
+axios.interceptors.request.use(config => {
+  app.$Progress.start(); // for every request start the progress
+  return config;
+});
+
+axios.interceptors.response.use(response => {
+  app.$Progress.finish(); // finish when a response is received
+  return response;
 });

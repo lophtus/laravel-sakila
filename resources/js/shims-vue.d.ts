@@ -5,3 +5,4 @@ declare module '*.vue' {
 }
 
 declare module "vue-initials-img";
+declare module "vue-progressbar";
