@@ -9,7 +9,10 @@
         "pc": "npm run profiler-client"
     },
     "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.19.1",
+        "@typescript-eslint/parser": "^8.19.1",
         "@vitejs/plugin-vue2": "^2.3.3",
+        "@vue/cli-plugin-typescript": "^5.0.8",
         "cross-env": "^5.1",
         "laravel-profiler-client": "^1.3.0",
         "laravel-vite-plugin": "^0.7.8",

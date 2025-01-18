@@ -98,66 +98,64 @@
   </b-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import { StateList, CountryList } from "../../../data/address_constants";
+import { getCurrentInstance, ref } from "vue";
+import { StateList, CountryList } from "@/admin/data/address_constants";
 
-export default {
-  name: "EditModal",
-  props: {
-    populateWith: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isSaving: false,
-      states: StateList,
-      countries: CountryList,
-      form: {}
-    };
-  },
-  methods: {
-    resetModal() {
-      this.form = Object.assign({}, this.populateWith);
-    },
-    handleOkay(bvModalEvt) {
-      bvModalEvt.preventDefault();
-
-      this.onSubmit();
-    },
-    async onSubmit() {
-      let vm = this;
-
-      vm.isSaving = true;
-
-      const promise = axios.patch("/customers/" + vm.form.id, vm.form);
-
-      promise
-        .then(({ data }) => {
-          const customer = data.data;
-
-          vm.$emit("saved", customer);
-
-          vm.$refs.editModal.hide();
-
-          vm.$toasted.show("Customer was updated successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        })
-        .catch(error => {
-          if (error.response.data.errors) {
-            vm.$refs.formObserver.setErrors(error.response.data.errors);
-          }
-        })
-        .finally(() => {
-          vm.isSaving = false;
-        });
-    }
+const props = defineProps({
+  populateWith: {
+    type: Object,
+    required: true
   }
-};
+});
+
+const emit = defineEmits(['saved']);
+
+const { proxy } = getCurrentInstance();
+
+const isSaving = ref(false);
+const states = StateList;
+const countries = CountryList;
+const form = ref({});
+
+const resetModal = () => {
+  form.value = Object.assign({}, props.populateWith);
+}
+
+const handleOkay = (bvModalEvt) => {
+  bvModalEvt.preventDefault();
+
+  onSubmit();
+}
+
+const onSubmit = async () => {
+  isSaving.value = true;
+
+  const promise = axios.patch("/customers/" + form.value.id, form.value);
+
+  promise
+    .then(({ data }) => {
+      const customer = data.data;
+
+      emit("saved", customer);
+
+      proxy.$refs.editModal.hide();
+
+      proxy.$toasted.show("Customer was updated successfully", {
+        type: "success",
+        icon: "far fa-check-circle"
+      });
+    })
+    .catch(error => {
+      if (error.response.data.errors) {
+        proxy.$refs.formObserver.setErrors(error.response.data.errors);
+      }
+    })
+    .finally(() => {
+      isSaving.value = false;
+    });
+}
 </script>
 
 <style scoped>

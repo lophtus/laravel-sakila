@@ -42,119 +42,104 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import api from "@/api";
 import FilmModal from "@/components/FilmModal";
 import FilmSlide from "@/components/FilmSlide";
+import { computed, onBeforeMount, ref, watch } from "vue";
+import { useRoute } from "vue-router/composables";
 
-let isRouted = false;
+const route = useRoute();
 
-export default {
-  name: "BrowseByCategoryView",
-    components: {
-    FilmModal,
-    FilmSlide,
-  },
-  data() {
-    return {
-      isLoaded: false,
-      isBusy: false,
-      currentPage: 1,
-      perPage: 12,
-      category: {},
-      items: [],
-      currentItem: {},
-      isModalVisible: false,
-      canLoadMore: false,
-    };
-  },
-  computed: {
-    pageTitle: function () {
-      const vm = this;
+const isRouted = ref(false);
+const isLoaded = ref(false);
+const isBusy = ref(false);
+const currentPage = ref(1);
+const perPage = 12;
+const category = ref({});
+const items = ref([]);
+const currentItem = ref({});
+const isModalVisible = ref(false);
+const canLoadMore = ref(false);
 
-      return !vm.isLoaded ? "Loading" : vm.category.name;
-    },
-  },
-  beforeRouteEnter(to, from, next) {
-    const promise = api.getCategory(to.params.id);
+onBeforeMount(() => {
+  watch(
+    () => route,
+    (newRoute, oldRoute) => {
+      isRouted.value = true;
 
-    isRouted = true;
+      const promise = api.getCategory(newRoute.params.id);
 
-    return promise
-      .then(({ data }) => {
-        const category = data.data;
+      promise
+        .then(({ data }) => {
+          const category = data.data;
 
-        next((vm) => {
-          vm.category = category;
-          vm.isLoaded = true;
-          vm.fetchData(vm.currentPage);
+          category.value = category;
+          isLoaded.value = true;
+          fetchData(currentPage.value);
+        })
+        .catch(() => {
+          next({ name: "not-found" });
         });
-      })
-      .catch(() => {
-        next({ name: "not-found" });
-      });
-  },
-  created() {
-    const vm = this;
+    },
+    { deep: true }
+  );
 
-    if (!vm.isLoaded && !isRouted) {
-      vm.init(vm.$route.params.id);
+  if (!isLoaded.value && !isRouted.value) {
+    init(route.params.id);
+  }
+});
+
+const pageTitle = computed(() => {
+  return !isLoaded.value ? "Loading" : category.value.name;
+});
+
+const init = (id) => {
+  const promise = api.getCategory(id);
+
+  return promise.then(({ data }) => {
+    category.value = data.data;
+    isLoaded.value = true;
+    fetchData(currentPage.value);
+  });
+}
+
+const loadMore = () => {
+  fetchData(currentPage.value + 1);
+}
+
+const fetchData = (page) => {
+  const promise = api.getFilmsByCategory(category.value.id, page, perPage);
+
+  isBusy.value = true;
+
+  return promise.then(({ data }) => {
+    data.data.forEach((element) => {
+      items.value.push(element);
+    });
+
+    currentPage.value = data.meta.current_page;
+
+    canLoadMore.value = false;
+
+    if (data.links.next != null) {
+      canLoadMore.value = true;
     }
-  },
-  methods: {
-    init: function (id) {
-      const vm = this;
 
-      const promise = api.getCategory(id);
+    isBusy.value = false;
 
-      return promise.then(({ data }) => {
-        vm.category = data.data;
-        vm.isLoaded = true;
-        vm.fetchData(vm.currentPage);
-      });
-    },
-    loadMore: function () {
-      const vm = this;
-      vm.fetchData(vm.currentPage + 1);
-    },
-    fetchData: function (page) {
-      const vm = this;
+    return items.value || [];
+  });
+}
 
-      const promise = api.getFilmsByCategory(vm.category.id, page, vm.perPage);
+const onSlideClick = (film) => {
+  currentItem.value = film;
+  isModalVisible.value = true;
+}
 
-      vm.isBusy = true;
-
-      return promise.then(({ data }) => {
-        data.data.forEach((element) => {
-          vm.items.push(element);
-        });
-
-        vm.currentPage = data.meta.current_page;
-
-        vm.canLoadMore = false;
-
-        if (data.links.next != null) {
-          vm.canLoadMore = true;
-        }
-
-        vm.isBusy = false;
-
-        return vm.items || [];
-      });
-    },
-    onSlideClick: function (film) {
-      const vm = this;
-
-      vm.currentItem = film;
-      vm.isModalVisible = true;
-    },
-    onModalClose: function () {
-      const vm = this;
-
-      vm.currentItem = null;
-      vm.isModalVisible = false;
-    },
-  },
+const onModalClose = () => {
+  currentItem.value = null;
+  isModalVisible.value = false;
 }
 </script>
 

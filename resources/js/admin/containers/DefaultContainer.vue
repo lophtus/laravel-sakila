@@ -17,19 +17,10 @@
   </div>
 </template>
 
-<script>
-import DefaultFooter from "./DefaultFooter";
-import DefaultHeader from "./DefaultHeader";
-import DefaultSidebar from "./DefaultSidebar";
-
-export default {
-  name: "DefaultContainer",
-  components: {
-    DefaultFooter,
-    DefaultHeader,
-    DefaultSidebar
-  }
-};
+<script setup lang="ts">
+import DefaultFooter from "./DefaultFooter.vue";
+import DefaultHeader from "./DefaultHeader.vue";
+import DefaultSidebar from "./DefaultSidebar.vue";
 </script>
 
 <style scoped>

@@ -91,7 +91,7 @@
               </b-row>
             </b-col>
             <b-col cols="auto">
-              <b-img src="https://via.placeholder.com/150x150"></b-img>
+              <b-img src="https://dummyimage.com/150x150/e/5.png"></b-img>
             </b-col>
           </b-row>
         </b-card>
@@ -122,64 +122,51 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import CreateModal from "./components/CreateModal";
+import { ref } from "vue";
+import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
+import CreateModal from "./components/CreateModal.vue";
 
-export default {
-  name: "FilmList",
-  components: {
-    LoadingSpinner,
-    CreateModal
-  },
-  data() {
-    return {
-      isBusy: false,
-      totalRows: 1,
-      currentPage: 1,
-      lastPage: 1,
-      perPage: 10,
-      pageOptions: [10, 20, 30],
-      filter: "",
-      fields: [
-        "show_details",
-        "id",
-        "title",
-        "release_year",
-        "actions"
-      ]
-    };
-  },
-  methods: {
-    async fetchData(ctx) {
-      let vm = this;
+const isBusy = ref(false);
+const totalRows = ref(1);
+const currentPage = ref(1);
+const lastPage = ref(1);
+const perPage = ref(10);
+const pageOptions = [10, 20, 30];
+const filter = ref("");
+const fields = [
+  "show_details",
+  "id",
+  "title",
+  "release_year",
+  "actions"
+];
 
-      vm.isBusy = true;
+const fetchData = async (ctx) => {
+  isBusy.value = true;
 
-      const promise = axios.get(
-        "/films?page[number]=" +
-          ctx.currentPage +
-          "&page[size]=" +
-          ctx.perPage +
-          "&filter[search]=" +
-          ctx.filter
-      );
+  const promise = axios.get(
+    "/films?page[number]=" +
+      ctx.currentPage +
+      "&page[size]=" +
+      ctx.perPage +
+      "&filter[search]=" +
+      ctx.filter
+  );
 
-      return promise.then(({ data }) => {
-        const items = data.data;
+  return promise.then(({ data }) => {
+    const items = data.data;
 
-        vm.currentPage = data.meta.current_page;
-        vm.lastPage = data.meta.last_page;
-        vm.totalRows = data.meta.total;
+    currentPage.value = data.meta.current_page;
+    lastPage.value = data.meta.last_page;
+    totalRows.value = data.meta.total;
 
-        vm.isBusy = false;
+    isBusy.value = false;
 
-        return items || [];
-      });
-    }
-  }
-};
+    return items || [];
+  });
+}
 </script>
 
 <style scoped>

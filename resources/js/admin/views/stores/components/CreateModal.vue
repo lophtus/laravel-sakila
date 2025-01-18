@@ -83,58 +83,55 @@
   </b-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import { StateList, CountryList } from "../../../data/address_constants";
+import { getCurrentInstance, ref } from "vue";
+import { useRouter } from "vue-router/composables";
+import { StateList, CountryList } from "@/admin/data/address_constants";
 
-export default {
-  name: "CreateModal",
-  data() {
-    return {
-      isSaving: false,
-      states: StateList,
-      countries: CountryList,
-      form: {}
-    };
-  },
-  methods: {
-    resetModal() {
-      this.form = {};
-    },
-    handleOkay(bvModalEvt) {
-      bvModalEvt.preventDefault();
+const { proxy } = getCurrentInstance();
+const router = useRouter();
 
-      this.onSubmit();
-    },
-    async onSubmit() {
-      let vm = this;
+const isSaving = ref(false);
+const states = StateList;
+const countries = CountryList;
+const form = ref({});
 
-      vm.isSaving = true;
+const resetModal = () => {
+  form.value = {};
+}
 
-      const promise = axios.post("/stores", vm.form);
+const handleOkay = (bvModalEvt) => {
+  bvModalEvt.preventDefault();
 
-      promise
-        .then(({ data }) => {
-          const store = data.data;
+  onSubmit();
+}
 
-          vm.$router.push({ name: "store-view", params: { id: store.id } });
+const onSubmit = async () => {
+  isSaving.value = true;
 
-          vm.$toasted.show("Store was created successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        })
-        .catch(error => {
-          if (error.response.data.errors) {
-            vm.$refs.formObserver.setErrors(error.response.data.errors);
-          }
-        })
-        .finally(() => {
-          vm.isSaving = false;
-        });
-    }
-  }
-};
+  const promise = axios.post("/stores", form.value);
+
+  promise
+    .then(({ data }) => {
+      const store = data.data;
+
+      router.push({ name: "store-view", params: { id: store.id } });
+
+      proxy.$toasted.show("Store was created successfully", {
+        type: "success",
+        icon: "far fa-check-circle"
+      });
+    })
+    .catch(error => {
+      if (error.response.data.errors) {
+        proxy.$refs.formObserver.setErrors(error.response.data.errors);
+      }
+    })
+    .finally(() => {
+      isSaving.value = false;
+    });
+}
 </script>
 
 <style scoped>

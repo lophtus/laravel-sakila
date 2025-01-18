@@ -10,9 +10,9 @@ export default defineConfig({
         laravel({
             input: [
               'resources/sass/admin/app.scss',
-              'resources/js/admin/app.js',
+              'resources/js/admin/app.ts',
               'resources/sass/app.scss',
-              'resources/js/app.js'
+              'resources/js/app.ts'
             ],
             refresh: true,
         }),
@@ -20,7 +20,7 @@ export default defineConfig({
         commonjs(),
     ],
     resolve: {
-      extensions: [ '.js', '.vue' ],
+      extensions: [ '.js', '.ts', '.vue' ],
       alias: {
         '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
         '~bootstrap-vue': path.resolve(__dirname, 'node_modules/bootstrap-vue'),

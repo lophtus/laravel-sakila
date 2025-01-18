@@ -59,52 +59,38 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import CreateModal from "./components/CreateModal";
+import { ref } from "vue";
+import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
+import CreateModal from "./components/CreateModal.vue";
 
-export default {
-  name: "StoreList",
-  components: {
-    LoadingSpinner,
-    CreateModal
-  },
-  data() {
-    return {
-      isBusy: false,
-      totalRows: 1,
-      currentPage: 1,
-      lastPage: 1,
-      perPage: 30,
-      fields: ["id", "address", "actions"],
-      stores: []
-    };
-  },
-  methods: {
-    async fetchData(ctx) {
-      let vm = this;
+const isBusy = ref(false);
+const totalRows = ref(1);
+const currentPage = ref(1);
+const lastPage = ref(1);
+const perPage = ref(30);
+const fields = ["id", "address", "actions"];
 
-      vm.isBusy = true;
+const fetchData = async (ctx) => {
+  isBusy.value = true;
 
-      const promise = axios.get(
-        "/stores?page[number]=" + ctx.currentPage + "&page[size]=" + ctx.perPage
-      );
+  const promise = axios.get(
+    "/stores?page[number]=" + ctx.currentPage + "&page[size]=" + ctx.perPage
+  );
 
-      return promise.then(({ data }) => {
-        const items = data.data;
+  return promise.then(({ data }) => {
+    const items = data.data;
 
-        vm.currentPage = data.meta.current_page;
-        vm.lastPage = data.meta.last_page;
-        vm.totalRows = data.meta.total;
+    currentPage.value = data.meta.current_page;
+    lastPage.value = data.meta.last_page;
+    totalRows.value = data.meta.total;
 
-        vm.isBusy = false;
+    isBusy.value = false;
 
-        return items || [];
-      });
-    }
-  }
-};
+    return items || [];
+  });
+}
 </script>
 
 <style scoped>

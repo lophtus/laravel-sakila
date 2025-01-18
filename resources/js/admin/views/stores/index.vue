@@ -2,10 +2,7 @@
     <router-view></router-view>
 </template>
 
-<script>
-export default {
-  name: "StoreIndex"
-};
+<script setup lang="ts">
 </script>
 
 <style scoped>

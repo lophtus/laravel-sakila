@@ -29,10 +29,7 @@
   </CHeader>
 </template>
 
-<script>
-export default {
-  name: "DefaultHeader"
-};
+<script setup lang="ts">
 </script>
 
 <style scoped>

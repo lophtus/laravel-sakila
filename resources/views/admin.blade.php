@@ -6,7 +6,7 @@
 
         <title>{{ config('app.name', 'Laravel') }} Admin</title>
 
-        @vite(['resources/sass/admin/app.scss', 'resources/js/admin/app.js'])
+        @vite(['resources/sass/admin/app.scss', 'resources/js/admin/app.ts'])
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">

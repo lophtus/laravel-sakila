@@ -109,58 +109,54 @@
   </b-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import { RatingList, SpecialFeatureList } from "../../../data/film_constants";
+import { getCurrentInstance, ref } from "vue";
+import { useRouter } from "vue-router/composables";
+import { RatingList, SpecialFeatureList } from "@/admin/data/film_constants";
 
-export default {
-  name: "CreateModal",
-  data() {
-    return {
-      isSaving: false,
-      ratings: RatingList,
-      special_features: SpecialFeatureList,
-      form: {}
-    };
-  },
-  methods: {
-    resetModal() {
-      this.form = {};
-    },
-    handleOkay(bvModalEvt) {
-      bvModalEvt.preventDefault();
+const { proxy } = getCurrentInstance();
 
-      this.onSubmit();
-    },
-    async onSubmit() {
-      let vm = this;
+const isSaving = ref(false);
+const ratings = RatingList;
+const special_features = SpecialFeatureList;
+const form = ref({});
 
-      vm.isSaving = true;
+const resetModal = () => {
+  form.value = {};
+}
 
-      const promise = axios.post("/films", vm.form);
+const handleOkay = (bvModalEvt) => {
+  bvModalEvt.preventDefault();
 
-      promise
-        .then(({ data }) => {
-          const film = data.data;
+  onSubmit();
+}
 
-          vm.$router.push({ name: "film-view", params: { id: film.id } });
+const onSubmit = async () => {
+  isSaving.value = true;
 
-          vm.$toasted.show("Film was created successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        })
-        .catch(error => {
-          if (error.response.data.errors) {
-            vm.$refs.formObserver.setErrors(error.response.data.errors);
-          }
-        })
-        .finally(() => {
-          vm.isSaving = false;
-        });
-    }
-  }
-};
+  const promise = axios.post("/films", form.value);
+
+  promise
+    .then(({ data }) => {
+      const film = data.data;
+
+      router.push({ name: "film-view", params: { id: film.id } });
+
+      proxy.$toasted.show("Film was created successfully", {
+        type: "success",
+        icon: "far fa-check-circle"
+      });
+    })
+    .catch(error => {
+      if (error.response.data.errors) {
+        proxy.$refs.formObserver.setErrors(error.response.data.errors);
+      }
+    })
+    .finally(() => {
+      isSaving.value = false;
+    });
+}
 </script>
 
 <style scoped>

@@ -14,7 +14,7 @@
 
     <b-row v-show="!isBusy">
       <b-col cols="auto">
-        <b-img src="https://via.placeholder.com/300x300"></b-img>
+        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
       </b-col>
       <b-col>
         <b-row class="h-100">
@@ -95,102 +95,92 @@
   </b-modal>
 </template>
 
-<script>
+<script setup lang="ts">
 import api from "@/api";
+import { useStore } from "@/store.js";
+import { computed, ref } from 'vue';
 
-export default {
-  name: "FilmModal",
-  props: {
-    filmId: Number,
-    visible: Boolean,
-  },
-  data() {
-    return {
-      isBusy: false,
-      isReserving: false,
-      isUnavailable: false,
-      rental: null,
-      inStock: false,
-      film: {},
-    };
-  },
-  computed: {
-    modalTitle: function () {
-      const vm = this;
+const props = defineProps({
+  filmId: Number,
+  visible: Boolean,
+});
 
-      return vm.isBusy
-        ? "Loading..."
-        : vm.film.title + " (" + vm.film.release_year + ")";
-    },
-  },
-  methods: {
-    onModalShow: function () {
-      const vm = this;
+const emit = defineEmits([ 'close' ]);
 
-      vm.isBusy = false;
-      vm.isReserving = false;
-      vm.isUnavailable = false;
-      vm.rental = null;
+const store = useStore();
 
-      vm.fetchData(vm.filmId).then(() => {
-        vm.inStock = vm.checkInStock(vm.film);
-      });
-    },
-    onModalClose: function () {
-      const vm = this;
+const isBusy = ref(false);
+const isReserving = ref(false);
+const isUnavailable = ref(false);
+const rental = ref(null);
+const inStock = ref(false);
+const film = ref({});
 
-      vm.$emit("close");
-    },
-    checkInStock: function (film) {
-      const vm = this;
+const modalTitle = computed(() => {
+  return isBusy.value
+    ? "Loading..."
+    : film.value.title + " (" + film.value.release_year + ")";
+});
 
-      if (!film || !film.in_stock_inventory) {
-        return false;
-      }
+const onModalShow = () => {
+  isBusy.value = false;
+  isReserving.value = false;
+  isUnavailable.value = false;
+  rental.value = null;
 
-      return (
-        film.in_stock_inventory.filter((inventory) => {
-          return inventory.store.id == vm.$store.getters.user.store.id;
-        }).length > 0
-      );
-    },
-    fetchData: function (filmId) {
-      const vm = this;
+  fetchData(props.filmId).then(() => {
+    inStock.value = checkInStock(film.value);
+  });
+}
 
-      vm.isBusy = true;
+const onModalClose = () => {
+    emit('close');
+}
 
-      const promise = api.getFilm(filmId, "inStockInventory.store");
+const checkInStock = (film) => {
+  if (!film.value || !film.value.in_stock_inventory) {
+    return false;
+  }
 
-      return promise.then(({ data }) => {
-        vm.film = data.data;
+  return (
+    film.value.in_stock_inventory.filter((inventory) => {
+      return inventory.store.id == store.getters.user.store.id;
+    }).length > 0
+  );
+}
 
-        vm.isBusy = false;
+const fetchData = (filmId) => {
+  isBusy.value = true;
 
-        return vm.film || [];
-      });
-    },
-    doReserve: function (film) {
-      const vm = this;
+  const promise = api.getFilm(filmId, "inStockInventory.store");
 
-      vm.isReserving = true;
+  return promise.then(({ data }) => {
+    film.value = data.data;
 
-      const promise = api.reserveFilm(film.id, vm.$activeStore);
+    isBusy.value = false;
 
-      return promise
-        .then(({ data }) => {
-          vm.rental = data.data;
+    return film.value || [];
+  });
+}
 
-          vm.isReserving = false;
+const doReserve = (film) => {
+  isReserving.value = true;
 
-          return vm.rental || {};
-        })
-        .catch(({ err }) => {
-          vm.isReserving = false;
-          vm.isUnavailable = true;
-        });
-    },
-  },
-};
+  const promise = api.reserveFilm(film.id, store.getters.user.store.id);
+
+  return promise
+    .then(({ data }) => {
+      rental.value = data.data;
+
+      isReserving.value = false;
+
+      return rental.value || {};
+    })
+    .catch(({ err }) => {
+      isReserving.value = false;
+      isUnavailable.value = true;
+    });
+}
 </script>
 
 <style lang="scss" scoped>

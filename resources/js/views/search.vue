@@ -48,93 +48,76 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import api from "@/api";
 import FilmModal from "@/components/FilmModal";
 import FilmSlide from "@/components/FilmSlide";
+import { ref } from "vue";
 
-export default {
-  name: "SearchView",
-  components: {
-    FilmModal,
-    FilmSlide,
-  },
-  data() {
-    return {
-      search: "",
-      isBusy: false,
-      currentPage: 1,
-      perPage: 12,
-      items: [],
-      currentItem: {},
-      isModalVisible: false,
-      canLoadMore: false,
-      hasSearched: false,
-    };
-  },
-  mounted() {
-    const vm = this;
-  },
-  methods: {
-    onSlideClick: function (film) {
-      const vm = this;
+const search = ref("");
+const isBusy = ref(false);
+const currentPage = ref(1);
+const perPage = 12;
+const items = ref([]);
+const currentItem = ref({});
+const isModalVisible = ref(false);
+const canLoadMore = ref(false);
+const hasSearched = ref(false);
 
-      vm.currentItem = film;
-      vm.isModalVisible = true;
-    },
-    onClose: function () {
-      const vm = this;
+const onSlideClick = (film) => {
+  currentItem.value = film;
+  isModalVisible.value = true;
+}
 
-      vm.currentItem = null;
-      vm.isModalVisible = false;
-    },
-    clearSearch: function () {
-      const vm = this;
-      vm.search = "";
-      vm.currentPage = 0;
-      vm.items = [];
-      vm.hasSearched = false;
-    },
-    onSubmit: function (evt) {
-      evt.preventDefault();
+const onClose = () => {
+  currentItem.value = null;
+  isModalVisible.value = false;
+}
 
-      const vm = this;
-      vm.items = [];
-      vm.fetchData(vm.currentPage);
-    },
-    loadMore: function () {
-      const vm = this;
-      vm.fetchData(vm.currentPage + 1);
-    },
-    fetchData: function (page) {
-      const vm = this;
+const clearSearch = () => {
+  search.value = "";
+  currentPage.value = 0;
+  items.value = [];
+  hasSearched.value = false;
+}
 
-      vm.isBusy = true;
+const onSubmit = (evt) => {
+  evt.preventDefault();
 
-      const promise = api.searchFilms(vm.search, page, vm.perPage);
+  items.value = [];
+  fetchData(currentPage.value);
+}
 
-      return promise.then(({ data }) => {
-        data.data.forEach((element) => {
-          vm.items.push(element);
-        });
+const loadMore = () => {
+  const vm = this;
+  vm.fetchData(vm.currentPage + 1);
+}
 
-        vm.hasSearched = true;
+const fetchData = (page) => {
+  isBusy.value = true;
 
-        vm.currentPage = data.meta.current_page;
+  const promise = api.searchFilms(search.value, page, perPage);
 
-        vm.canLoadMore = false;
+  return promise.then(({ data }) => {
+    data.data.forEach((element) => {
+      items.value.push(element);
+    });
 
-        if (data.links.next != null) {
-          vm.canLoadMore = true;
-        }
+    hasSearched.value = true;
 
-        vm.isBusy = false;
+    currentPage.value = data.meta.current_page;
 
-        return vm.items || [];
-      });
-    },
-  },
-};
+    canLoadMore.value = false;
+
+    if (data.links.next != null) {
+      canLoadMore.value = true;
+    }
+
+    isBusy.value = false;
+
+    return items.value || [];
+  });
+}
 </script>
 
 <style lang="scss" scoped>

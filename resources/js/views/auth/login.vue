@@ -85,58 +85,54 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import api from "@/api";
+import { useStore } from "@/store.js";
+import { ref } from "vue";
+import { useRouter } from "vue-router/composables";
 
-export default {
-  name: "LoginView",
-  data() {
-    return {
-      disabled: false,
-      hasErrors: false,
-      errorMessage: null,
-      errors: [],
-      form: {
-        email: "",
-        password: "",
-      },
-    };
-  },
-  methods: {
-    login(evt) {
-      const vm = this;
+const router = useRouter();
+const store = useStore();
 
-      evt.preventDefault();
+const disabled = ref(false);
+const hasErrors = ref(false);
+const errorMessage = ref(null);
+const errors = ref([]);
+const form = ref({
+  email: "",
+  password: "",
+});
 
-      if (vm.disabled) return;
+const login = (evt) => {
+  evt.preventDefault();
 
-      vm.disabled = true;
-      vm.hasErrors = false;
-      vm.errorMessage = null;
-      vm.errors = [];
+  if (disabled.value) return;
 
-      const promise = api.login(vm.form.email, vm.form.password);
+  disabled.value = true;
+  hasErrors.value = false;
+  errorMessage.value = null;
+  errors.value = [];
 
-      promise
-        .then(({ data }) => {
-          vm.disabled = false;
+  const promise = api.login(form.value.email, form.value.password);
 
-          localStorage.setItem("user", JSON.stringify(data.data));
+  promise
+    .then(({ data }) => {
+      disabled.value = false;
 
-          vm.$store.commit("loginUser");
-          vm.$router.push({ name: "dashboard" });
-        })
-        .catch((error) => {
-          vm.disabled = false;
-          vm.hasErrors = true;
-          vm.errorMessage = error.response.data.message;
-          if (error.response.data.errors) {
-            vm.errors = error.response.data.errors;
-          }
-        });
-    },
-  },
-};
+      localStorage.setItem("user", JSON.stringify(data.data));
+
+      store.commit("loginUser");
+      router.push({ name: "dashboard" });
+    })
+    .catch((error) => {
+      disabled.value = false;
+      hasErrors.value = true;
+      errorMessage.value = error.response.data.message;
+      if (error.response.data.errors) {
+        errors.value = error.response.data.errors;
+      }
+    });
+}
 </script>
 
 <style lang="scss" scoped>

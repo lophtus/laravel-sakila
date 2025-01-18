@@ -50,7 +50,7 @@
       >
         <template #toggler>
           <CHeaderNavLink>
-            <vue-initials-img class="c-avatar" :name="customerName" />
+            <vue-initials-img class="c-avatar" :name="userName" />
           </CHeaderNavLink>
         </template>
 
@@ -68,18 +68,16 @@
   </CHeader>
 </template>
 
-<script>
-export default {
-  name: "DefaultHeader",
-  computed: {
-    customerName: function () {
-      const vm = this;
-      const user = vm.$store.getters.user;
+<script setup lang="ts">
+import { useStore } from '@/store.js';
+import { computed } from 'vue';
 
-      return user.first_name + " " + user.last_name;
-    },
-  },
-};
+const store = useStore();
+
+const userName = computed(() => {
+  const user = store.getters.user;
+  return user.first_name + " " + user.last_name;
+});
 </script>
 
 <style lang="scss" scoped>

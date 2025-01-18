@@ -15,7 +15,7 @@
         </address>
       </b-col>
       <b-col cols="auto">
-        <b-img src="https://via.placeholder.com/300x300"></b-img>
+        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
       </b-col>
     </b-row>
 
@@ -49,64 +49,69 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import axios from "axios";
-import CustomerList from "./components/CustomerList";
-import EditModal from "./components/EditModal";
-import FilmList from "./components/FilmList";
-import InventoryList from "./components/InventoryList";
+import { getCurrentInstance, onBeforeMount, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router/composables";
+import CustomerList from "./components/CustomerList.vue";
+import EditModal from "./components/EditModal.vue";
+import FilmList from "./components/FilmList.vue";
+import InventoryList from "./components/InventoryList.vue";
 
-export default {
-  name: "StoreView",
-  components: {
-    CustomerList,
-    EditModal,
-    FilmList,
-    InventoryList
-  },
-  data() {
-    return {
-      isLoaded: false,
-      store: {}
-    };
-  },
-  beforeRouteEnter(to, from, next) {
-    const promise = axios.get("/stores/" + to.params.id);
+const { proxy } = getCurrentInstance();
+const route = useRoute();
+const router = useRouter();
 
-    return promise.then(({ data }) => {
-      const store = data.data;
+const isRouted = ref(false);
+const isLoaded = ref(false);
+const store = ref({});
 
-      next(vm => {
-        vm.store = store || {};
-        vm.isLoaded = true;
-      });
-    });
-  },
-  methods: {
-    onSave(store) {
-      this.store = store;
+onBeforeMount(() => {
+  watch(
+    () => route,
+    (newRoute, oldRoute) => {
+      isRouted.value = true;
+
+      fetchData(newRoute.params.id);
     },
-    async onDelete() {
-      let vm = this;
+    { deep: true }
+  );
 
-      vm.$bvModal
-        .msgBoxConfirm("Do you really want to delete this store?", {})
-        .then(value => {
-          if (value) {
-            const promise = axios.delete("/stores/" + vm.store.id);
-
-            promise.then(() => {
-              vm.$router.push({ name: "store-list" });
-              vm.$toasted.show("Store was deleted successfully", {
-                type: "success",
-                icon: "far fa-check-circle"
-              });
-            });
-          }
-        });
-    }
+  if (!isLoaded.value && !isRouted.value) {
+    fetchData(route.params.id);
   }
-};
+});
+
+const fetchData = (id) => {
+  const promise = axios.get("/stores/" + id);
+
+  promise.then(({ data }) => {
+    store.value = data.data || {};
+    isLoaded.value = true;
+  });
+}
+
+const onSave = (storeObj) => {
+  store.value = storeObj;
+}
+
+const onDelete = async () => {
+  proxy.$bvModal
+    .msgBoxConfirm("Do you really want to delete this store?", {})
+    .then(value => {
+      if (value) {
+        const promise = axios.delete("/stores/" + store.value.id);
+
+        promise.then(() => {
+          router.push({ name: "store-list" });
+          proxy.$toasted.show("Store was deleted successfully", {
+            type: "success",
+            icon: "far fa-check-circle"
+          });
+        });
+      }
+    });
+}
 </script>
 
 <style scoped>
