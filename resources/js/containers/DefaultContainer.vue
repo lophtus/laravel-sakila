@@ -1,10 +1,8 @@
 <template>
-  <div class="c-app">
-    <div class="c-wrapper">
-      <div class="c-body">
-        <main class="c-main p-0">
-          <router-view :key="$route.path"></router-view>
-        </main>
+  <div>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+      <div class="body flex-grow-1">
+        <router-view :key="$route.path"></router-view>
       </div>
     </div>
   </div>

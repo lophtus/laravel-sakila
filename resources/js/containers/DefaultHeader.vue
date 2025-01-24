@@ -1,82 +1,75 @@
 <template>
-  <CHeader fixed colorScheme="light">
-    <CHeaderBrand class="d-md-none">
-      <CImg
-        src="/img/brand/coreui-signet.svg"
-        width="55"
-        height="55"
-        alt="Sakila"
-      />
-    </CHeaderBrand>
-    <CHeaderBrand class="mx-2 d-sm-down-none">
-      <CImg
-        src="/img/brand/coreui-vue-logo.svg"
-        width="190"
-        height="46"
-        alt="Sakila"
-      />
-    </CHeaderBrand>
+  <CHeader position="sticky" class="mb-4">
+    <CContainer fluid>
+      <CHeaderBrand class="mx-2">
+        <CImage
+          src="/img/brand/coreui-vue-logo.svg"
+          width="190"
+          height="46"
+          alt="Sakila"
+        />
+      </CHeaderBrand>
 
-    <CHeaderNav class="mr-auto">
-      <CHeaderNavItem class="px-2">
-        <CHeaderNavLink :to="{ name: 'dashboard' }" activeClass="active">
-          Dashboard
-        </CHeaderNavLink>
-      </CHeaderNavItem>
+      <CHeaderNav class="d-none d-md-flex me-auto">
+        <CNavItem class="px-2">
+          <router-link :to="{ name: 'dashboard' }" class="nav-link">
+            Dashboard
+          </router-link>
+        </CNavItem>
 
-      <CHeaderNavItem class="px-2">
-        <CHeaderNavLink :to="{ name: 'browse' }" activeClass="active">
-          Browse
-        </CHeaderNavLink>
-      </CHeaderNavItem>
+        <CNavItem class="px-2">
+          <router-link :to="{ name: 'browse' }" class="nav-link">
+            Browse
+          </router-link>
+        </CNavItem>
 
-      <CHeaderNavItem class="px-2">
-        <CHeaderNavLink :to="{ name: 'search' }" activeClass="active">
-          Search
-        </CHeaderNavLink>
-      </CHeaderNavItem>
-    </CHeaderNav>
+        <CNavItem class="px-2">
+          <router-link :to="{ name: 'search' }" class="nav-link">
+            Search
+          </router-link>
+        </CNavItem>
+      </CHeaderNav>
 
-    <CHeaderNav class="mr-4">
-      <CHeaderNavItem>
-        {{ $store.getters.user.store.address }}
-      </CHeaderNavItem>
+      <CHeaderNav>
+        <CNavItem class="my-auto">
+          {{ storeAddress }}
+        </CNavItem>
 
-      <CDropdown
-        inNav
-        class="c-header-nav-items"
-        placement="bottom-end"
-        add-menu-classes="pt-0"
-      >
-        <template #toggler>
-          <CHeaderNavLink>
-            <vue-initials-img class="c-avatar" :name="userName" />
-          </CHeaderNavLink>
-        </template>
+        <CDropdown variant="nav-item">
+          <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
+            <CAvatar color="primary" class="fw-bold">{{ userInitials }}</CAvatar>
+          </CDropdownToggle>
 
-        <CDropdownHeader class="text-center" color="light">
-          <strong>Settings</strong>
-        </CDropdownHeader>
-        <CDropdownItem> <CIcon name="cil-user" /> Profile </CDropdownItem>
-        <CDropdownItem> <CIcon name="cil-settings" /> Settings </CDropdownItem>
-        <CDropdownItem>
-          <CIcon name="cil-account-logout" />
-          <CLink :to="{ name: 'logout' }"> Logout </CLink>
-        </CDropdownItem>
-      </CDropdown>
-    </CHeaderNav>
+          <CDropdownMenu class="pt-0">
+            <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
+              Settings
+            </CDropdownHeader>
+            <CDropdownItem> <CIcon name="cil-user" /> Profile </CDropdownItem>
+            <CDropdownItem> <CIcon name="cil-settings" /> Settings </CDropdownItem>
+            <CDropdownItem>
+              <CIcon name="cil-account-logout" />
+              <router-link :to="{ name: 'logout' }"> Logout </router-link>
+            </CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown>
+      </CHeaderNav>
+    </CContainer>
   </CHeader>
 </template>
 
 <script setup lang="ts">
-import { useStore } from '@/store.js';
 import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 const store = useStore();
 
-const userName = computed(() => {
+const storeAddress = computed(() => {
+  return store.getters.user.store.address;
+});
+
+const userInitials = computed(() => {
   const user = store.getters.user;
-  return user.first_name + " " + user.last_name;
+  return user.first_name.substring(0, 1) + " " + user.last_name.substring(0, 1);
 });
 </script>
 

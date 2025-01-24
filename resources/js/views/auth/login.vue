@@ -1,16 +1,16 @@
 <template>
-  <div class="c-app flex-row align-items-center">
+  <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
-        <CCol md="8">
+        <CCol :md="8">
           <CCardGroup>
             <CCard class="p-4">
               <CCardBody>
-                <CForm @submit="login($event)">
+                <CForm @submit.prevent="login">
                   <h1>Login</h1>
-                  <p class="text-muted">Sign In to your account</p>
+                  <p class="text-medium-emphasis">Sign In to your account</p>
 
-                  <b-alert variant="danger" :show="hasErrors">
+                  <CAlert color="danger" :visible="hasErrors">
                     {{ errorMessage }}
 
                     <ul v-if="Object.keys(errors).length">
@@ -18,64 +18,61 @@
                         {{ error[0] }}
                       </li>
                     </ul>
-                  </b-alert>
+                  </CAlert>
 
-                  <CInput
-                    v-model="form.email"
-                    placeholder="Email"
-                    autocomplete="email"
-                  >
-                    <template #prepend-content>
+                  <CInputGroup class="mb-3">
+                    <CInputGroupText>
                       <CIcon name="cil-user" />
-                    </template>
-                  </CInput>
-                  <CInput
-                    v-model="form.password"
-                    placeholder="Password"
-                    type="password"
-                    autocomplete="curent-password"
-                  >
-                    <template #prepend-content>
+                    </CInputGroupText>
+                    <CFormInput
+                      v-model="form.email"
+                      placeholder="Email"
+                      autocomplete="email"
+                    />
+                  </CInputGroup>
+
+                  <CInputGroup class="mb-4">
+                    <CInputGroupText>
                       <CIcon name="cil-lock-locked" />
-                    </template>
-                  </CInput>
+                    </CInputGroupText>
+                    <CFormInput
+                      v-model="form.password"
+                      type="password"
+                      placeholder="Password"
+                      autocomplete="current-password"
+                    />
+                  </CInputGroup>
+
                   <CRow>
-                    <CCol col="6" class="text-left">
+                    <CCol :xs="6">
                       <CButton
                         type="submit"
                         :disabled="disabled"
                         color="primary"
                         class="px-4"
-                        >Login</CButton
-                      >
+                      > Login </CButton>
                     </CCol>
-                    <CCol col="6" class="text-right">
-                      <CButton color="link" class="px-0"
-                        >Forgot password?</CButton
-                      >
-                      <CButton color="link" class="d-lg-none"
-                        >Register now!</CButton
-                      >
+                    <CCol :xs="6" class="text-right">
+                      <CButton color="link" class="px-0">
+                        Forgot password?
+                      </CButton>
                     </CCol>
                   </CRow>
                 </CForm>
               </CCardBody>
             </CCard>
-            <CCard
-              color="primary"
-              text-color="white"
-              class="text-center py-5 d-md-down-none"
-              body-wrapper
-            >
-              <CCardBody>
-                <h2>Sign up</h2>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-                <CButton color="light" variant="outline" size="lg"
-                  >Register Now!</CButton
-                >
+            <CCard class="text-white bg-primary py-5" style="width: 44%">
+              <CCardBody class="text-center">
+                <div>
+                  <h2>Sign up</h2>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </p>
+                  <CButton color="light" variant="outline" class="mt-3:">
+                    Register Now!
+                  </CButton>
+                </div>
               </CCardBody>
             </CCard>
           </CCardGroup>
@@ -87,9 +84,9 @@
 
 <script setup lang="ts">
 import api from "@/api";
-import { useStore } from "@/store.js";
 import { ref } from "vue";
-import { useRouter } from "vue-router/composables";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const store = useStore();

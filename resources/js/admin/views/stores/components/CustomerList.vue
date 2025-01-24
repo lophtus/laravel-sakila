@@ -1,37 +1,33 @@
 <template>
   <div>
-    <b-row class="mb-4">
-      <b-col>
-        <b-button variant="success" size="sm" v-b-modal.create-modal>
+    <CRow class="mb-4">
+      <CCol>
+        <CButton color="success" size="sm">
           <i class="far fa-plus-square"></i>
           Create
-        </b-button>
-      </b-col>
-    </b-row>
+        </CButton>
+      </CCol>
+    </CRow>
 
-    <b-row>
-      <b-col>
-        <b-form-group label="Filter">
-          <b-input-group size="sm">
-            <b-input
-              v-model="filter"
-              type="search"
-              id="filterInput"
-              placeholder="Type to Search"
-              debounce="500"
-            ></b-input>
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col>
-        <b-form-group label="Per page">
-          <b-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-select>
-        </b-form-group>
-      </b-col>
-    </b-row>
+    <CRow>
+      <CCol>
+        <CFormLabel for="filterInput">Filter</CFormLabel>
+        <CInputGroup size="sm">
+          <CFormInput
+            v-model="filter"
+            type="search"
+            id="filterInput"
+            placeholder="Type to Search"
+            debounce="500"
+          />
+          <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
+        </CInputGroup>
+      </CCol>
+      <CCol>
+        <CFormLabel for="perPageSelect">Per page</CFormLabel>
+        <CFormSelect v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions" />
+      </CCol>
+    </CRow>
 
     <b-table
       :items="fetchData"
@@ -60,20 +56,20 @@
       </template>
 
       <template v-slot:cell(actions)="row">
-        <b-button
-          variant="primary"
+        <CButton
+          color="primary"
           size="sm"
           :to="{name:'customer-view', params: {id: row.item.id}}"
         >
           <i class="far fa-edit"></i>
           View
-        </b-button>
+        </CButton>
       </template>
     </b-table>
 
-    <b-row>
-      <b-col>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</b-col>
-      <b-col>
+    <CRow>
+      <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
+      <CCol>
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -81,8 +77,8 @@
           align="right"
           size="sm"
         ></b-pagination>
-      </b-col>
-    </b-row>
+      </CCol>
+    </CRow>
 
     <CreateModal :store="store"></CreateModal>
   </div>

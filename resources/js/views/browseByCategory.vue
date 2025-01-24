@@ -4,8 +4,8 @@
 
     <div>
       <template v-if="isLoaded">
-        <b-row v-if="items.length">
-          <b-col class="card-grid">
+        <CRow v-if="items.length">
+          <CCol class="card-grid">
             <FilmSlide
               v-for="item in items"
               :key="item.id"
@@ -13,23 +13,23 @@
               class="swiper-slide"
               @click="onSlideClick(item)"
             ></FilmSlide>
-          </b-col>
-        </b-row>
+          </CCol>
+        </CRow>
 
-        <b-row v-else-if="! isBusy">
-          <b-col>
+        <CRow v-else-if="! isBusy">
+          <CCol>
             <p>No results found</p>
-          </b-col>
-        </b-row>
+          </CCol>
+        </CRow>
 
-        <b-row v-if="canLoadMore">
-          <b-col class="text-center">
-            <b-button variant="dark" @click="loadMore()">Load More</b-button>
-          </b-col>
-        </b-row>
+        <CRow v-if="canLoadMore">
+          <CCol class="text-center">
+            <CButton color="dark" @click="loadMore()">Load More</CButton>
+          </CCol>
+        </CRow>
 
       </template>
-      <b-spinner v-show="isBusy"></b-spinner>
+      <CSpinner v-show="isBusy"></CSpinner>
 
     </div>
 
@@ -44,10 +44,10 @@
 
 <script setup lang="ts">
 import api from "@/api";
-import FilmModal from "@/components/FilmModal";
-import FilmSlide from "@/components/FilmSlide";
+import FilmModal from "@/components/FilmModal.vue";
+import FilmSlide from "@/components/FilmSlide.vue";
 import { computed, onBeforeMount, ref, watch } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 
@@ -138,7 +138,7 @@ const onSlideClick = (film) => {
 }
 
 const onModalClose = () => {
-  currentItem.value = null;
+  currentItem.value = {};
   isModalVisible.value = false;
 }
 </script>

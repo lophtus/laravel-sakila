@@ -1,64 +1,57 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
+    <CRow>
+      <CCol>
         <h2>{{ film.title }} ({{ film.release_year }})</h2>
 
         <p>{{ film.description }}</p>
 
-        <b-row>
-          <b-col>Length</b-col>
-          <b-col>{{ film.length }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rating</b-col>
-          <b-col>{{ film.rating }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Special Features</b-col>
-          <b-col>{{ film.special_features }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Duration</b-col>
-          <b-col>{{ film.rental_duration }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Rate</b-col>
-          <b-col>{{ film.rental_rate }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Replacement Cost</b-col>
-          <b-col>{{ film.replacement_cost }}</b-col>
-        </b-row>
-      </b-col>
-      <b-col cols="auto">
-        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
-      </b-col>
-    </b-row>
+        <CRow>
+          <CCol>Length</CCol>
+          <CCol>{{ film.length }}</CCol>
+        </CRow>
+        <CRow>
+          <CCol>Rating</CCol>
+          <CCol>{{ film.rating }}</CCol>
+        </CRow>
+        <CRow>
+          <CCol>Special Features</CCol>
+          <CCol>{{ film.special_features }}</CCol>
+        </CRow>
+        <CRow>
+          <CCol>Rental Duration</CCol>
+          <CCol>{{ film.rental_duration }}</CCol>
+        </CRow>
+        <CRow>
+          <CCol>Rental Rate</CCol>
+          <CCol>{{ film.rental_rate }}</CCol>
+        </CRow>
+        <CRow>
+          <CCol>Replacement Cost</CCol>
+          <CCol>{{ film.replacement_cost }}</CCol>
+        </CRow>
+      </CCol>
+      <CCol cols="auto">
+        <CImage src="https://dummyimage.com/300x300/e/5.png" />
+      </CCol>
+    </CRow>
 
-    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
-      <i class="far fa-edit"></i>
-      Edit
-    </b-button>
+    <CButton color="primary" size="sm">
+      <CIcon icon="cil-pencil" /> Edit
+    </CButton>
 
-    <b-button variant="danger" size="sm" @click="onDelete">
-      <i class="far fa-times-circle"></i>
-      Delete
-    </b-button>
-
-    <EditModal :populateWith="film" @saved="onSave"></EditModal>
+    <CButton color="danger" size="sm">
+      <CIcon icon="cil-x-circle" /> Delete
+    </CButton>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { getCurrentInstance, onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
-import EditModal from "./components/EditModal.vue";
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router";
 
-const { proxy } = getCurrentInstance();
 const route = useRoute();
-const router = useRouter();
 
 const isLoaded = ref(false);
 const film = ref({});
@@ -73,28 +66,6 @@ onBeforeMount(() => {
     isLoaded.value = true;
   });
 });
-
-const onSave = (filmObj) => {
-  film.value = filmObj;
-}
-
-const onDelete = async () => {
-  proxy.$bvModal
-    .msgBoxConfirm("Do you really want to delete this film?", {})
-    .then(value => {
-      if (value) {
-        const promise = axios.delete("/films/" + film.value.id);
-
-        promise.then(() => {
-          router.push({ name: "film-list" });
-          proxy.$toasted.show("Film was deleted successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        });
-      }
-    });
-}
 </script>
 
 <style scoped>

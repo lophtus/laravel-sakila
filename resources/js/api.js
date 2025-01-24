@@ -1,9 +1,22 @@
 import axios from 'axios';
 import store from "@/store";
-import Vue from "vue";
+import { useRouter } from "vue-router";
+
+const handleUnauthorized = (error) => {
+  const router = useRouter();
+
+  if (error.response && error.response.status === 401) {
+    store.commit('logoutUser');
+    router.push({name: 'login'});
+  }
+}
+
+const axiosInstance = axios.create();
+
+axiosInstance.defaults.baseURL = "http://" + window.location.host + "/api";
 
 // add authorization header to requests when logged in
-axios.interceptors.request.use(function (config) {
+axiosInstance.interceptors.request.use(function (config) {
   if (store.getters.user != null) {
     config.headers.Authorization = 'Bearer ' + store.getters.user.access_token;
   }
@@ -11,29 +24,26 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-axios.interceptors.response.use(response => response, error => {
-  const { status } = error.response;
-
-  // handle unauthorized errors
-  if (status == 401) {
-    store.commit('logoutUser');
-    Vue.$router.push({name: "login"});
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    handleUnauthorized(error);
+    return Promise.reject(error);
   }
-  return Promise.reject(error);
-});
+);
 
 export default {
 
   getCategories() {
-    return axios.get('/categories');
+    return axiosInstance.get('/categories');
   },
 
   getCategory(categoryId) {
-    return axios.get('/categories/' + categoryId);
+    return axiosInstance.get('/categories/' + categoryId);
   },
 
   getFilmsByCategory(categoryId, page = 1, perPage = 30) {
-    return axios.get('/categories/' + categoryId + '/films', {
+    return axiosInstance.get('/categories/' + categoryId + '/films', {
       params: {
         'page[number]': page,
         'page[size]': perPage,
@@ -42,7 +52,7 @@ export default {
   },
 
   getFilms(page = 1, perPage = 30) {
-    return axios.get('/films', {
+    return axiosInstance.get('/films', {
       params: {
         'page[number]': page,
         'page[size]': perPage,
@@ -51,7 +61,7 @@ export default {
   },
 
   getFilm(filmId, includes = null, filters = null) {
-    return axios.get('/films/' + filmId, {
+    return axiosInstance.get('/films/' + filmId, {
       params: {
         ...(includes ? { 'include': includes } : {}),
         ...(filters ? { 'filters': filters } : {})
@@ -60,7 +70,7 @@ export default {
   },
 
   searchFilms(search, page = 1, perPage = 30) {
-    return axios.get('/films', {
+    return axiosInstance.get('/films', {
       params: {
         'filter[search]': search,
         'page[number]': page,
@@ -70,18 +80,18 @@ export default {
   },
 
   reserveFilm(filmId, storeId) {
-    return axios.post('/stores/' + storeId + '/films/' + filmId + '/rent');
+    return axiosInstance.post('/stores/' + storeId + '/films/' + filmId + '/rent');
   },
 
   login(email, password) {
-    return axios.post('/login', {
+    return axiosInstance.post('/login', {
       email: email,
       password: password,
     });
   },
 
   getSuggestions() {
-    return axios.get('/my/suggestions', {
+    return axiosInstance.get('/my/suggestions', {
       params: { }
     });
   }

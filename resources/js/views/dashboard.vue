@@ -2,15 +2,18 @@
   <div>
     <div class="my-4">
       <div v-if="items.length">
-        <b-row v-for="item in items" :key="item.id">
-          <b-col>
-            <CategoryDashboardWidget :category="item" @click="onSlideClick"></CategoryDashboardWidget>
-          </b-col>
-        </b-row>
+        <CRow v-for="item in items" :key="item.id">
+          <CCol>
+            <CategoryDashboardWidget
+              :category="item"
+              @click="onSlideClick"
+            ></CategoryDashboardWidget>
+          </CCol>
+        </CRow>
       </div>
 
       <div v-else-if="isBusy">
-        <b-spinner></b-spinner>
+        <CSpinner></CSpinner>
       </div>
 
       <div v-else>
@@ -18,19 +21,23 @@
       </div>
     </div>
 
-    <FilmModal v-if="currentItem" :visible="isModalVisible" :filmId="currentItem.id" @close="onModalClose"></FilmModal>
-
+    <FilmModal
+      v-if="currentItem"
+      :visible="isModalVisible"
+      :filmId="currentItem.id"
+      @close="onModalClose"
+    ></FilmModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import api from "@/api";
-import CategoryDashboardWidget from "@/components/CategoryDashboardWidget";
-import FilmModal from "@/components/FilmModal";
+import CategoryDashboardWidget from "@/components/CategoryDashboardWidget.vue";
+import FilmModal from "@/components/FilmModal.vue";
 import { onMounted, ref } from "vue";
 
 const isBusy = ref(false);
-const currentItem = ref();
+const currentItem = ref({});
 const items = ref([]);
 const isModalVisible = ref(false);
 
@@ -58,7 +65,7 @@ const onSlideClick = (film) => {
 }
 
 const onModalClose = () => {
-  currentItem.value = null;
+  currentItem.value = {};
   isModalVisible.value = false;
 }
 </script>

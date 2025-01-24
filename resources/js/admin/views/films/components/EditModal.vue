@@ -1,111 +1,93 @@
 <template>
-  <b-modal ref="editModal" id="edit-modal" title="Edit Film" @show="resetModal" @ok="handleOkay">
-    <p>Use the form below to update the film.</p>
+  <CModal :visible="visible">
+    <CModalHeader>
+      <CModalTitle>Edit Film</CModalTitle>
+    </CModalHeader>
 
-    <ValidationObserver ref="formObserver" v-slot="{ passes }">
-      <b-form @submit.stop.prevent="passes(onSubmit)">
-        <ValidationProvider rules="required" name="title" v-slot="{ valid, errors }">
-          <b-form-group label="Title">
-            <b-input v-model="form.title" :state="errors[0] ? false : (valid ? true : null)" />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+    <CModalBody>
+      <p>Use the form below to update the film.</p>
 
-        <ValidationProvider name="description" v-slot="{ valid, errors }">
-          <b-form-group label="Description">
-            <b-textarea
-              v-model="form.description"
-              :state="errors[0] ? false : (valid ? true : null)"
-            ></b-textarea>
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+      <CForm
+        class="needs-validation"
+        novalidate
+        :validated="isValidated"
+        @submit.prevent="onSubmit"
+      >
+        <CFormInput
+          v-model="form.title"
+          id="inputTitle"
+          label="Title"
+          required
+        />
 
-        <ValidationProvider name="length" v-slot="{ valid, errors }">
-          <b-form-group label="Length">
-            <b-input v-model="form.length" :state="errors[0] ? false : (valid ? true : null)" />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormTextarea
+          v-model="form.description"
+          id="inputDescription"
+          label="Description"
+        ></CFormTextarea>
 
-        <ValidationProvider name="release_year" v-slot="{ valid, errors }">
-          <b-form-group label="Release Year">
-            <b-input
-              v-model="form.release_year"
-              :state="errors[0] ? false : (valid ? true : null)"
-            />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormInput
+          v-model="form.length"
+          id="inputLength"
+          label="Length"
+        />
 
-        <ValidationProvider name="rating" v-slot="{ valid, errors }">
-          <b-form-group label="Rating">
-            <b-select
-              v-model="form.rating"
-              :options="ratings"
-              :state="errors[0] ? false : (valid ? true : null)"
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null" disabled>Select a rating</b-form-select-option>
-              </template>
-            </b-select>
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormInput
+          v-model="form.release_year"
+          id="inputReleaseYear"
+          label="Release Year"
+        />
 
-        <ValidationProvider name="special_features" v-slot="{ valid, errors }">
-          <b-form-group label="Special Features">
-            <b-select
-              v-model="form.special_features"
-              :options="special_features"
-              :state="errors[0] ? false : (valid ? true : null)"
-            >
-              <template v-slot:first>
-                <b-form-select-option :value="null">None</b-form-select-option>
-              </template>
-            </b-select>
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormSelect
+          v-model="form.rating"
+          :options="['Select a rating', ...ratings]"
+          id="inputRating"
+          label="Rating"
+          feedbackInvalid="Please select a valid rating."
+        />
 
-        <ValidationProvider rules="required" name="rental_duration" v-slot="{ valid, errors }">
-          <b-form-group label="Rental Duration">
-            <b-input
-              v-model="form.rental_duration"
-              :state="errors[0] ? false : (valid ? true : null)"
-            />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormSelect
+          v-model="form.special_features"
+          :options="['None', ...ratings]"
+          id="inputSpecialFeatures"
+          label="Special Features"
+        />
 
-        <ValidationProvider rules="required" name="rental_rate" v-slot="{ valid, errors }">
-          <b-form-group label="Rental Rate">
-            <b-input v-model="form.rental_rate" :state="errors[0] ? false : (valid ? true : null)" />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
+        <CFormInput
+          v-model="form.release_duration"
+          id="inputReleaseDuration"
+          label="Release Duration"
+          required
+        />
 
-        <ValidationProvider rules="required" name="replacement_cost" v-slot="{ valid, errors }">
-          <b-form-group label="Replacement Cost">
-            <b-input
-              v-model="form.replacement_cost"
-              :state="errors[0] ? false : (valid ? true : null)"
-            />
-            <b-form-invalid-feedback>{{ errors[0] }}</b-form-invalid-feedback>
-          </b-form-group>
-        </ValidationProvider>
-      </b-form>
-    </ValidationObserver>
+        <CFormInput
+          v-model="form.rental_rate"
+          id="inputRentalRate"
+          label="Rental Rate"
+          required
+        />
 
-    <template v-slot:modal-ok>
-      <b-spinner v-if="isSaving" class="mr-2" small></b-spinner>Save
-    </template>
-  </b-modal>
+        <CFormInput
+          v-model="form.replacement_cost"
+          id="inputReplacementCost"
+          label="Replacement Cost"
+          required
+        />
+      </CForm>
+    </CModalBody>
+
+    <CModalFooter>
+      <CButton color="primary" @click="onSubmit">
+        <CSpinner v-if="isSaving" class="mr-2" small /> Save
+      </CButton>
+    </CModalFooter>
+  </CModal>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
 import { getCurrentInstance, ref } from "vue";
+import { useToasted } from "@hoppscotch/vue-toasted";
 import { RatingList, SpecialFeatureList } from "@/admin/data/film_constants";
 
 const props = defineProps({
@@ -118,23 +100,23 @@ const props = defineProps({
 const emit = defineEmits(['saved']);
 
 const { proxy } = getCurrentInstance();
+const toasted = useToasted();
 
 const isSaving = ref(false);
+const isValidated = ref(false);
 const ratings = RatingList;
 const special_features = SpecialFeatureList;
-const form = ref({});
-
-const resetModal = () => {
-  form.value = Object.assign({}, props.populateWith);
-}
-
-const handleOkay = (bvModalEvt) => {
-  bvModalEvt.preventDefault();
-
-  onSubmit();
-}
+const form = ref(Object.assign({}, props.populateWith));
 
 const onSubmit = async () => {
+  const form = event.currentTarget;
+
+  if (form.checkValidity() === false) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  isValidated.value = true;
   isSaving.value = true;
 
   const promise = axios.patch("/films/" + form.value.id, form.value);
@@ -147,7 +129,7 @@ const onSubmit = async () => {
 
       proxy.$refs.editModal.hide();
 
-      proxy.$toasted.show("Film was updated successfully", {
+      toasted.show("Film was updated successfully", {
         type: "success",
         icon: "far fa-check-circle"
       });
