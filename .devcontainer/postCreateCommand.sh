@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NODE_VERSION=16
+NODE_VERSION=18
 
 # Setup and enable apache2 site
 sudo cp ./.devcontainer/etc/apache2/sites-available/laravel-sakila.conf /etc/apache2/sites-available/laravel-sakila.conf

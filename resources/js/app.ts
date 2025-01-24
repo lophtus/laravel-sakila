@@ -6,8 +6,6 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,16 +17,8 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-import Vue from "vue";
-import { BootstrapVue } from "bootstrap-vue";
+import { createApp } from "vue";
 import CoreuiVue from "@coreui/vue";
-import VueInitialsImg from "vue-initials-img";
-
-Vue.config.performance = true;
-
-Vue.use(BootstrapVue);
-Vue.use(CoreuiVue);
-Vue.use(VueInitialsImg);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -40,16 +30,25 @@ import App from "@/App.vue";
 import router from "@/router";
 import store from "@/store.js";
 
-//importing whole set
-import { cilAccountLogout, cilSettings, cilUser } from '@coreui/icons'
+import { CIcon } from "@coreui/icons-vue";
+import {
+  cilAccountLogout,
+  cilLockLocked,
+  cilSettings,
+  cilUser,
+} from "@coreui/icons";
 
-const app = new Vue({
-  el: "#app",
-  router,
-  store,
-  icons: { cilAccountLogout, cilSettings, cilUser },
-  components: {
-    App
-  },
-  render: h => h(App)
-});
+const icons = {
+  cilAccountLogout,
+  cilLockLocked,
+  cilSettings,
+  cilUser,
+};
+
+createApp(App)
+  .use(router)
+  .use(store)
+  .use(CoreuiVue)
+  .provide('icons', icons)
+  .component('CIcon', CIcon)
+  .mount('#app');

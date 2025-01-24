@@ -6,8 +6,6 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,29 +17,9 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-import axios from "axios";
-import Vue from "vue";
-import { BootstrapVue } from "bootstrap-vue";
+import { createApp } from "vue";
 import CoreuiVue from "@coreui/vue";
-import Toasted from "vue-toasted";
-import VueProgressBar from "vue-progressbar";
-
-Vue.config.performance = true;
-
-Vue.use(BootstrapVue);
-Vue.use(CoreuiVue);
-Vue.use(Toasted, {
-  theme: "toasted-primary",
-  iconPack: "custom-class",
-  position: "bottom-right",
-  duration: 5000
-});
-
-const options = {
-    color: '#3490dc',
-    failedColor: '#e3342f',
-}
-Vue.use(VueProgressBar, options);
+import Toasted from "@hoppscotch/vue-toasted";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -51,24 +29,19 @@ Vue.use(VueProgressBar, options);
 
 import App from "./App.vue";
 import router from "./router";
-import "./vee-validate";
+import store from "./store/index";
 
-const app = new Vue({
-  el: "#app",
-  router,
-  components: {
-    App
-  },
-  render: h => h(App)
-});
+// Make sure to include the default stylings
+import "@hoppscotch/vue-toasted/style.css"
 
+import { CIcon } from "@coreui/icons-vue";
+import { iconsSet as icons } from '@/admin/assets/icons'
 
-axios.interceptors.request.use(config => {
-  app.$Progress.start(); // for every request start the progress
-  return config;
-});
-
-axios.interceptors.response.use(response => {
-  app.$Progress.finish(); // finish when a response is received
-  return response;
-});
+const app = createApp(App)
+  .use(router)
+  .use(store)
+  .use(CoreuiVue)
+  .use(Toasted)
+  .provide('icons', icons)
+  .component('CIcon', CIcon)
+  .mount('#app');

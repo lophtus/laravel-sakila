@@ -1,9 +1,9 @@
 <template>
-  <b-alert variant="danger" show>
+  <CAlert color="danger" show>
     <ul class="my-0">
       <li v-for="(value, key) in validationErrors" :key="key">{{ value }}</li>
     </ul>
-  </b-alert>
+  </CAlert>
 </template>
 
 <script setup lang="ts">

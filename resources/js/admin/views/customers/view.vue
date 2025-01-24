@@ -3,29 +3,23 @@
     <h2>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</h2>
 
     <address>
-        {{ customer.address }}
-        <br/>
-        <span v-if="customer.address2">
-            {{ customer.address2 }}
-            <br/>
-        </span>
+      <span class="d-block">{{ customer.address }}</span>
+      <span v-if="customer.address2" class="d-block">{{ customer.address2 }}</span>
+      <span class="d-block">
         {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
+      </span>
     </address>
 
-    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
-      <i class="far fa-edit"></i>
-      Edit
-    </b-button>
-
-    <EditModal :populateWith="customer" @saved="onSave"></EditModal>
+    <CButton color="primary" size="sm">
+      <CIcon icon="cil-pencil" /> Edit
+    </CButton>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
 import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router/composables";
-import EditModal from "./components/EditModal.vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 
@@ -42,10 +36,6 @@ onBeforeMount(() => {
     isLoaded.value = true;
   });
 });
-
-const onSave = (customerObj) => {
-  customer.value = customerObj;
-}
 </script>
 
 <style scoped>

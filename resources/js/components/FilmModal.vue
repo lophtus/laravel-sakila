@@ -1,104 +1,105 @@
 <template>
-  <b-modal
-    ref="film-modal"
-    id="film-modal"
-    :title="modalTitle"
+  <CModal
     size="lg"
-    hide-footer
     :visible="visible"
     @show="onModalShow"
-    @hide="onModalClose"
     @close="onModalClose"
   >
-    <b-spinner v-if="isBusy"></b-spinner>
+    <CModalHeader>
+      <CModalTitle>{{ modalTitle }}</CModalTitle>
+    </CModalHeader>
 
-    <b-row v-show="!isBusy">
-      <b-col cols="auto">
-        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
-      </b-col>
-      <b-col>
-        <b-row class="h-100">
-          <b-col class="d-flex flex-column">
-            <b-alert variant="danger" :show="!inStock"
-              >This title is not available at the selected store.</b-alert
-            >
+    <CModalBody>
+      <CSpinner v-if="isBusy"></CSpinner>
 
-            <p v-if="film.description">{{ film.description }}</p>
-
-            <b-row v-if="film.rating">
-              <b-col>Rating</b-col>
-              <b-col>{{ film.rating }}</b-col>
-            </b-row>
-            <b-row v-if="film.length">
-              <b-col>Length</b-col>
-              <b-col>{{ film.length }}</b-col>
-            </b-row>
-            <b-row v-if="film.language">
-              <b-col>Language</b-col>
-              <b-col>{{ film.language }}</b-col>
-            </b-row>
-            <b-row v-if="film.original_language">
-              <b-col>Original Language</b-col>
-              <b-col>{{ film.original_language }}</b-col>
-            </b-row>
-            <b-row v-if="film.special_features">
-              <b-col>Special Features</b-col>
-              <b-col>{{ film.special_features }}</b-col>
-            </b-row>
-            <b-row>
-              <b-col>Rental</b-col>
-              <b-col
-                >${{ film.rental_rate }} /
-                {{ film.rental_duration }} days</b-col
+      <CRow v-show="!isBusy">
+        <CCol cols="auto">
+          <CImage src="https://dummyimage.com/300x300/e/5.png"></CImage>
+        </CCol>
+        <CCol>
+          <CRow class="h-100">
+            <CCol class="d-flex flex-column">
+              <CAlert color="danger" :show="!inStock"
+                >This title is not available at the selected store.</CAlert
               >
-            </b-row>
 
-            <div v-if="inStock" class="mt-auto">
-              <div v-if="!rental">
-                <b-button
-                  v-if="!isUnavailable"
-                  variant="success"
-                  block
-                  @click="doReserve(film)"
+              <p v-if="film.description">{{ film.description }}</p>
+
+              <CRow v-if="film.rating">
+                <CCol>Rating</CCol>
+                <CCol>{{ film.rating }}</CCol>
+              </CRow>
+              <CRow v-if="film.length">
+                <CCol>Length</CCol>
+                <CCol>{{ film.length }}</CCol>
+              </CRow>
+              <CRow v-if="film.language">
+                <CCol>Language</CCol>
+                <CCol>{{ film.language }}</CCol>
+              </CRow>
+              <CRow v-if="film.original_language">
+                <CCol>Original Language</CCol>
+                <CCol>{{ film.original_language }}</CCol>
+              </CRow>
+              <CRow v-if="film.special_features">
+                <CCol>Special Features</CCol>
+                <CCol>{{ film.special_features }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Rental</CCol>
+                <CCol
+                  >${{ film.rental_rate }} /
+                  {{ film.rental_duration }} days</CCol
                 >
-                  <b-spinner v-if="isReserving" small></b-spinner>Reserve Now!
-                </b-button>
+              </CRow>
 
-                <div v-if="isUnavailable">
-                  <b-alert variant="danger" class="my-0" show
-                    >This title is currently unavailable.</b-alert
+              <div v-if="inStock" class="mt-auto">
+                <div v-if="!rental">
+                  <CButton
+                    v-if="!isUnavailable"
+                    color="success"
+                    block
+                    @click="doReserve(film)"
+                  >
+                    <CSpinner v-if="isReserving" small></CSpinner>Reserve Now!
+                  </CButton>
+
+                  <div v-if="isUnavailable">
+                    <CAlert color="danger" class="my-0" show
+                      >This title is currently unavailable.</CAlert
+                    >
+                  </div>
+                </div>
+
+                <div v-else>
+                  <CAlert color="success" class="my-0" show
+                    >Your reservation request was processed successfully.</CAlert
                   >
                 </div>
               </div>
 
               <div v-else>
-                <b-alert variant="success" class="my-0" show
-                  >Your reservation request was processed successfully.</b-alert
+                This is in stock at the following locations.
+
+                <CRow
+                  v-for="inventory in film.in_stock_inventory"
+                  :key="inventory.id"
                 >
+                  <CCol>{{ inventory.store.address }}</CCol>
+                </CRow>
               </div>
-            </div>
-
-            <div v-else>
-              This is in stock at the following locations.
-
-              <b-row
-                v-for="inventory in film.in_stock_inventory"
-                :key="inventory.id"
-              >
-                <b-col>{{ inventory.store.address }}</b-col>
-              </b-row>
-            </div>
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
-  </b-modal>
+            </CCol>
+          </CRow>
+        </CCol>
+      </CRow>
+    </CModalBody>
+  </CModal>
 </template>
 
 <script setup lang="ts">
 import api from "@/api";
-import { useStore } from "@/store.js";
 import { computed, ref } from 'vue';
+import { useStore } from "vuex";
 
 const props = defineProps({
   filmId: Number,

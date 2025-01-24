@@ -3,9 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@/store.js";
 import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router/composables";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const store = useStore();
 const router = useRouter();
