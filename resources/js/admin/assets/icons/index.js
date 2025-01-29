@@ -17,11 +17,13 @@ import {
   cilUser,
   cilVideo,
   cilXCircle,
+  cilArrowCircleRight,
 } from '@coreui/icons'
 
 export const iconsSet = Object.assign(
   {},
   {
+    cilArrowCircleRight,
     cilBuilding,
     cilCommentSquare,
     cilDollar,
