@@ -28,7 +28,7 @@
     >
       <CTableBody>
         <CTableRow v-if="isBusy">
-          <CTableDataCell colSpan="5" v-c-placeholder="{animation: 'glow'}">
+          <CTableDataCell colSpan="6" v-c-placeholder="{animation: 'glow'}">
             <CPlaceholder :lg="12"></CPlaceholder>
           </CTableDataCell>
         </CTableRow>
