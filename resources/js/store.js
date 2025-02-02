@@ -1,9 +1,6 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     user: JSON.parse(localStorage.getItem("user")),
   },
@@ -34,4 +31,3 @@ const store = new Vuex.Store({
 });
 
 export default store;
-export const useStore = () => store;

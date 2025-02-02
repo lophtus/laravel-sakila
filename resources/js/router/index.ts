@@ -1,5 +1,4 @@
-import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import DefaultContainer from "@/containers/DefaultContainer.vue";
 import IndexView from "@/views/index.vue";
@@ -13,86 +12,78 @@ import LogoutView from "@/views/auth/logout.vue";
 import NotFound from "@/errors/NotFound.vue";
 import store from "@/store.js";
 
-Vue.use(VueRouter);
+const routes = [
+  {
+    path: "/",
+    component: DefaultContainer,
+    children: [
+      {
+        path: "",
+        redirect: "dashboard",
+        name: "index",
+        component: IndexView,
+        meta: {
+          requiresAuth: true,
+        },
+        children: [
+          {
+            path: "dashboard",
+            name: "dashboard",
+            component: DashboardView,
+          },
+          {
+            path: "browse",
+            name: "browse",
+            component: BrowseView,
+          },
+          {
+            path: "browse/:id",
+            name: "browse-by-category",
+            component: BrowseByCategoryView,
+            props: true,
+          },
+          {
+            path: "search",
+            name: "search",
+            component: SearchView,
+          },
+        ],
+      },
+      {
+        path: "login",
+        name: "login",
+        component: LoginView,
+        meta: {
+          requiresAuth: false,
+        }
+      },
+      {
+        path: "logout",
+        name: "logout",
+        component: LogoutView,
+        meta: {
+          requiresAuth: true,
+        }
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound,
+    meta: {
+      requiresAuth: false,
+    }
+  }
+];
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   linkActiveClass: 'active',
 //   scrollBehavior: () => ({ y: 0 }),
-  routes: configRoutes()
+  routes
 });
 
-function configRoutes(): Array<RouteConfig> {
-  return [
-    {
-      path: "/",
-      component: DefaultContainer,
-      children: [
-        {
-          path: "",
-          redirect: "dashboard",
-          name: "index",
-          component: IndexView,
-          meta: {
-            requiresAuth: true,
-          },
-          children: [
-            {
-              path: "dashboard",
-              name: "dashboard",
-              component: DashboardView,
-            },
-            {
-              path: "browse",
-              name: "browse",
-              component: BrowseView,
-            },
-            {
-              path: "browse/:id",
-              name: "browse-by-category",
-              component: BrowseByCategoryView,
-              props: true,
-            },
-            {
-              path: "search",
-              name: "search",
-              component: SearchView,
-            },
-          ],
-        },
-        {
-          path: "login",
-          name: "login",
-          component: LoginView,
-          meta: {
-            requiresAuth: false,
-          }
-        },
-        {
-          path: "logout",
-          name: "logout",
-          component: LogoutView,
-          meta: {
-            requiresAuth: true,
-          }
-        }
-      ]
-    },
-    {
-      path: '/404',
-      alias: '*',
-      name: 'not-found',
-      component: NotFound,
-      meta: {
-        requiresAuth: false,
-      }
-    },
-    {
-      path: '*',
-      redirect: { name: 'not-found' },
-    }
-  ];
-}
 
 router.beforeEach((to, from, next) => {
   // force login

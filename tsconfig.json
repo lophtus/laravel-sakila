@@ -16,7 +16,10 @@
       "outDir": "dist",
       "paths": {
           "@/*": ["./*"] // Alias '@' to the 'src' directory
-      }
+      },
+      "typeRoots": [
+        "./node_modules/@types"
+      ]
     },
     "include": [
       "**/*.js",

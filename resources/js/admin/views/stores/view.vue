@@ -1,88 +1,72 @@
 <template>
   <div>
-    <h2>Store (#{{ store.id }})</h2>
+    <CCard>
+      <CCardHeader>Store #{{ store.id }}</CCardHeader>
+      <CCardBody>
+        <CSpinner v-if="!isLoaded" />
 
-    <b-row>
-      <b-col>
-        <address>
-          {{ store.address }}
-          <br />
-          <span v-if="store.address2">
-            {{ store.address2 }}
-            <br />
-          </span>
-          {{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}
-        </address>
-      </b-col>
-      <b-col cols="auto">
-        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
-      </b-col>
-    </b-row>
+        <template v-else>
+          <CRow>
+            <CCol>
+              Phone: {{  store.phone || "Not provided" }}
+              <address>
+                <span class="d-block">{{ store.address }}</span>
+                <span v-if="store.address2" class="d-block">{{ store.address2 }}</span>
+                <span class="d-block">{{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}</span>
+              </address>
+            </CCol>
+            <CCol cols="auto">
+              <CImage src="https://dummyimage.com/300x300/e/5.png"></CImage>
+            </CCol>
+          </CRow>
 
-    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
-      <i class="far fa-edit"></i>
-      Edit
-    </b-button>
+          <div class="d-grid gap-1 d-md-flex justify-content-md-start mt-2">
+            <router-link :to="{ name: 'store-edit', params: { id: store.id } }">
+              <CButton color="primary" size="sm">
+                <CIcon icon="cil-pencil" /> Edit
+              </CButton>
+            </router-link>
 
-    <b-button variant="danger" size="sm" @click="onDelete">
-      <i class="far fa-times-circle"></i>
-      Delete
-    </b-button>
+            <CButton color="danger" size="sm" @click="() => { showConfirm = true; }">
+              <CIcon icon="cil-x-circle" /> Delete
+            </CButton>
+          </div>
+        </template>
+      </CCardBody>
+    </CCard>
 
-    <hr />
-
-    <b-card no-body>
-      <b-tabs card>
-        <b-tab title="Customers">
-          <CustomerList v-if="isLoaded" :store="store" />
-        </b-tab>
-        <b-tab title="Films" lazy>
-          <FilmList v-if="isLoaded" :store="store" />
-        </b-tab>
-        <b-tab title="Inventory" lazy>
-          <InventoryList v-if="isLoaded" :store="store" />
-        </b-tab>
-      </b-tabs>
-    </b-card>
-
-    <EditModal :populateWith="store" @saved="onSave"></EditModal>
+    <Confirm
+      :visible="showConfirm"
+      @closed="() => { showConfirm = false; }"
+      @confirmed="onDelete"
+    >
+      Are you sure you want to delete '{{ store.address }} (#{{ store.id }})'?
+    </Confirm>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { getCurrentInstance, onBeforeMount, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
-import CustomerList from "./components/CustomerList.vue";
-import EditModal from "./components/EditModal.vue";
-import FilmList from "./components/FilmList.vue";
-import InventoryList from "./components/InventoryList.vue";
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
+import Confirm from "@/admin/components/Confirm.vue";
+import { toastError, toastSuccess } from "@/admin/components/Toast";
 
-const { proxy } = getCurrentInstance();
-const route = useRoute();
-const router = useRouter();
-
-const isRouted = ref(false);
-const isLoaded = ref(false);
-const store = ref({});
-
-onBeforeMount(() => {
-  watch(
-    () => route,
-    (newRoute, oldRoute) => {
-      isRouted.value = true;
-
-      fetchData(newRoute.params.id);
-    },
-    { deep: true }
-  );
-
-  if (!isLoaded.value && !isRouted.value) {
-    fetchData(route.params.id);
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   }
 });
 
-const fetchData = (id) => {
+const router = useRouter();
+
+const isLoaded = ref(false);
+const showConfirm = ref(false);
+const store = ref<StoreWithDefaults>({});
+
+const fetchData = (id: EntityIdentifier) => {
   const promise = axios.get("/stores/" + id);
 
   promise.then(({ data }) => {
@@ -91,25 +75,24 @@ const fetchData = (id) => {
   });
 }
 
-const onSave = (storeObj) => {
-  store.value = storeObj;
-}
+watch(() => props.id, fetchData, { immediate: true });
 
-const onDelete = async () => {
-  proxy.$bvModal
-    .msgBoxConfirm("Do you really want to delete this store?", {})
-    .then(value => {
-      if (value) {
-        const promise = axios.delete("/stores/" + store.value.id);
+const onDelete = () => {
+  const promise = axios.delete("/films/" + props.id);
 
-        promise.then(() => {
-          router.push({ name: "store-list" });
-          proxy.$toasted.show("Store was deleted successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        });
-      }
+  promise
+    .then(({ data }) => {
+      toastSuccess("Store was updated successfully");
+
+      router.push({
+        name: "store-list",
+      });
+    })
+    .catch(error => {
+      toastError("Failed to delete store");
+    })
+    .finally(() => {
+      showConfirm.value = false;
     });
 }
 </script>

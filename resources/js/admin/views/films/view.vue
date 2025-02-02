@@ -1,98 +1,114 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <h2>{{ film.title }} ({{ film.release_year }})</h2>
+    <CCard>
+      <CCardHeader>{{ film.title }} ({{ film.release_year }})</CCardHeader>
+      <CCardBody>
+        <CRow>
+          <CCol>
+            <p>{{ film.description || "Description not available" }}</p>
 
-        <p>{{ film.description }}</p>
+            <CRow>
+              <CCol>Length</CCol>
+              <CCol>{{ film.length }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rating</CCol>
+              <CCol>{{ film.rating }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Special Features</CCol>
+              <CCol>{{ film.special_features }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rental Duration</CCol>
+              <CCol>{{ film.rental_duration }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rental Rate</CCol>
+              <CCol>{{ film.rental_rate }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Replacement Cost</CCol>
+              <CCol>{{ film.replacement_cost }}</CCol>
+            </CRow>
+          </CCol>
+          <CCol cols="auto">
+            <CImage src="https://dummyimage.com/300x300/e/5.png" />
+          </CCol>
+        </CRow>
 
-        <b-row>
-          <b-col>Length</b-col>
-          <b-col>{{ film.length }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rating</b-col>
-          <b-col>{{ film.rating }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Special Features</b-col>
-          <b-col>{{ film.special_features }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Duration</b-col>
-          <b-col>{{ film.rental_duration }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Rate</b-col>
-          <b-col>{{ film.rental_rate }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Replacement Cost</b-col>
-          <b-col>{{ film.replacement_cost }}</b-col>
-        </b-row>
-      </b-col>
-      <b-col cols="auto">
-        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
-      </b-col>
-    </b-row>
+        <div class="d-grid gap-1 d-md-flex justify-content-md-start mt-2">
+          <router-link :to="{ name: 'film-edit', params: { id: film.id } }">
+            <CButton color="primary" size="sm">
+              <CIcon icon="cil-pencil" /> Edit
+            </CButton>
+          </router-link>
 
-    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
-      <i class="far fa-edit"></i>
-      Edit
-    </b-button>
+          <CButton color="danger" size="sm" @click="() => { showConfirm = true; }">
+            <CIcon icon="cil-x-circle" /> Delete
+          </CButton>
+        </div>
+      </CCardBody>
+    </CCard>
 
-    <b-button variant="danger" size="sm" @click="onDelete">
-      <i class="far fa-times-circle"></i>
-      Delete
-    </b-button>
-
-    <EditModal :populateWith="film" @saved="onSave"></EditModal>
+    <Confirm
+      :visible="showConfirm"
+      @closed="() => { showConfirm = false; }"
+      @confirmed="onDelete"
+    >
+      Are you sure you want to delete '{{ film.title }} ({{ film.release_year }})'?
+    </Confirm>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { getCurrentInstance, onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
-import EditModal from "./components/EditModal.vue";
+import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { type EntityIdentifier, type FilmWithDefaults } from "@/admin/types";
+import Confirm from "@/admin/components/Confirm.vue";
+import { toastError, toastSuccess } from "@/admin/components/Toast";
 
-const { proxy } = getCurrentInstance();
-const route = useRoute();
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  }
+});
+
 const router = useRouter();
 
 const isLoaded = ref(false);
-const film = ref({});
+const showConfirm = ref(false);
+const film = ref<FilmWithDefaults>({});
 
-onBeforeMount(() => {
-  const promise = axios.get("/films/" + route.params.id);
+const fetchData = (id: EntityIdentifier) => {
+  const promise = axios.get("/films/" + id);
 
-  return promise.then(({ data }) => {
-    const item = data.data;
-
-    film.value = item || {};
+  promise.then(({ data }) => {
+    film.value = data.data || {};
     isLoaded.value = true;
   });
-});
-
-const onSave = (filmObj) => {
-  film.value = filmObj;
 }
 
-const onDelete = async () => {
-  proxy.$bvModal
-    .msgBoxConfirm("Do you really want to delete this film?", {})
-    .then(value => {
-      if (value) {
-        const promise = axios.delete("/films/" + film.value.id);
+watch(() => props.id, fetchData, { immediate: true });
 
-        promise.then(() => {
-          router.push({ name: "film-list" });
-          proxy.$toasted.show("Film was deleted successfully", {
-            type: "success",
-            icon: "far fa-check-circle"
-          });
-        });
-      }
+const onDelete = () => {
+  const promise = axios.delete("/films/" + props.id);
+
+  promise
+    .then(({ data }) => {
+      toastSuccess("Film was updated successfully");
+
+      router.push({
+        name: "film-list",
+      });
+    })
+    .catch(error => {
+      toastError("Failed to delete film");
+    })
+    .finally(() => {
+      showConfirm.value = false;
     });
 }
 </script>

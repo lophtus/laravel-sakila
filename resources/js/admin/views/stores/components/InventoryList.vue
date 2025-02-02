@@ -1,28 +1,24 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <b-form-group label="Filter">
-          <b-input-group size="sm">
-            <b-input
-              v-model="filter"
-              type="search"
-              id="filterInput"
-              placeholder="Type to Search"
-              debounce="500"
-            ></b-input>
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col>
-        <b-form-group label="Per page">
-          <b-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-select>
-        </b-form-group>
-      </b-col>
-    </b-row>
+    <CRow>
+      <CCol>
+        <CFormLabel for="filterInput">Filter</CFormLabel>
+        <CInputGroup size="sm">
+          <CFormInput
+            v-model="filter"
+            type="search"
+            id="filterInput"
+            placeholder="Type to Search"
+            debounce="500"
+          />
+          <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
+        </CInputGroup>
+      </CCol>
+      <CCol>
+        <CFormLabel for="perPageSelect">Per page</CFormLabel>
+        <CFormSelect v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions" />
+      </CCol>
+    </CRow>
 
     <b-table
       :items="fetchData"
@@ -39,68 +35,68 @@
       </template>
 
       <template v-slot:cell(show_details)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
+        <CButton size="sm" @click="row.toggleDetails" class="mr-2">
           <i :class="row.detailsShowing ? 'far fa-caret-square-up' : 'far fa-caret-square-down'"></i>
-        </b-button>
+        </CButton>
       </template>
 
       <template v-slot:row-details="row">
         <b-card>
-          <b-row>
-            <b-col>
+          <CRow>
+            <CCol>
               <p>{{ row.item.film.description }}</p>
 
-              <b-row>
-                <b-col>Language</b-col>
-                <b-col>{{ row.item.film.language }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rating</b-col>
-                <b-col>{{ row.item.film.rating }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Length</b-col>
-                <b-col>{{ row.item.film.length }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Special Features</b-col>
-                <b-col>{{ row.item.film.special_features }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rental Duration</b-col>
-                <b-col>{{ row.item.film.rental_duration }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rental Rate</b-col>
-                <b-col>{{ row.item.film.rental_rate }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Replacement Cost</b-col>
-                <b-col>{{ row.item.film.replacement_cost }}</b-col>
-              </b-row>
-            </b-col>
-            <b-col cols="auto">
-              <b-img src="https://dummyimage.com/150x150/e/5.png"></b-img>
-            </b-col>
-          </b-row>
+              <CRow>
+                <CCol>Language</CCol>
+                <CCol>{{ row.item.film.language }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Rating</CCol>
+                <CCol>{{ row.item.film.rating }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Length</CCol>
+                <CCol>{{ row.item.film.length }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Special Features</CCol>
+                <CCol>{{ row.item.film.special_features }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Rental Duration</CCol>
+                <CCol>{{ row.item.film.rental_duration }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Rental Rate</CCol>
+                <CCol>{{ row.item.film.rental_rate }}</CCol>
+              </CRow>
+              <CRow>
+                <CCol>Replacement Cost</CCol>
+                <CCol>{{ row.item.film.replacement_cost }}</CCol>
+              </CRow>
+            </CCol>
+            <CCol cols="auto">
+              <CImage src="https://dummyimage.com/150x150/e/5.png"></CImage>
+            </CCol>
+          </CRow>
         </b-card>
       </template>
 
       <template v-slot:cell(actions)="row">
-        <b-button
-          variant="primary"
+        <CButton
+          color="primary"
           size="sm"
           :to="{name:'inventory-view', params: {id: row.item.id}}"
         >
           <i class="far fa-edit"></i>
           View
-        </b-button>
+        </CButton>
       </template>
     </b-table>
 
-    <b-row>
-      <b-col>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</b-col>
-      <b-col>
+    <CRow>
+      <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
+      <CCol>
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -108,8 +104,8 @@
           align="right"
           size="sm"
         ></b-pagination>
-      </b-col>
-    </b-row>
+      </CCol>
+    </CRow>
   </div>
 </template>
 

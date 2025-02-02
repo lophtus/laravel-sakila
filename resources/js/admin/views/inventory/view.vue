@@ -1,71 +1,81 @@
 <template>
   <div>
-    <b-row>
-      <b-col>
-        <h2>Inventory (#{{ inventory.id }})</h2>
+    <CCard>
+      <CCardHeader>Inventory (#{{ inventory.id }})</CCardHeader>
+      <CCardBody>
+        <CRow>
+          <CCol>
+            <router-link v-if="isLoaded" :to="{name: 'store-view', params: {id: store.id}}">{{ store.address }} {{ store.city }}, {{ store.state }} {{ store.postal_code }}</router-link>
 
-        <router-link v-if="isLoaded" :to="{name: 'store-view', params: {id: store.id}}">{{ store.address }} {{ store.city }}, {{ store.state }} {{ store.postal_code }}</router-link>
+            <h4>{{ film.title }} ({{ film.release_year }})</h4>
 
-        <h4>{{ film.title }} ({{ film.release_year }})</h4>
+            <p>{{ film.description }}</p>
 
-        <p>{{ film.description }}</p>
-
-        <b-row>
-          <b-col>Length</b-col>
-          <b-col>{{ film.length }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rating</b-col>
-          <b-col>{{ film.rating }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Special Features</b-col>
-          <b-col>{{ film.special_features }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Duration</b-col>
-          <b-col>{{ film.rental_duration }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Rental Rate</b-col>
-          <b-col>{{ film.rental_rate }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col>Replacement Cost</b-col>
-          <b-col>{{ film.replacement_cost }}</b-col>
-        </b-row>
-      </b-col>
-      <b-col cols="auto">
-        <b-img src="https://dummyimage.com/300x300/e/5.png"></b-img>
-      </b-col>
-    </b-row>
+            <CRow>
+              <CCol>Length</CCol>
+              <CCol>{{ film.length }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rating</CCol>
+              <CCol>{{ film.rating }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Special Features</CCol>
+              <CCol>{{ film.special_features }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rental Duration</CCol>
+              <CCol>{{ film.rental_duration }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Rental Rate</CCol>
+              <CCol>{{ film.rental_rate }}</CCol>
+            </CRow>
+            <CRow>
+              <CCol>Replacement Cost</CCol>
+              <CCol>{{ film.replacement_cost }}</CCol>
+            </CRow>
+          </CCol>
+          <CCol cols="auto">
+            <CImage src="https://dummyimage.com/300x300/e/5.png"></CImage>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router/composables";
+import { ref, watch } from "vue";
+import { type EntityIdentifier, type FilmWithDefaults, type InventoryWithDefaults, type StoreWithDefaults } from "@/admin/types";
 
-const route = useRoute();
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  }
+});
 
 const isLoaded = ref(false);
-const film = ref({});
-const inventory = ref({});
-const store = ref({});
+const film = ref<FilmWithDefaults>({});
+const inventory = ref<InventoryWithDefaults>({});
+const store = ref<StoreWithDefaults>({});
 
-onBeforeMount(() => {
-    const promise = axios.get("/inventory/" + route.params.id + "?include=film,store");
+const fetchData = (id: EntityIdentifier) => {
+  const promise = axios.get("/inventory/" + id + "?include=film,store");
 
-    return promise.then(({ data }) => {
-      const item = data.data;
+  promise.then(({ data }) => {
+    const item = data.data;
 
-      film.value = item.film || {};
-      inventory.value = item || {};
-      store.value = item.store || {};
-      isLoaded.value = true;
-    });
-});
+    film.value = item.film || {};
+    inventory.value = item || {};
+    store.value = item.store || {};
+    isLoaded.value = true;
+  });
+}
+
+watch(() => props.id, fetchData, { immediate: true });
 </script>
 
 <style scoped>

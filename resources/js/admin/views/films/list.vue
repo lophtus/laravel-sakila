@@ -1,162 +1,150 @@
 <template>
   <div>
-    <h2>Films</h2>
+    <div class="d-grid gap-1 d-md-flex justify-content-md-end mb-2">
+      <router-link :to="{ name: 'film-create' }">
+        <CButton color="success" size="sm">
+          <CIcon icon="cil-plus" /> Create
+        </CButton>
+      </router-link>
+    </div>
 
-    <b-row class="mb-4">
-      <b-col>
-        <b-button variant="success" size="sm" v-b-modal.create-modal>
-          <i class="far fa-plus-square"></i>
-          Create
-        </b-button>
-      </b-col>
-    </b-row>
+    <CCard>
+      <CCardHeader>Films</CCardHeader>
+      <CCardBody>
+        <CRow class="mb-4">
+          <CCol>
+            <CFormLabel for="filterInput">Filter</CFormLabel>
+            <CInputGroup size="sm">
+              <CFormInput
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search"
+                debounce="500"
+              />
+              <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
+            </CInputGroup>
+          </CCol>
+          <CCol>
+            <CFormLabel for="perPageSelect">Per page</CFormLabel>
+            <CFormSelect v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions" />
+          </CCol>
+        </CRow>
 
-    <b-row>
-      <b-col>
-        <b-form-group label="Filter">
-          <b-input-group size="sm">
-            <b-input
-              v-model="filter"
-              type="search"
-              id="filterInput"
-              placeholder="Type to Search"
-              debounce="500"
-            ></b-input>
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col>
-        <b-form-group label="Per page">
-          <b-select v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions"></b-select>
-        </b-form-group>
-      </b-col>
-    </b-row>
+        <CTable
+          :columns="columns"
+          hover
+        >
+          <CTableBody>
+            <CTableRow v-if="isBusy">
+              <CTableDataCell colSpan="5" v-c-placeholder="{animation: 'glow'}">
+                <CPlaceholder :lg="12"></CPlaceholder>
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow v-else v-for="item in items">
+              <CTableDataCell>
+                <CImage src="https://dummyimage.com/75x75/e/5.png" />
+              </CTableDataCell>
+              <CTableDataCell>{{ item.id }}</CTableDataCell>
+              <CTableDataCell>
+                {{ truncate(item.title) }}
+              </CTableDataCell>
+              <CTableDataCell>{{ item.release_year }}</CTableDataCell>
+              <CTableDataCell>
+                <router-link :to="{name:'film-view', params: {id: item.id}}">
+                  <CButton
+                    color="primary"
+                    size="sm"
+                  >
+                    <CIcon icon="cil-arrow-circle-right" /> View
+                  </CButton>
+                </router-link>
+              </CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
 
-    <b-table
-      :items="fetchData"
-      :fields="fields"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :filter="filter"
-      :busy="isBusy"
-      show-empty
-      striped
-    >
-      <template v-slot:table-busy>
-        <LoadingSpinner />
-      </template>
-
-      <template v-slot:cell(show_details)="row">
-        <b-button size="sm" @click="row.toggleDetails" class="mr-2">
-          <i :class="row.detailsShowing ? 'far fa-caret-square-up' : 'far fa-caret-square-down'"></i>
-        </b-button>
-      </template>
-
-      <template v-slot:row-details="row">
-        <b-card>
-          <b-row>
-            <b-col>
-              <p>{{ row.item.description }}</p>
-
-              <b-row>
-                <b-col>Language</b-col>
-                <b-col>{{ row.item.language }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rating</b-col>
-                <b-col>{{ row.item.rating }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Length</b-col>
-                <b-col>{{ row.item.length }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Special Features</b-col>
-                <b-col>{{ row.item.special_features }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rental Duration</b-col>
-                <b-col>{{ row.item.rental_duration }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Rental Rate</b-col>
-                <b-col>{{ row.item.rental_rate }}</b-col>
-              </b-row>
-              <b-row>
-                <b-col>Replacement Cost</b-col>
-                <b-col>{{ row.item.replacement_cost }}</b-col>
-              </b-row>
-            </b-col>
-            <b-col cols="auto">
-              <b-img src="https://dummyimage.com/150x150/e/5.png"></b-img>
-            </b-col>
-          </b-row>
-        </b-card>
-      </template>
-
-      <template v-slot:cell(actions)="row">
-        <b-button variant="primary" size="sm" :to="{name:'film-view', params: {id: row.item.id}}">
-          <i class="far fa-edit"></i>
-          View
-        </b-button>
-      </template>
-    </b-table>
-
-    <b-row>
-      <b-col>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</b-col>
-      <b-col>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          align="right"
-          size="sm"
-        ></b-pagination>
-      </b-col>
-    </b-row>
-
-    <CreateModal></CreateModal>
+        <CRow>
+          <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
+          <CCol>
+            <CPagination align="end">
+              <CPaginationItem aria-label="Previous" @click="prevPage" :disabled="currentPage <= 1"><span aria-hidden="true">&laquo;</span></CPaginationItem>
+              <template v-for="page in pageCount">
+                <CPaginationItem :active="page === currentPage" @click="changePage(page)">{{ page }}</CPaginationItem>
+              </template>
+              <CPaginationItem aria-label="Next" @click="nextPage" :disabled="currentPage >= pageCount"><span aria-hidden="true">&raquo;</span></CPaginationItem>
+            </CPagination>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref } from "vue";
-import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
-import CreateModal from "./components/CreateModal.vue";
+import { truncate } from "lodash";
+import { computed, ComputedRef, onMounted, ref } from "vue";
+import { type Film } from "@/admin/types";
 
 const isBusy = ref(false);
 const totalRows = ref(1);
 const currentPage = ref(1);
 const lastPage = ref(1);
-const perPage = ref(10);
-const pageOptions = [10, 20, 30];
+const perPage = ref("10");
+const pageOptions = [
+  { label: "10", value: "10" },
+  { label: "20", value: "20" },
+  { label: "30", value: "30" },
+];
+const pageCount: ComputedRef<number> = computed(() => {
+  return Math.ceil(totalRows.value / parseInt(perPage.value));
+});
 const filter = ref("");
-const fields = [
+const columns = [
   "show_details",
   "id",
   "title",
   "release_year",
   "actions"
 ];
+const items = ref<Film[]>([]);
 
-const fetchData = async (ctx) => {
+onMounted(() => {
+  fetchData();
+});
+
+const changePage = (page: number) => {
+  if (page > pageCount.value) {
+    return;
+  }
+
+  currentPage.value = page;
+  fetchData();
+}
+
+const nextPage = () => {
+  changePage(++currentPage.value);
+}
+
+const prevPage = () => {
+  changePage(--currentPage.value);
+}
+
+const fetchData = async () => {
   isBusy.value = true;
 
   const promise = axios.get(
     "/films?page[number]=" +
-      ctx.currentPage +
+      currentPage.value +
       "&page[size]=" +
-      ctx.perPage +
+      perPage.value +
       "&filter[search]=" +
-      ctx.filter
+      filter.value
   );
 
   return promise.then(({ data }) => {
-    const items = data.data;
+    const loadedItems = data.data;
 
     currentPage.value = data.meta.current_page;
     lastPage.value = data.meta.last_page;
@@ -164,7 +152,7 @@ const fetchData = async (ctx) => {
 
     isBusy.value = false;
 
-    return items || [];
+    items.value = loadedItems || [];
   });
 }
 </script>

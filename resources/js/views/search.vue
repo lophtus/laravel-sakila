@@ -1,20 +1,18 @@
 <template>
-  <div>
-    <b-form @submit="onSubmit($event)">
-      <b-input-group size="lg">
-        <b-input v-model="search" class="form-control" />
+  <CContainer>
+    <CForm @submit.prevent="onSubmit">
+      <CInputGroup>
+        <CFormInput v-model="search" />
 
-        <b-input-group-append>
-          <b-button variant="success" type="submit">Search</b-button>
-          <b-button variant="danger" @click="clearSearch()">Clear</b-button>
-        </b-input-group-append>
-      </b-input-group>
-    </b-form>
+        <CButton color="success" type="submit">Search</CButton>
+        <CButton color="danger" @click="clearSearch()">Clear</CButton>
+      </CInputGroup>
+    </CForm>
 
     <div class="my-4">
       <template v-if="hasSearched">
-        <b-row v-if="items.length">
-          <b-col class="card-grid">
+        <CRow v-if="items.length">
+          <CCol class="card-grid">
             <FilmSlide
               v-for="item in items"
               :key="item.id"
@@ -22,21 +20,21 @@
               class="card-slide"
               @click="onSlideClick(item)"
             ></FilmSlide>
-          </b-col>
-        </b-row>
+          </CCol>
+        </CRow>
 
         <div v-else-if="!isBusy">
           <p>No results found</p>
         </div>
 
-        <b-row v-if="canLoadMore">
-          <b-col class="text-center">
-            <b-button variant="dark" @click="loadMore()">Load More</b-button>
-          </b-col>
-        </b-row>
+        <CRow v-if="canLoadMore">
+          <CCol class="text-center">
+            <CButton color="dark" @click="loadMore()">Load More</CButton>
+          </CCol>
+        </CRow>
       </template>
 
-      <b-spinner v-show="isBusy"></b-spinner>
+      <CSpinner v-show="isBusy"></CSpinner>
     </div>
 
     <FilmModal
@@ -45,13 +43,13 @@
       :filmId="currentItem.id"
       @close="onClose"
     ></FilmModal>
-  </div>
+  </CContainer>
 </template>
 
 <script setup lang="ts">
 import api from "@/api";
-import FilmModal from "@/components/FilmModal";
-import FilmSlide from "@/components/FilmSlide";
+import FilmModal from "@/components/FilmModal.vue";
+import FilmSlide from "@/components/FilmSlide.vue";
 import { ref } from "vue";
 
 const search = ref("");
@@ -70,7 +68,7 @@ const onSlideClick = (film) => {
 }
 
 const onClose = () => {
-  currentItem.value = null;
+  currentItem.value = {};
   isModalVisible.value = false;
 }
 
@@ -81,16 +79,13 @@ const clearSearch = () => {
   hasSearched.value = false;
 }
 
-const onSubmit = (evt) => {
-  evt.preventDefault();
-
+const onSubmit = () => {
   items.value = [];
   fetchData(currentPage.value);
 }
 
 const loadMore = () => {
-  const vm = this;
-  vm.fetchData(vm.currentPage + 1);
+  fetchData(currentPage.value + 1);
 }
 
 const fetchData = (page) => {

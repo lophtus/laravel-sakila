@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-spinner v-if="!isLoaded"></b-spinner>
+  <CContainer>
+    <CSpinner v-if="!isLoaded"></CSpinner>
 
     <div v-if="isLoaded && items.length">
       <div class="card-grid">
@@ -13,14 +13,14 @@
         ></CategorySlide>
       </div>
     </div>
-  </div>
+  </CContainer>
 </template>
 
 <script setup lang="ts">
 import api from "@/api";
-import CategorySlide from "@/components/CategorySlide";
+import CategorySlide from "@/components/CategorySlide.vue";
 import { onBeforeMount, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();

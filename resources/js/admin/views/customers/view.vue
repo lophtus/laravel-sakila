@@ -1,51 +1,62 @@
 <template>
   <div>
-    <h2>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</h2>
+    <CCard>
+      <CCardHeader>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</CCardHeader>
+      <CCardBody>
+        <CSpinner v-if="!isLoaded" />
 
-    <address>
-        {{ customer.address }}
-        <br/>
-        <span v-if="customer.address2">
-            {{ customer.address2 }}
-            <br/>
-        </span>
-        {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
-    </address>
+        <template v-else>
+          Email: {{ customer.email || "Not provided" }}
 
-    <b-button variant="primary" size="sm" v-b-modal.edit-modal>
-      <i class="far fa-edit"></i>
-      Edit
-    </b-button>
+          <address>
+            <span class="d-block">{{ customer.address }}</span>
+            <span v-if="customer.address2" class="d-block">{{ customer.address2 }}</span>
+            <span class="d-block">
+              {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
+            </span>
+          </address>
 
-    <EditModal :populateWith="customer" @saved="onSave"></EditModal>
+          <div class="d-grid gap-1 d-md-flex justify-content-md-start mt-2">
+            <router-link :to="{ name: 'customer-edit', params: { id: customer.id } }">
+              <CButton color="primary" size="sm">
+                <CIcon icon="cil-pencil" /> Edit
+              </CButton>
+            </router-link>
+          </div>
+        </template>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router/composables";
-import EditModal from "./components/EditModal.vue";
-
-const route = useRoute();
+import { ref, watch } from "vue";
+import { type CustomerWithDefaults, type EntityIdentifier } from "@/admin/types";
 
 const isLoaded = ref(false);
-const customer = ref({});
+const customer = ref<CustomerWithDefaults>({});
 
-onBeforeMount(() => {
-  const promise = axios.get("/customers/" + route.params.id);
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  }
+});
+
+const fetchData = (id: EntityIdentifier) => {
+  const promise = axios.get("/customers/" + id);
 
   return promise.then(({ data }) => {
     const item = data.data;
 
-    customer.value = item || {};
+    customer.value = Object.assign(item || {});
     isLoaded.value = true;
   });
-});
-
-const onSave = (customerObj) => {
-  customer.value = customerObj;
 }
+
+watch(() => props.id, fetchData, { immediate: true });
+
 </script>
 
 <style scoped>
