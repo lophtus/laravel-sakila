@@ -1,41 +1,62 @@
 <template>
   <div>
-    <h2>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</h2>
+    <CCard>
+      <CCardHeader>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</CCardHeader>
+      <CCardBody>
+        <CSpinner v-if="!isLoaded" />
 
-    <address>
-      <span class="d-block">{{ customer.address }}</span>
-      <span v-if="customer.address2" class="d-block">{{ customer.address2 }}</span>
-      <span class="d-block">
-        {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
-      </span>
-    </address>
+        <template v-else>
+          Email: {{ customer.email || "Not provided" }}
 
-    <CButton color="primary" size="sm">
-      <CIcon icon="cil-pencil" /> Edit
-    </CButton>
+          <address>
+            <span class="d-block">{{ customer.address }}</span>
+            <span v-if="customer.address2" class="d-block">{{ customer.address2 }}</span>
+            <span class="d-block">
+              {{ customer.city }}, {{ customer.state }} {{ customer.country }} {{ customer.postal_code }}
+            </span>
+          </address>
+
+          <div class="d-grid gap-1 d-md-flex justify-content-md-start mt-2">
+            <router-link :to="{ name: 'customer-edit', params: { id: customer.id } }">
+              <CButton color="primary" size="sm">
+                <CIcon icon="cil-pencil" /> Edit
+              </CButton>
+            </router-link>
+          </div>
+        </template>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router";
-
-const route = useRoute();
+import { ref, watch } from "vue";
+import { type CustomerWithDefaults, type EntityIdentifier } from "@/admin/types";
 
 const isLoaded = ref(false);
-const customer = ref({});
+const customer = ref<CustomerWithDefaults>({});
 
-onBeforeMount(() => {
-  const promise = axios.get("/customers/" + route.params.id);
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  }
+});
+
+const fetchData = (id: EntityIdentifier) => {
+  const promise = axios.get("/customers/" + id);
 
   return promise.then(({ data }) => {
     const item = data.data;
 
-    customer.value = item || {};
+    customer.value = Object.assign(item || {});
     isLoaded.value = true;
   });
-});
+}
+
+watch(() => props.id, fetchData, { immediate: true });
+
 </script>
 
 <style scoped>

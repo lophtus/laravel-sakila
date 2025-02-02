@@ -32,7 +32,10 @@ import router from "./router";
 import store from "./store/index";
 
 // Make sure to include the default stylings
-import "@hoppscotch/vue-toasted/style.css"
+import "@hoppscotch/vue-toasted/style.css";
+
+// Include CoreUI icon styling
+import "@coreui/icons/css/free.min.css";
 
 import { CIcon } from "@coreui/icons-vue";
 import { iconsSet as icons } from '@/admin/assets/icons'
@@ -41,7 +44,7 @@ const app = createApp(App)
   .use(router)
   .use(store)
   .use(CoreuiVue)
-  .use(Toasted)
+  .use(Toasted, { iconPack: 'custom-class' })
   .provide('icons', icons)
   .component('CIcon', CIcon)
   .mount('#app');

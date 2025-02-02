@@ -1,11 +1,11 @@
 <template>
   <CModal :visible="visible">
     <CModalHeader>
-      <CModalTitle>Edit Customer</CModalTitle>
+      <CModalTitle>Create Customer</CModalTitle>
     </CModalHeader>
 
     <CModalBody>
-      <p>Use the form below to update the customer.</p>
+      <p>Use the form below to create a new customer.</p>
 
       <CForm
         class="needs-validation"
@@ -14,41 +14,41 @@
         @submit.prevent="onSubmit"
       >
         <CFormInput
-          v-model="form.first_name"
+          v-model="formData.first_name"
           id="inputFirstName"
           label="First Name"
           required
         />
 
         <CFormInput
-          v-model="form.last_name"
+          v-model="formData.last_name"
           id="inputLastName"
           label="Last Name"
           required
         />
 
         <CFormInput
-          v-model="form.email"
+          v-model="formData.email"
           id="inputEmail"
           label="Email"
           required
         />
 
         <CFormInput
-          v-model="form.address"
+          v-model="formData.address"
           id="inputAddress"
           label="Address"
           required
         />
 
         <CFormInput
-          v-model="form.address2"
+          v-model="formData.address2"
           id="inputAddress2"
           label="Address2"
         />
 
         <CFormInput
-          v-model="form.city"
+          v-model="formData.city"
           id="inputCity"
           label="City"
           feedbackInvalid="Please provide a valid city."
@@ -56,7 +56,7 @@
         />
 
         <CFormSelect
-          v-model="form.state"
+          v-model="formData.state"
           :options="['Select a state', ...states]"
           id="inputState"
           label="State"
@@ -65,7 +65,7 @@
         />
 
         <CFormSelect
-          v-model="form.country"
+          v-model="formData.country"
           :options="['Select a country', ...countries]"
           id="inputCountry"
           label="Country"
@@ -74,14 +74,14 @@
         />
 
         <CFormInput
-          v-model="form.postal_code"
+          v-model="formData.postal_code"
           id="inputPostalCode"
           label="Postal Code"
           required
         />
 
         <CFormInput
-          v-model="form.phone"
+          v-model="formData.phone"
           id="inputPhone"
           label="Phone"
           required
@@ -90,8 +90,8 @@
     </CModalBody>
 
     <CModalFooter>
-      <CButton color="primary" @click="onSubmit">
-        <CSpinner v-if="isSaving" class="mr-2" small /> Save
+      <CButton color="success" @click="onSubmit">
+        <CSpinner v-if="isSaving" class="mr-2" size="sm" /> Save
       </CButton>
     </CModalFooter>
   </CModal>
@@ -99,58 +99,54 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { getCurrentInstance, ref } from "vue";
-import { useToasted } from "@hoppscotch/vue-toasted";
+import { PropType, ref } from "vue";
+import { useRouter } from "vue-router";
+import { toastSuccess } from "@/admin/components/Toast";
 import { StateList, CountryList } from "@/admin/data/address_constants";
+import { type CustomerWithDefaults, type Store } from "@/admin/types";
 
 const props = defineProps({
-  populateWith: {
-    type: Object,
+  store: {
+    type: Object as PropType<Store>,
     required: true
   },
-  visible: Boolean
+  visible: Boolean,
 });
 
-const emit = defineEmits(['saved']);
-
-const { proxy } = getCurrentInstance();
-const toasted = useToasted();
+const router = useRouter();
 
 const isSaving = ref(false);
 const isValidated = ref(false);
 const states = StateList;
 const countries = CountryList;
-const form = ref(Object.assign({}, props.populateWith));
+const formData = ref<CustomerWithDefaults>({});
+const errors = ref();
 
-const onSubmit = async () => {
-  const form = event.currentTarget;
+const onSubmit = async (evt: Event) => {
+  const formElement = evt.currentTarget as HTMLFormElement;
 
-  if (form.checkValidity() === false) {
-    event.preventDefault();
-    event.stopPropagation();
+  if (formElement.checkValidity() === false) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    return;
   }
 
   isValidated.value = true;
   isSaving.value = true;
 
-  const promise = axios.patch("/customers/" + form.value.id, form.value);
+  const promise = axios.post("/stores/" + props.store.id + "/customers", formData.value);
 
   promise
     .then(({ data }) => {
       const customer = data.data;
 
-      emit("saved", customer);
+      toastSuccess("Customer was created successfully");
 
-      proxy.$refs.editModal.hide();
-
-      toasted.show("Customer was updated successfully", {
-        type: "success",
-        icon: "far fa-check-circle"
-      });
+      router.push({ name: "customer-view", params: { id: customer.id } });
     })
     .catch(error => {
       if (error.response.data.errors) {
-        proxy.$refs.formObserver.setErrors(error.response.data.errors);
+        errors.value = error.response.data.errors || {};
       }
     })
     .finally(() => {

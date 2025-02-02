@@ -1,5 +1,7 @@
 import {
+  cilArrowCircleRight,
   cilBuilding,
+  cilCheckCircle,
   cilCommentSquare,
   cilDollar,
   cilEnvelopeOpen,
@@ -17,7 +19,6 @@ import {
   cilUser,
   cilVideo,
   cilXCircle,
-  cilArrowCircleRight,
 } from '@coreui/icons'
 
 export const iconsSet = Object.assign(
@@ -25,6 +26,7 @@ export const iconsSet = Object.assign(
   {
     cilArrowCircleRight,
     cilBuilding,
+    cilCheckCircle,
     cilCommentSquare,
     cilDollar,
     cilEnvelopeOpen,

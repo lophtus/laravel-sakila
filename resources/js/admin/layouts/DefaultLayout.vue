@@ -13,7 +13,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { CContainer } from "@coreui/vue";
 import AppFooter from "@/admin/components/AppFooter.vue";
 import AppHeader from "@/admin/components/AppHeader.vue";
 import AppSidebar from "@/admin/components/AppSidebar.vue";
