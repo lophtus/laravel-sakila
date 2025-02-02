@@ -14,7 +14,7 @@ export function toastError (message: string) {
   return useToasted().show(message,
     {
       duration: 2000,
-      type: "danger",
+      type: "error",
       icon: "icon cil-x-circle me-2",
     }
   );

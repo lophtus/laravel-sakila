@@ -27,20 +27,31 @@
               </CButton>
             </router-link>
 
-            <CButton color="danger" size="sm">
+            <CButton color="danger" size="sm" @click="() => { showConfirm = true; }">
               <CIcon icon="cil-x-circle" /> Delete
             </CButton>
           </div>
         </template>
       </CCardBody>
     </CCard>
+
+    <Confirm
+      :visible="showConfirm"
+      @closed="() => { showConfirm = false; }"
+      @confirmed="onDelete"
+    >
+      Are you sure you want to delete '{{ store.address }} (#{{ store.id }})'?
+    </Confirm>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
+import Confirm from "@/admin/components/Confirm.vue";
+import { toastError, toastSuccess } from "@/admin/components/Toast";
 
 const props = defineProps({
   id: {
@@ -49,7 +60,10 @@ const props = defineProps({
   }
 });
 
+const router = useRouter();
+
 const isLoaded = ref(false);
+const showConfirm = ref(false);
 const store = ref<StoreWithDefaults>({});
 
 const fetchData = (id: EntityIdentifier) => {
@@ -62,6 +76,25 @@ const fetchData = (id: EntityIdentifier) => {
 }
 
 watch(() => props.id, fetchData, { immediate: true });
+
+const onDelete = () => {
+  const promise = axios.delete("/films/" + props.id);
+
+  promise
+    .then(({ data }) => {
+      toastSuccess("Store was updated successfully");
+
+      router.push({
+        name: "store-list",
+      });
+    })
+    .catch(error => {
+      toastError("Failed to delete store");
+    })
+    .finally(() => {
+      showConfirm.value = false;
+    });
+}
 </script>
 
 <style scoped>
