@@ -80,18 +80,22 @@
       </CCol>
     </CRow>
 
-    <CreateModal :store="store"></CreateModal>
+    <CreateCustomerModal :store="store"></CreateCustomerModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref } from "vue";
-import CreateModal from "../../customers/components/CreateModal.vue";
+import { PropType, ref } from "vue";
+import CreateCustomerModal from "./CreateCustomerModal.vue";
 import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
+import { type Store } from "@/admin/types";
 
 const props = defineProps({
-  store: Object
+  store: {
+    type: Object as PropType<Store>,
+    required: true,
+  }
 });
 
 const isBusy = ref(false);

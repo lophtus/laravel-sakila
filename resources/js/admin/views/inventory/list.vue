@@ -1,79 +1,100 @@
 <template>
   <div>
-    <h2>Inventory</h2>
+    <CCard>
+      <CCardHeader>Inventory</CCardHeader>
+      <CCardBody>
+        <CRow class="mb-4">
+          <CCol>
+            <CFormLabel for="filterInput">Filter</CFormLabel>
+            <CInputGroup size="sm">
+              <CFormInput
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search"
+                debounce="500"
+              />
+              <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
+            </CInputGroup>
+          </CCol>
+          <CCol>
+            <CFormLabel for="perPageSelect">Per page</CFormLabel>
+            <CFormSelect v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions" />
+          </CCol>
+        </CRow>
 
-    <CRow class="mb-4">
-      <CCol>
-        <CFormLabel for="filterInput">Filter</CFormLabel>
-        <CInputGroup size="sm">
-          <CFormInput
-            v-model="filter"
-            type="search"
-            id="filterInput"
-            placeholder="Type to Search"
-            debounce="500"
-          />
-          <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
-        </CInputGroup>
-      </CCol>
-      <CCol>
-        <CFormLabel for="perPageSelect">Per page</CFormLabel>
-        <CFormSelect v-model="perPage" id="perPageSelect" size="sm" :options="pageOptions" />
-      </CCol>
-    </CRow>
+        <CTable
+          :columns="columns"
+          hover
+        >
+          <CTableBody>
+            <CTableRow v-if="isBusy">
+              <CTableDataCell colSpan="5" v-c-placeholder="{animation: 'glow'}">
+                <CPlaceholder :lg="12"></CPlaceholder>
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow v-else v-for="item in items">
+              <CTableDataCell>
+                <CImage src="https://dummyimage.com/75x75/e/5.png" />
+              </CTableDataCell>
+              <CTableDataCell>{{ item.id }}</CTableDataCell>
+              <CTableDataCell>
+                <CRow>
+                  <CCol>
+                    {{ truncate(item.film.title) }}
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    {{ item.film?.release_year }}
+                  </CCol>
+                  <CCol>
+                    {{ item.film.rating }}
+                  </CCol>
+                  <CCol>
+                    {{ item.film.length }}
+                  </CCol>
+                </CRow>
+              </CTableDataCell>
+              <CTableDataCell>
+                {{ item.store.address }}
+              </CTableDataCell>
+              <CTableDataCell>
+                <router-link :to="{name:'inventory-view', params: {id: item.id}}">
+                  <CButton
+                    color="primary"
+                    size="sm"
+                  >
+                    <CIcon icon="cil-arrow-circle-right" /> View
+                  </CButton>
+                </router-link>
+              </CTableDataCell>
+            </CTableRow>
+          </CTableBody>
+        </CTable>
 
-    <CTable
-      :columns="columns"
-      striped
-    >
-      <CTableBody>
-        <CTableRow v-if="isBusy">
-          <CTableDataCell colSpan="6" v-c-placeholder="{animation: 'glow'}">
-            <CPlaceholder :lg="12"></CPlaceholder>
-          </CTableDataCell>
-        </CTableRow>
-        <CTableRow v-else v-for="item in items">
-          <CTableDataCell>
-            <CImage src="https://dummyimage.com/75x75/e/5.png" />
-          </CTableDataCell>
-          <CTableDataCell>{{ item.id }}</CTableDataCell>
-          <CTableDataCell>
-            {{ item.film.title }}
-          </CTableDataCell>
-          <CTableDataCell>{{ item.film.release_year }}</CTableDataCell>
-          <CTableDataCell>{{ item.film.rating }}</CTableDataCell>
-          <CTableDataCell>
-            <router-link :to="{name:'inventory-view', params: {id: item.id}}">
-              <CButton
-                color="primary"
-                size="sm"
-              >
-                <CIcon icon="cil-arrow-circle-right" /> View
-              </CButton>
-            </router-link>
-          </CTableDataCell>
-        </CTableRow>
-      </CTableBody>
-    </CTable>
-
-    <CRow>
-      <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
-      <CCol>
-        <CPagination align="end">
-          <CPaginationItem aria-label="Previous" @click="prevPage" :disabled="currentPage <= 1"><span aria-hidden="true">&laquo;</span></CPaginationItem>
-          <template v-for="page in pageCount">
-            <CPaginationItem :active="page === currentPage" @click="changePage(page)">{{ page }}</CPaginationItem>
-          </template>
-          <CPaginationItem aria-label="Next" @click="nextPage" :disabled="currentPage >= pageCount"><span aria-hidden="true">&raquo;</span></CPaginationItem>
-        </CPagination>
-      </CCol>
-    </CRow>
+        <CRow>
+          <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
+          <CCol>
+            <CPagination align="end">
+              <CPaginationItem aria-label="Previous" @click="prevPage" :disabled="currentPage <= 1"><span aria-hidden="true">&laquo;</span></CPaginationItem>
+              <template v-for="page in pageCount">
+                <CPaginationItem :active="page === currentPage" @click="changePage(page)">{{ page }}</CPaginationItem>
+              </template>
+              <CPaginationItem aria-label="Next" @click="nextPage" :disabled="currentPage >= pageCount"><span aria-hidden="true">&raquo;</span></CPaginationItem>
+            </CPagination>
+          </CCol>
+        </CRow>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
+import { truncate } from "lodash";
 import { computed, ComputedRef, onMounted, ref } from "vue";
+import { Inventory } from "@/admin/types";
 
 const isBusy = ref(false);
 const totalRows = ref(1);
@@ -93,11 +114,10 @@ const columns = [
   "show_details",
   "id",
   "title",
-  "release_year",
-  "rating",
+  "store",
   "actions"
 ];
-const items = ref([]);
+const items = ref<Inventory[]>([]);
 
 onMounted(() => {
   fetchData();
@@ -128,7 +148,7 @@ const fetchData = async () => {
       currentPage.value +
       "&page[size]=" +
       perPage.value +
-      "&include=film" +
+      "&include=film,store" +
       "&filter[search]=" +
       filter.value
   );

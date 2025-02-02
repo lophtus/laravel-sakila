@@ -1,58 +1,58 @@
 <template>
   <div>
-    <h2>Store (#{{ store.id }})</h2>
+    <CCard>
+      <CCardHeader>Store #{{ store.id }}</CCardHeader>
+      <CCardBody>
+        <CSpinner v-if="!isLoaded" />
 
-    <CRow>
-      <CCol>
-        <address>
-          <span class="d-block">{{ store.address }}</span>
-          <span v-if="store.address2" class="d-block">{{ store.address2 }}</span>
-          <span class="d-block">{{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}</span>
-        </address>
-      </CCol>
-      <CCol cols="auto">
-        <CImage src="https://dummyimage.com/300x300/e/5.png"></CImage>
-      </CCol>
-    </CRow>
+        <template v-else>
+          <CRow>
+            <CCol>
+              Phone: {{  store.phone || "Not provided" }}
+              <address>
+                <span class="d-block">{{ store.address }}</span>
+                <span v-if="store.address2" class="d-block">{{ store.address2 }}</span>
+                <span class="d-block">{{ store.city }}, {{ store.state }} {{ store.country }} {{ store.postal_code }}</span>
+              </address>
+            </CCol>
+            <CCol cols="auto">
+              <CImage src="https://dummyimage.com/300x300/e/5.png"></CImage>
+            </CCol>
+          </CRow>
 
-    <CButton color="primary" size="sm">
-      <CIcon icon="cil-pencil" /> Edit
-    </CButton>
+          <div class="d-grid gap-1 d-md-flex justify-content-md-start mt-2">
+            <router-link :to="{ name: 'store-edit', params: { id: store.id } }">
+              <CButton color="primary" size="sm">
+                <CIcon icon="cil-pencil" /> Edit
+              </CButton>
+            </router-link>
 
-    <CButton color="danger" size="sm">
-      <CIcon icon="cil-x-circle" /> Delete
-    </CButton>
+            <CButton color="danger" size="sm">
+              <CIcon icon="cil-x-circle" /> Delete
+            </CButton>
+          </div>
+        </template>
+      </CCardBody>
+    </CCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { onBeforeMount, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { ref, watch } from "vue";
+import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
 
-const route = useRoute();
-
-const isRouted = ref(false);
-const isLoaded = ref(false);
-const store = ref({});
-
-onBeforeMount(() => {
-  watch(
-    () => route.params.id,
-    (newValue, oldValue) => {
-      isRouted.value = true;
-
-      fetchData(newValue);
-    },
-    { deep: true }
-  );
-
-  if (!isLoaded.value && !isRouted.value) {
-    fetchData(route.params.id);
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   }
 });
 
-const fetchData = (id) => {
+const isLoaded = ref(false);
+const store = ref<StoreWithDefaults>({});
+
+const fetchData = (id: EntityIdentifier) => {
   const promise = axios.get("/stores/" + id);
 
   promise.then(({ data }) => {
@@ -60,6 +60,8 @@ const fetchData = (id) => {
     isLoaded.value = true;
   });
 }
+
+watch(() => props.id, fetchData, { immediate: true });
 </script>
 
 <style scoped>

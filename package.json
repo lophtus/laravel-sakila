@@ -10,6 +10,7 @@
         "pc": "npm run profiler-client"
     },
     "devDependencies": {
+        "@types/lodash": "^4.17.15",
         "@typescript-eslint/eslint-plugin": "^8.19.1",
         "@typescript-eslint/parser": "^8.19.1",
         "@vitejs/plugin-vue": "^5.2.1",
