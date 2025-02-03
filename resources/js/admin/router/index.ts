@@ -18,6 +18,7 @@ import StoreEdit from "@/admin/views/stores/edit.vue";
 import StoreIndex from "@/admin/views/stores/index.vue";
 import StoreList from "@/admin/views/stores/list.vue";
 import StoreView from "@/admin/views/stores/view.vue";
+import NotFound from "@/errors/NotFound.vue";
 
 const routes = [
   {
@@ -138,6 +139,11 @@ const routes = [
         ],
       }
     ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    component: NotFound,
   }
 ];
 
