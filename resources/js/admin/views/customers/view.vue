@@ -33,6 +33,9 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 import { type CustomerWithDefaults, type EntityIdentifier } from "@/admin/types";
+import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
+
+const { redirectToNotFound } = useNotFoundRedirect();
 
 const isLoaded = ref(false);
 const customer = ref<CustomerWithDefaults>({});
@@ -52,6 +55,12 @@ const fetchData = (id: EntityIdentifier) => {
 
     customer.value = Object.assign(item || {});
     isLoaded.value = true;
+  }).catch((error) => {
+    if (error.response) {
+      if(error.response.status === 404) {
+        redirectToNotFound();
+      }
+    }
   });
 }
 

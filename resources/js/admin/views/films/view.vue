@@ -68,6 +68,7 @@ import { useRouter } from "vue-router";
 import { type EntityIdentifier, type FilmWithDefaults } from "@/admin/types";
 import Confirm from "@/admin/components/Confirm.vue";
 import { toastError, toastSuccess } from "@/admin/components/Toast";
+import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
 
 const props = defineProps({
   id: {
@@ -77,6 +78,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const { redirectToNotFound } = useNotFoundRedirect();
 
 const isLoaded = ref(false);
 const showConfirm = ref(false);
@@ -88,6 +90,12 @@ const fetchData = (id: EntityIdentifier) => {
   promise.then(({ data }) => {
     film.value = data.data || {};
     isLoaded.value = true;
+  }).catch((error) => {
+    if (error.response) {
+      if(error.response.status === 404) {
+        redirectToNotFound();
+      }
+    }
   });
 }
 
