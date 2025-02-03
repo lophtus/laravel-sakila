@@ -35,13 +35,13 @@
       </CCardBody>
     </CCard>
 
-    <Confirm
+    <ConfirmModal
       :visible="showConfirm"
       @closed="() => { showConfirm = false; }"
       @confirmed="onDelete"
     >
       Are you sure you want to delete '{{ store.address }} (#{{ store.id }})'?
-    </Confirm>
+    </ConfirmModal>
   </div>
 </template>
 
@@ -49,7 +49,7 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import Confirm from "@/admin/components/Confirm.vue";
+import ConfirmModal from "@/admin/components/ConfirmModal.vue";
 import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
 import useToast from "@/admin/composables/useToast";
 import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
