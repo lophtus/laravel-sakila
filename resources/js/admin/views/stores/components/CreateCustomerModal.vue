@@ -101,7 +101,7 @@
 import axios from "axios";
 import { PropType, ref } from "vue";
 import { useRouter } from "vue-router";
-import { toastSuccess } from "@/admin/components/Toast";
+import useToast from "@/admin/composables/useToast";
 import { StateList, CountryList } from "@/admin/data/address_constants";
 import { type CustomerWithDefaults, type Store } from "@/admin/types";
 
@@ -114,6 +114,7 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const { toastSuccess } = useToast();
 
 const isSaving = ref(false);
 const isValidated = ref(false);

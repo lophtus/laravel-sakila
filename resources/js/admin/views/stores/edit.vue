@@ -88,10 +88,9 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { type EntityIdentifier, type CustomerWithDefaults } from "@/admin/types";
-import { toastSuccess } from "@/admin/components/Toast";
+import useToast from "@/admin/composables/useToast";
 import { StateList, CountryList } from "@/admin/data/address_constants";
-import store from "@/admin/store";
+import { type EntityIdentifier, type CustomerWithDefaults } from "@/admin/types";
 
 const props = defineProps({
   id: {
@@ -103,6 +102,7 @@ const props = defineProps({
 const emit = defineEmits(['saved']);
 
 const router = useRouter();
+const { toastSuccess } = useToast();
 
 const isLoaded = ref(false);
 const isSaving = ref(false);

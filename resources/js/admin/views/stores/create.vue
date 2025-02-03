@@ -83,13 +83,14 @@
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { type CustomerWithDefaults } from "@/admin/types";
-import { toastSuccess } from "@/admin/components/Toast";
+import useToast from "@/admin/composables/useToast";
 import { StateList, CountryList } from "@/admin/data/address_constants";
+import { type CustomerWithDefaults } from "@/admin/types";
 
 const emit = defineEmits(['saved']);
 
 const router = useRouter();
+const { toastSuccess } = useToast();
 
 const isSaving = ref(false);
 const isValidated = ref(false);
