@@ -49,10 +49,10 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
 import Confirm from "@/admin/components/Confirm.vue";
-import { toastError, toastSuccess } from "@/admin/components/Toast";
 import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
+import useToast from "@/admin/composables/useToast";
+import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
 
 const props = defineProps({
   id: {
@@ -63,6 +63,7 @@ const props = defineProps({
 
 const router = useRouter();
 const { redirectToNotFound } = useNotFoundRedirect();
+const { toastError, toastSuccess } = useToast();
 
 const isLoaded = ref(false);
 const showConfirm = ref(false);
