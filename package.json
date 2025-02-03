@@ -29,7 +29,7 @@
         "@coreui/vue": "^4.0",
         "@fortawesome/fontawesome-free": "^5.12.1",
         "@hoppscotch/vue-toasted": "^0.1.0",
-        "axios": "^0.21",
+        "axios": "^0.28",
         "bootstrap": "^4.6.1",
         "lodash": "^4.17.21",
         "popper.js": "^1.12",
