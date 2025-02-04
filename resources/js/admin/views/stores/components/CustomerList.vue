@@ -1,13 +1,10 @@
 <template>
   <div>
-    <CRow class="mb-4">
-      <CCol>
-        <CButton color="success" size="sm">
-          <i class="far fa-plus-square"></i>
-          Create
-        </CButton>
-      </CCol>
-    </CRow>
+    <div class="d-grid gap-1 d-md-flex justify-content-md-end mb-2">
+      <CButton color="success" size="sm" @click="() => { showCreate = true; }">
+        <CIcon icon="cil-plus" /> Create
+      </CButton>
+    </div>
 
     <CRow>
       <CCol>
@@ -20,7 +17,7 @@
             placeholder="Type to Search"
             debounce="500"
           />
-          <CButton :disabled="!filter" @click="filter = ''">Clear</CButton>
+          <CButton color="secondary" :disabled="!filter" @click="filter = ''">Clear</CButton>
         </CInputGroup>
       </CCol>
       <CCol>
@@ -29,67 +26,61 @@
       </CCol>
     </CRow>
 
-    <b-table
-      :items="fetchData"
-      :fields="fields"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :filter="filter"
-      :busy="isBusy"
-      show-empty
-      striped
+    <CTable
+      :columns="columns"
+      hover
     >
-      <template v-slot:table-busy>
-        <LoadingSpinner />
-      </template>
-
-      <template v-slot:cell(name)="row">{{ row.item.first_name }} {{ row.item.last_name }}</template>
-
-      <template v-slot:cell(address)="row">
-        {{ row.item.address }}
-        <br />
-        <span v-if="row.item.address2">
-          {{ row.item.address2 }}
-          <br />
-        </span>
-        {{ row.item.city }}, {{ row.item.state }} {{ row.item.postal_code }}
-      </template>
-
-      <template v-slot:cell(actions)="row">
-        <CButton
-          color="primary"
-          size="sm"
-          :to="{name:'customer-view', params: {id: row.item.id}}"
-        >
-          <i class="far fa-edit"></i>
-          View
-        </CButton>
-      </template>
-    </b-table>
+      <CTableBody>
+        <CTableRow v-if="isBusy">
+          <CTableDataCell colSpan="5" v-c-placeholder="{animation: 'glow'}">
+            <CPlaceholder :lg="12"></CPlaceholder>
+          </CTableDataCell>
+        </CTableRow>
+        <CTableRow v-else v-for="item in items">
+          <CTableDataCell>{{ item.id }}</CTableDataCell>
+          <CTableDataCell>{{ item.first_name }}</CTableDataCell>
+          <CTableDataCell>{{ item.last_name }}</CTableDataCell>
+          <CTableDataCell>{{ item.email }}</CTableDataCell>
+          <CTableDataCell>
+            <router-link :to="{name:'customer-view', params: {id: item.id}}">
+              <CButton
+                color="primary"
+                size="sm"
+              >
+                <CIcon icon="cil-arrow-circle-right" /> View
+              </CButton>
+            </router-link>
+          </CTableDataCell>
+        </CTableRow>
+      </CTableBody>
+    </CTable>
 
     <CRow>
       <CCol>Page {{ currentPage }} of {{ lastPage }} ({{ totalRows }} items)</CCol>
       <CCol>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          align="right"
-          size="sm"
-        ></b-pagination>
+        <CPagination align="end">
+          <CPaginationItem aria-label="Previous" @click="prevPage" :disabled="currentPage <= 1"><span aria-hidden="true">&laquo;</span></CPaginationItem>
+          <template v-for="page in pageCount">
+            <CPaginationItem :active="page === currentPage" @click="changePage(page)">{{ page }}</CPaginationItem>
+          </template>
+          <CPaginationItem aria-label="Next" @click="nextPage" :disabled="currentPage >= pageCount"><span aria-hidden="true">&raquo;</span></CPaginationItem>
+        </CPagination>
       </CCol>
     </CRow>
 
-    <CreateCustomerModal :store="store"></CreateCustomerModal>
+    <CreateCustomerModal
+      :visible="showCreate"
+      :store="store"
+      @closed="() => { showCreate = false; }"
+    ></CreateCustomerModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { PropType, ref } from "vue";
+import { computed, ComputedRef, onMounted, PropType, ref } from "vue";
 import CreateCustomerModal from "./CreateCustomerModal.vue";
-import LoadingSpinner from "@/admin/components/LoadingSpinner.vue";
-import { type Store } from "@/admin/types";
+import { Customer, type Store } from "@/admin/types";
 
 const props = defineProps({
   store: {
@@ -99,28 +90,67 @@ const props = defineProps({
 });
 
 const isBusy = ref(false);
+const showCreate = ref(false);
+
 const totalRows = ref(1);
 const currentPage = ref(1);
 const lastPage = ref(1);
-const perPage = ref(30);
-const pageOptions = [10, 20, 30];
+const perPage = ref("10");
+const pageOptions = [
+  { label: "10", value: "10"},
+  { label: "20", value: "20" },
+  { label: "30", value: "30" }
+];
+const pageCount: ComputedRef<number> = computed(() => {
+  return Math.ceil(totalRows.value / parseInt(perPage.value));
+});
 const filter = ref("");
-const fields = ["id", "name", "email", "address", "actions"];
+const columns = [
+  "id",
+  "name",
+  "email",
+  "address",
+  "actions"
+];
+const items = ref<Customer[]>([]);
 
-const fetchData = async (ctx) => {
+onMounted(() => {
+  fetchData();
+});
+
+const changePage = (page: number) => {
+  if (page > pageCount.value) {
+    return;
+  }
+
+  currentPage.value = page;
+  fetchData();
+}
+
+const nextPage = () => {
+  changePage(++currentPage.value);
+}
+
+const prevPage = () => {
+  changePage(--currentPage.value);
+}
+
+const fetchData = async () => {
+  isBusy.value = true;
+
   const promise = axios.get(
     "/stores/" +
       props.store.id +
       "/customers?page[number]=" +
-      ctx.currentPage +
+      currentPage.value +
       "&page[size]=" +
-      ctx.perPage +
+      perPage.value +
       "&filter[search]=" +
-      ctx.filter
+      filter.value
   );
 
   return promise.then(({ data }) => {
-    const items = data.data;
+    const loadedItems = data.data;
 
     currentPage.value = data.meta.current_page;
     lastPage.value = data.meta.last_page;
@@ -128,7 +158,7 @@ const fetchData = async (ctx) => {
 
     isBusy.value = false;
 
-    return items || [];
+    items.value = loadedItems || [];
   });
 }
 </script>

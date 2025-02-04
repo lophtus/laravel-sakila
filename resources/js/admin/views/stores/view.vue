@@ -31,6 +31,17 @@
               <CIcon icon="cil-x-circle" /> Delete
             </CButton>
           </div>
+
+          <CNav variant="tabs" class="mt-4 mb-2">
+            <CNavItem>
+              <CNavLink :active="activeTab === 'customers'" @click="activeTab = 'customers'">Customers</CNavLink>
+            </CNavItem>
+          </CNav>
+          <CTabContent>
+            <CTabPane :visible="true">
+              <CustomerList v-if="activeTab === 'customers'" :store="store"></CustomerList>
+            </CTabPane>
+          </CTabContent>
         </template>
       </CCardBody>
     </CCard>
@@ -53,6 +64,8 @@ import ConfirmModal from "@/admin/components/ConfirmModal.vue";
 import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
 import useToast from "@/admin/composables/useToast";
 import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
+import { CNavItem, CTabContent } from "@coreui/vue";
+import CustomerList from "./components/CustomerList.vue";
 
 const props = defineProps({
   id: {
@@ -68,6 +81,8 @@ const { toastError, toastSuccess } = useToast();
 const isLoaded = ref(false);
 const showConfirm = ref(false);
 const store = ref<StoreWithDefaults>({});
+
+const activeTab = ref('customers');
 
 const fetchData = (id: EntityIdentifier) => {
   const promise = axios.get("/stores/" + id);

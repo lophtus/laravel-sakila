@@ -15,6 +15,7 @@ class AddPasswordToCustomerTable extends Migration
     {
         Schema::table('customer', function (Blueprint $table) {
             $table->string('password')
+                ->nullable()
                 ->after('email');
         });
     }
