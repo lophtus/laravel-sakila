@@ -36,10 +36,14 @@
             <CNavItem>
               <CNavLink :active="activeTab === 'customers'" @click="activeTab = 'customers'">Customers</CNavLink>
             </CNavItem>
+            <CNavItem>
+              <CNavLink :active="activeTab === 'inventory'" @click="activeTab = 'inventory'">Inventory</CNavLink>
+            </CNavItem>
           </CNav>
           <CTabContent>
             <CTabPane :visible="true">
               <CustomerList v-if="activeTab === 'customers'" :store="store"></CustomerList>
+              <InventoryList v-if="activeTab === 'inventory'" :store="store"></InventoryList>
             </CTabPane>
           </CTabContent>
         </template>
@@ -66,6 +70,7 @@ import useToast from "@/admin/composables/useToast";
 import { type EntityIdentifier, type StoreWithDefaults } from "@/admin/types";
 import { CNavItem, CTabContent } from "@coreui/vue";
 import CustomerList from "./components/CustomerList.vue";
+import InventoryList from "./components/InventoryList.vue";
 
 const props = defineProps({
   id: {
