@@ -1,5 +1,8 @@
 <template>
-  <CModal :visible="visible">
+  <CModal
+    :visible="isVisible"
+    @close="onClose"
+  >
     <CModalHeader>
       <CModalTitle>Create Customer</CModalTitle>
     </CModalHeader>
@@ -99,7 +102,7 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { PropType, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { useRouter } from "vue-router";
 import useToast from "@/admin/composables/useToast";
 import { StateList, CountryList } from "@/admin/data/address_constants";
@@ -113,6 +116,8 @@ const props = defineProps({
   visible: Boolean,
 });
 
+const emit = defineEmits(['saved', 'closed']);
+
 const router = useRouter();
 const { toastSuccess } = useToast();
 
@@ -122,6 +127,10 @@ const states = StateList;
 const countries = CountryList;
 const formData = ref<CustomerWithDefaults>({});
 const errors = ref();
+
+const isVisible = computed<boolean>(() => {
+  return props.visible;
+});
 
 const onSubmit = async (evt: Event) => {
   const formElement = evt.currentTarget as HTMLFormElement;
@@ -141,6 +150,8 @@ const onSubmit = async (evt: Event) => {
     .then(({ data }) => {
       const customer = data.data;
 
+      emit('saved', customer);
+
       toastSuccess("Customer was created successfully");
 
       router.push({ name: "customer-view", params: { id: customer.id } });
@@ -153,6 +164,10 @@ const onSubmit = async (evt: Event) => {
     .finally(() => {
       isSaving.value = false;
     });
+}
+
+const onClose = () => {
+  emit('closed');
 }
 </script>
 
