@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>Inventory (#{{ inventory.id }})</CCardHeader>
+      <CCardHeader>
+        <strong>{{ cardTitle }}</strong>
+      </CCardHeader>
       <CCardBody>
         <CRow>
           <CCol>
@@ -47,7 +49,7 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { type EntityIdentifier, type FilmWithDefaults, type InventoryWithDefaults, type StoreWithDefaults } from "@/admin/types";
 
 const props = defineProps({
@@ -61,6 +63,10 @@ const isLoaded = ref(false);
 const film = ref<FilmWithDefaults>({});
 const inventory = ref<InventoryWithDefaults>({});
 const store = ref<StoreWithDefaults>({});
+
+const cardTitle = computed(() => {
+  return !isLoaded.value ? "Loading" : `Inventory (${inventory.value.id})`;
+});
 
 const fetchData = (id: EntityIdentifier) => {
   const promise = axios.get("/inventory/" + id + "?include=film,store");

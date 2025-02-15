@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>{{ customer.first_name }} {{ customer.last_name }} (#{{ customer.id }})</CCardHeader>
+      <CCardHeader>
+        <strong>{{ cardTitle }}</strong>
+      </CCardHeader>
       <CCardBody>
         <CSpinner v-if="!isLoaded" />
 
@@ -31,7 +33,7 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { type CustomerWithDefaults, type EntityIdentifier } from "@/admin/types";
 import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
 
@@ -45,6 +47,10 @@ const props = defineProps({
     type: String,
     required: true,
   }
+});
+
+const cardTitle = computed(() => {
+  return !isLoaded.value ? "Loading" : `${customer.value.first_name} ${customer.value.last_name} (${customer.value.id})`;
 });
 
 const fetchData = (id: EntityIdentifier) => {

@@ -9,7 +9,9 @@
     </div>
 
     <CCard>
-      <CCardHeader>Films</CCardHeader>
+      <CCardHeader>
+        <strong>Films</strong>
+      </CCardHeader>
       <CCardBody>
         <CRow class="mb-4">
           <CCol>
