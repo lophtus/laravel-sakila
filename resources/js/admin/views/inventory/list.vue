@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>Inventory</CCardHeader>
+      <CCardHeader>
+        <strong>Inventory</strong>
+      </CCardHeader>
       <CCardBody>
         <CRow class="mb-4">
           <CCol>

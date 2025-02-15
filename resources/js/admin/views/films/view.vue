@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>{{ film.title }} ({{ film.release_year }})</CCardHeader>
+      <CCardHeader>
+        <strong>{{ cardTitle }}</strong>
+      </CCardHeader>
       <CCardBody>
         <CRow>
           <CCol>
@@ -63,7 +65,7 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import ConfirmModal from "@/admin/components/ConfirmModal.vue";
 import useToast from "@/admin/composables/useToast";
@@ -84,6 +86,10 @@ const { toastError, toastSuccess } = useToast();
 const isLoaded = ref(false);
 const showConfirm = ref(false);
 const film = ref<FilmWithDefaults>({});
+
+const cardTitle = computed(() => {
+  return !isLoaded.value ? "Loading" : `${film.value.title} (${film.value.release_year})`;
+});
 
 const fetchData = (id: EntityIdentifier) => {
   const promise = axios.get("/films/" + id);

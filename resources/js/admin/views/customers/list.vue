@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>Customers</CCardHeader>
+      <CCardHeader>
+        <strong>Customers</strong>
+      </CCardHeader>
       <CCardBody>
         <CRow class="mb-4">
           <CCol md="6">

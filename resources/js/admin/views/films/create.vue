@@ -1,6 +1,8 @@
 <template>
   <CCard>
-    <CCardHeader as="h5">Create Store</CCardHeader>
+    <CCardHeader>
+      <strong>Create Store</strong>
+    </CCardHeader>
     <CCardBody>
       <p>Use the form below to create a store.</p>
 

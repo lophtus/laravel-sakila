@@ -1,7 +1,9 @@
 <template>
   <div>
     <CCard>
-      <CCardHeader>Store #{{ store.id }}</CCardHeader>
+      <CCardHeader>
+        <strong>{{ cardTitle }}</strong>
+      </CCardHeader>
       <CCardBody>
         <CSpinner v-if="!isLoaded" />
 
@@ -62,7 +64,7 @@
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import ConfirmModal from "@/admin/components/ConfirmModal.vue";
 import useNotFoundRedirect from "@/admin/composables/useNotFoundRedirect";
@@ -86,6 +88,10 @@ const { toastError, toastSuccess } = useToast();
 const isLoaded = ref(false);
 const showConfirm = ref(false);
 const store = ref<StoreWithDefaults>({});
+
+const cardTitle = computed(() => {
+  return !isLoaded.value ? "Loading" : `Store #${store.value.id}`;
+});
 
 const activeTab = ref('customers');
 

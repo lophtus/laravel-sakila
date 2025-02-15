@@ -1,6 +1,8 @@
 <template>
   <CCard>
-    <CCardHeader as="h5">Edit Customer</CCardHeader>
+    <CCardHeader>
+      <strong>Edit Customer</strong>
+    </CCardHeader>
     <CCardBody>
       <CSpinner v-if="!isLoaded" />
 

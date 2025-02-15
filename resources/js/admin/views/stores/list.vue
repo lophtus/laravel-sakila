@@ -9,7 +9,9 @@
     </div>
 
     <CCard>
-      <CCardHeader>Stores</CCardHeader>
+      <CCardHeader>
+        <strong>Stores</strong>
+      </CCardHeader>
       <CCardBody>
 
         <CRow class="mb-4">
